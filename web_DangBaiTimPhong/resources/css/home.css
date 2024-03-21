@@ -1,0 +1,77 @@
+:root{
+    --primary-color: #ff5d26
+}
+
+/* .view_home{
+    background-color: #ffff;
+} */
+
+.header_search .location,
+.header_search .category {
+    position: relative;
+    background-color: #fff;
+}
+
+.header_search .location span i,
+.header_search .category span i {
+    position: absolute;
+    top: 6px;
+    bottom: 0;
+    left: 8px;
+}
+
+.header_search .location .form-select,
+.header_search .category .form-select{
+    width: 220px;
+}
+
+.header_search .location .form-select:focus,
+.header_search .category .form-select:focus{
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+
+.search-info .btn-search{
+    background-color: var(--primary-color);
+    color: #ffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 7px 0;
+    cursor: pointer;
+}
+
+.search-info .btn-search:hover{
+    background-color: #ea4e27;
+}
+
+/* Search frame */
+
+/* Search by price */
+
+.view_home .main_home .search-acreage,
+.view_home .main_home .search-price{
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #dedede;
+    border-radius: 8px;
+}
+
+.view_home .main_home .list-group-search .list-group-item a{
+    font-size: 15px;
+    color: #4b4b4b;
+}
+
+/* bài post */
+
+.main_home .avatar_name .avatar .image_avatar_post{
+    height: 40px;
+    width: 40px;
+    border-radius: 100rem;
+    object-fit: cover;
+
+}
+
