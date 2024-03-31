@@ -30,7 +30,7 @@
                                 <div class="avatar d-flex align-items-center">
                                    <i class="bi bi-person-plus-fill"></i>
                                 </div>
-                                <span class="ps-1">Đăng Nhập</span>
+                                <small><span class="ps-1">Đăng Nhập</span></small>
                             </a>
                         </li>
                         <li class="nav-item dropdown">
@@ -38,7 +38,7 @@
                                 <div class="avatar d-flex align-items-center">
                                     <i class="bi bi-box-arrow-in-right"></i>
                                 </div>
-                                <span class="ps-1">Đăng Kí</span>
+                                <small><span class="ps-1">Đăng Kí</span></small>
                             </a>
                         </li>
                         <li class="nav-item_post dropdown ms-md-4 ms-sm-0 ">
@@ -95,7 +95,7 @@
     .navbar .collapse .post_new{
         background-color: var(--primary-color);
         color: #fff;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 500;
         border: 3px solid #d95230;
         border-radius: 10px;

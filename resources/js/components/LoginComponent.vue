@@ -18,7 +18,7 @@
                                 <label for="">Email</label>
                                 <input type="text" name="" id="" class="form-control" >
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-2">
                                 <label for="" class="form-label">Password</label>
                                 <input type="password" name="" id="" class="form-control">
                             </div>
@@ -27,8 +27,8 @@
                                 <input type="submit" class="form-control btn-login" value="Đăng Nhập">
                             </div>
                             <div class="form-group footer_form d-flex justify-content-between my-3">
-                                <a href="">Bạn quên mật khẩu ?</a>
-                                <a href="/signup">Tạo tài khoản mới</a>
+                                <a href=""><small>Bạn quên mật khẩu ?</small></a>
+                                <a href="/signup"><small>Tạo tài khoản mới</small></a>
                             </div>
                         </div>
                     </form>
@@ -43,7 +43,7 @@
                         <img class="w-75 " src="../../image/contact.png" alt="">
                     </div>
                     <div class="info_contact text-center">
-                        <span class="text-black-75" >Liên hệ với chúng tôi nếu bạn cần hổ trợ</span>
+                        <span class="text-black-50" >Liên hệ với chúng tôi nếu bạn cần hổ trợ</span>
                     </div>
                     <div class=" d-flex justify-content-center my-3">
                         <button class="btn_contact p-2 px-3">Gửi Liên Hệ</button>
@@ -97,7 +97,7 @@
     .from_login .form-group .btn-login{
         background-color: var(--primary-color);
         color: #ffff;
-        font-size: 18px;
+        font-size: 15px;
     }
 
     .from_login .form-group.footer_form a{

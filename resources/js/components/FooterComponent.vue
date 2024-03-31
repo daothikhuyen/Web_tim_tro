@@ -3,8 +3,8 @@
     <div class="footer bg-white py-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-10 py-2 d-flex justify-content-between align-items-center">
+                <!-- <div class="col-md-1"></div> -->
+                <div class="col-md-11 py-2 ms-2 d-flex justify-content-between align-items-center">
                     <div class="row w-100">
                         <div class="col-md-5">
                             <div class="info_footer">
@@ -12,7 +12,7 @@
                                     <img src="../../image/logo.png" alt="" class="w-100">
                                 </div>
                                 <span class="text-secondary">
-                                    <b>PhongTot</b> luôn tự tin mang đến cho người dùng <br>  các cơ hội tìm nhà tốt nhất.
+                                    <b>PhongTot</b> <small>luôn tự tin mang đến cho người dùng <br>  các cơ hội tìm nhà tốt nhất.</small>
                                 </span>
                             </div>
                         </div>
@@ -110,16 +110,16 @@
     }
 
     .footer .info_footer .logo_info{
-        width: 50%;
+        width: 48%;
         height: auto;
     }
 
     .customer_support ul li{
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .customer_support ul li a{
-        margin: 5px 0;
+        margin: 3px 0;
         display: block;
         padding: 5px 0;
         color: #333;
