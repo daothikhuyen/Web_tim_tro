@@ -14,9 +14,8 @@
     </head>
     <body class="antialiased" style="background-color: #f5f5f5">
         <div id="app">
-          <example-component></example-component>
+            <example-component></example-component>
         </div>
-        {{-- <script src="{{ mix('js/app.js') }}" type="text/javascript"></script> --}}
     </body>
 </html>
 

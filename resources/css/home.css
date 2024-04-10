@@ -2,6 +2,13 @@
     --primary-color: #ff5d26
 }
 
+.header_navbar.fix_body #navbar-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+  }
+
 ul , li {
     list-style: none;
 }
@@ -220,16 +227,16 @@ ul , li {
     object-fit: cover;
 }
 
-.content_comment .show_feedback .avatar_name .name{
+.content_comment .NameAndFeedback  .name{
     font-size: 13px;
 }
 
-.content_comment .show_feedback .avatar_name .created_time {
+.content_comment .TimeAndReply .created_time {
     font-size: 11px;
     color: rgb(75, 75, 75,0.75)
 }
 
-.content_comment .show_feedback .avatar_name .reply{
+.content_comment .TimeAndReply .reply{
     font-size: 11px;
     font-weight: 500;
 }

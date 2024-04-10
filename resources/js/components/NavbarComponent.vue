@@ -1,7 +1,6 @@
 
 <template>
-
-    <div class="header_navbar px-0 bg-white">
+    <div class="header_navbar px-0 bg-white" @scroll="fixNavMenu()" :class="{'fix_body': fixnavmenu}">
         <div class="header py-2 bg-light">
             <div class="d-flex justify-content-between aglin-items-center text-center">
                 <div class="ps-5">
@@ -12,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light px-0 position-sticky ">
+        <nav class="navbar navbar-expand-lg navbar-light px-0" id="navbar-menu">
             <div class="container">
                 <a class="navbar-brand" href="/">
                     <div class="logo w-100">
@@ -58,14 +57,25 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 
     export default {
         mounted() {
             console.log('Component mounted.')
         },
-
+        data() {
+            const fixnavmenu = ref(false)
+            return {
+                fixnavmenu,
+            }
+        },
+        methods: {
+            fixNavMenu(){
+                console.log(this.fixnavmenu)
+                this.fixnavmenu = true
+            }
+        },
     }
-
 
 </script>
 
