@@ -1,7 +1,6 @@
 
 <template>
-
-    <div class="header_navbar px-0 bg-white">
+    <div class="header_navbar px-0 bg-white" @scroll="fixNavMenu()" :class="{'fix_body': fixnavmenu}">
         <div class="header py-2 bg-light">
             <div class="d-flex justify-content-between aglin-items-center text-center">
                 <div class="ps-5">
@@ -12,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light px-0 position-sticky ">
+        <nav class="navbar navbar-expand-lg navbar-light px-0" id="navbar-menu">
             <div class="container">
                 <a class="navbar-brand" href="/">
                     <div class="logo w-100">
@@ -30,7 +29,7 @@
                                 <div class="avatar d-flex align-items-center">
                                    <i class="bi bi-person-plus-fill"></i>
                                 </div>
-                                <span class="ps-1">Đăng Nhập</span>
+                                <small><span class="ps-1">Đăng Nhập</span></small>
                             </a>
                         </li>
                         <li class="nav-item dropdown">
@@ -38,7 +37,7 @@
                                 <div class="avatar d-flex align-items-center">
                                     <i class="bi bi-box-arrow-in-right"></i>
                                 </div>
-                                <span class="ps-1">Đăng Kí</span>
+                                <small><span class="ps-1">Đăng Kí</span></small>
                             </a>
                         </li>
                         <li class="nav-item_post dropdown ms-md-4 ms-sm-0 ">
@@ -58,14 +57,25 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 
     export default {
         mounted() {
             console.log('Component mounted.')
         },
-
+        data() {
+            const fixnavmenu = ref(false)
+            return {
+                fixnavmenu,
+            }
+        },
+        methods: {
+            fixNavMenu(){
+                console.log(this.fixnavmenu)
+                this.fixnavmenu = true
+            }
+        },
     }
-
 
 </script>
 
@@ -95,7 +105,7 @@
     .navbar .collapse .post_new{
         background-color: var(--primary-color);
         color: #fff;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 500;
         border: 3px solid #d95230;
         border-radius: 10px;
