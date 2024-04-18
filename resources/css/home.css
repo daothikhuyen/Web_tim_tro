@@ -1,17 +1,44 @@
 :root{
-    --primary-color: #ff5d26
+    --primary-color: #ff5d26;
+    --second-color: #ffff;
+    --hover-color: rgb(162, 160, 160,0.25);
+    --siderbar-width: 300px;
 }
 
-.header_navbar.fix_body #navbar-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-  }
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
 
 ul , li {
     list-style: none;
 }
+
+.App.fix_body #navbar-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+#navbar-menu {
+    display: block;
+    width: 100%;
+    background-color: #fff;
+}
+
 .header_search .location,
 .header_search .category {
     position: relative;

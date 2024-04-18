@@ -5,11 +5,16 @@
  */
 
 import './bootstrap';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import { createApp } from 'vue';
 
 
 import app from './App.vue'
 import router from './router/index.js';
 
-createApp(app).use(router).mount('#app')
+const vueApp = createApp(app)
+
+
+vueApp.use(router).mount('#app')
 

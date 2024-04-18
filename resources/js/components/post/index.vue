@@ -44,7 +44,34 @@ export default defineComponent(
         },
         methods: {
 
-                      
+            ShowWriteComment(index){
+                this.ShowWriteComment = false
+                console.log(this.ShowWriteComment)
+            },
+
+            // Send comment
+            AddComment(postId, parentId, index, event) {
+                try {
+                    event.preventDefault();
+
+                    const Hours = useDateFormat(useNow(), 'DD/MM/YYYY')
+                    const newComment = {
+                        id: Math.floor(Math.random() * 1000),
+                        username: this.user[0].username,
+                        avatar: this.user[0].avatar,
+                        post_id: postId,
+                        content: this.commentData,
+                        created_time: Hours,
+                        parent_id: parentId,
+                        feedback: []
+                    };
+
+                    this.treeFeedback.feedback.push(newComment);
+                    this.commentData = '';
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            },
 
         },
         created() {

@@ -3,7 +3,9 @@ import { createRouter, createWebHistory} from "vue-router"
 
 import HomeComponent from '../components/HomeComponent.vue';
 import LoginComponent from '../components/LoginComponent.vue';
-import SignUpComponent from '../components/SignUpComponent.vue'
+import SignUpComponent from '../components/SignUpComponent.vue';
+import AddPost from '../components/ManagerUser/View_ManagerUser/viewWritePost.vue'
+import listPost from '../components/ManagerUser/View_ManagerUser/listPost.vue'
 
 const routes = [
     {
@@ -20,6 +22,16 @@ const routes = [
         name: 'signup',
         path: '/signup',
         component: SignUpComponent
+    },
+    {
+        name: 'AddPost',
+        path: '/addPost',
+        component:AddPost
+    },
+    {
+        name: 'ListPost',
+        path: '/listpost',
+        component:listPost
     }
   ];
 

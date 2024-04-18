@@ -1,6 +1,6 @@
 
 <template>
-    <div class="header_navbar px-0 bg-white" @scroll="fixNavMenu()" :class="{'fix_body': fixnavmenu}">
+    <div class="header_navbar px-0 bg-white">
         <div class="header py-2 bg-light">
             <div class="d-flex justify-content-between aglin-items-center text-center">
                 <div class="ps-5">
@@ -21,10 +21,10 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse d-md-flex align-items-center" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse d-md-flex align-items-center"  id="navbarSupportedContent">
 
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+                        <li class="nav-item dropdown" :class="{hide: isUser}">
                             <a class="nav-link d-flex align-items-center" href="/login" >
                                 <div class="avatar d-flex align-items-center">
                                    <i class="bi bi-person-plus-fill"></i>
@@ -32,7 +32,7 @@
                                 <small><span class="ps-1">Đăng Nhập</span></small>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" :class="{hide: isUser}">
                             <a class="nav-link d-flex align-items-center" href="/signup" >
                                 <div class="avatar d-flex align-items-center">
                                     <i class="bi bi-box-arrow-in-right"></i>
@@ -40,46 +40,98 @@
                                 <small><span class="ps-1">Đăng Kí</span></small>
                             </a>
                         </li>
-                        <li class="nav-item_post dropdown ms-md-4 ms-sm-0 ">
-                            <a class="post_new nav-link d-flex align-items-center px-4 w-sm-auto" href="#" >
-                                <div class="avatar d-flex align-items-center">
-                                    <i class="bi bi-file-earmark-plus-fill"></i>
+                        <li class="nav-item dropdown">
+                            <div class="userLogin w-100">
+                                <div class="avatar_name d-flex align-items-center dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="avatar inline-block">
+                                        <img :src="user[0].avatar" alt="avatar" class="image_avatar_post">
+                                    </div>
+                                    <div class="name ps-1 fw-semibold" >
+                                        <span style="font-size:15px">{{ user[0].username }}</span>
+                                    </div>
                                 </div>
-                                <span class="ps-1">Đăng Tin</span>
-                            </a>
+                                <ul class="dropdown-menu mt-2 p-1" aria-labelledby="navbarDropdown">
+                                    <li class="menu-child border-bottom py-1">
+                                        <a class="dropdown-item" href="#">📝 Đăng tin cho thuê</a>
+                                    </li>
+                                    <li class="menu-child border-bottom py-1">
+                                        <a class="dropdown-item" href="#">📑 Quản lí tin đăng</a>
+                                    </li>
+                                    <li class="menu-child border-bottom py-1">
+                                        <a class="dropdown-item" href="#">👤 Thông tin tài khoản</a>
+                                        </li>
+                                    <li class="menu-child border-bottom py-1">
+                                        <a class="dropdown-item" href="#">💖 Tin đã yêu thích</a>
+                                    </li>
+                                    <!-- <li>
+                                        <hr class="dropdown-divider">
+                                    </li> -->
+                                    <li>
+                                        <a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i> Thoát</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item_post">
+                            <div class=" dropdown ms-md-4 ms-sm-0 ">
+                                <a class="post_new nav-link d-flex align-items-center px-4 w-sm-auto" href="/addPost" >
+                                    <div class="avatar d-flex align-items-center">
+                                        <i class="bi bi-file-earmark-plus-fill"></i>
+                                    </div>
+                                    <span class="ps-1">Đăng Tin</span>
+                                </a>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
     </div>
+
 
 </template>
 
 <script>
 import { ref } from 'vue'
 
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        },
-        data() {
-            const fixnavmenu = ref(false)
-            return {
-                fixnavmenu,
+import apiUser from '../Api/userApi'
+
+export default {
+    mounted() {
+        console.log('Component mounted.')
+        console.log(this.user.username)
+        this.loadViewInfo()
+    },
+    data() {
+        const isUser = ref(false)
+
+        return {
+            isUser,
+            user: []
+        }
+    },
+    methods: {
+        loadViewInfo(){
+            if(this.user.length != 0){
+                this.isUser = true
+            }else{
+                this.isUser = false
             }
-        },
-        methods: {
-            fixNavMenu(){
-                console.log(this.fixnavmenu)
-                this.fixnavmenu = true
-            }
-        },
-    }
+        }
+    },
+    computed: {
+
+    },
+    created() {
+        this.user = apiUser.User()
+    },
+}
 
 </script>
 
-<style>
+<style scoped>
     :root{
         --primary-color: #ff5d26
     }
@@ -97,11 +149,6 @@ import { ref } from 'vue'
         width: 120px;
     }
 
-    .navbar .navbar-nav .avatar{
-        width: 20px;
-        height: 20px
-    }
-
     .navbar .collapse .post_new{
         background-color: var(--primary-color);
         color: #fff;
@@ -115,13 +162,36 @@ import { ref } from 'vue'
     .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
         color: var(--primary-color);
     }
-
+/*
     .navbar-nav .nav-item:hover a{
-        color: var(--primary-color);
-    }
+        color: black;
+    } */
 
     .navbar .nav-item_post:hover a{
         background-color: #ea4e27;
+    }
+
+    /* avatar */
+
+    .userLogin .avatar_name .avatar img {
+        height: 30px;
+        width: 30px;
+        border-radius: 100rem;
+        object-fit: cover;
+    }
+
+    .dropdown-menu:hover li {
+        color: black;
+    }
+
+    .dropdown-menu .menu-child:hover a{
+         color: var(--primary-color);
+    }
+
+    .dropdown-item.active, .dropdown-item:active {
+        color: var(--bs-dropdown-link-active-color);
+        text-decoration: none;
+        background-color: #f4f4f4;
     }
 </style>
 
