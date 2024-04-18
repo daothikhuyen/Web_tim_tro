@@ -118,7 +118,7 @@ import feedback from "../Api/feedbackApi"
 import { ref, defineComponent } from 'vue'
 import { useDateFormat, useNow } from '@vueuse/core'
 import NavbarComponent from './NavbarComponent.vue'
-import TreeFeedBack from './Recursive/FeedbackTree.vue'
+
 import PostComponent from './post/index.vue'
 
 export default defineComponent(
@@ -126,7 +126,6 @@ export default defineComponent(
         name: "HomeComponent",
         components: {
             NavbarComponent,
-            TreeFeedBack,
             PostComponent,
         },
         data() {
@@ -174,7 +173,6 @@ export default defineComponent(
             this.infoPost = postApi.listPost(),
             this.imagePost = imageApi.imagePost(),
             this.user = userApi.User();
-            this.treeFeedback = feedback.feedback()
         }
     }
 )

@@ -125,12 +125,12 @@ const listPost = () => {
                 {
                     id: 1,
                     image: 'https://cloud.mogi.vn/images/2024/03/29/570/3c707d8330004321b870d719942f2db1.jpg',
-                    post_id: 1
+                    post_id: 3
                 },
                 {
                     id: 2,
                     image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
-                    post_id: 1
+                    post_id: 3
                 }
             ]
 

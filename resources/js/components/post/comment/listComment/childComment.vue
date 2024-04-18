@@ -1,19 +1,19 @@
 <template>
     <li class="content_feedback">
-        <div class="show_writeComment d-flex" :id="node.id_feedback">
+        <div class="show_writeComment d-flex" :id="nodeData.id_feedback">
             <div class="avatar_name d-flex ">
                 <div class="avatar inline-block">
-                    <img :src="node.avatar" alt="avatar" class="image_avatar_feedback">
+                    <img :src="nodeData.avatar" alt="avatar" class="image_avatar_feedback">
                 </div>
             </div>
             <div class="NameAndFeedback w-100 pe-3">
                 <div class="node-tree d-flex align-items-center mb-1">
                     <div class="name px-2">
                         <div class="px-2 py-1 rounded-3" style=" background-color: rgb(119, 119, 119,0.10);">
-                            <div class="fw-semibold">{{ node.username }}</div>
+                            <div class="fw-semibold">{{ nodeData.username }}</div>
                             <div class="show_content_feedback">
                                 <div class="content">
-                                    {{ node.content }}
+                                    {{ nodeData.content }}
                                 </div>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                 <div class="TimeAndReply ps-3">
                     <div class="d-flex mt-1 ms-1">
                         <div class="created_time">
-                            {{ node.created_time }}
+                            {{ nodeData.created_time }}
                         </div>
                         <div class="reply ps-4" @click.prevent="relpyComment()">
                            Thích
@@ -38,39 +38,33 @@
                             <div class="avatar_comment">
                                 <img :src="user.avatar" alt="" class="avatar">
                             </div>
-                        </div>
-                        <div class="content_writeComment">
-                            <form action="" class="fromSubmitComment"
-                                @submit.prevent="AddComment(node.post_id, node.id_feedback, $event)">
-                                <input type="text" class="inputComment w-100" v-model="commentData"
-                                    placeholder="Viết bình luận..." ref="input">
-                                <button class="btn_send" type="submit">
-                                    <i class="bi bi-send-fill" style="color:#ea4e27 "></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                        </div>     
+                        <AddComment :add="add" :postId="nodeData.post_id" :nodeData="nodeData"></AddComment>                   
+                    </div>                    
                 </div>
             </div>
         </div>
-        <ul v-if="node.feedback && node.feedback.length ">
-            <node v-for="child in node.feedback" :key="child.id" :node="child"></node>
+        <ul v-if="nodeData.feedback && nodeData.feedback.length ">
+            <FeedBackNode v-for="childNodeData in childCommentData" :nodeData="childNodeData" :add="add"></FeedBackNode>
         </ul>
 
     </li>
 </template>
 
 <script>
-import { ref,onMounted,onUnmounted, defineComponent } from 'vue'
-import { useDateFormat, useNow } from '@vueuse/core'
+import { ref, defineComponent } from 'vue'
 
-import userApi from '../../Api/userApi'
-import feedbackApi from '../../Api/feedbackApi'
+import userApi from '../../../../Api/userApi'
+import AddComment from '../AddComment.vue'
 
 export default defineComponent ({
-    name: "node",
+    name: "FeedBackNode",
     props: {
-        node: Array,
+        nodeData: Array,
+        add: Function,
+    },
+    components:{
+        AddComment,
     },
     data() {
         const commentData = ref(null)
@@ -86,38 +80,17 @@ export default defineComponent ({
         relpyComment(index){
             this.showReply = true
         },
-
-        AddComment(postId, parentId, event) {
-                try {
-                    event.preventDefault();
-
-                    const Hours = useDateFormat(useNow(), 'DD/MM/YYYY')
-                    const newComment = {
-                        id: Math.floor(Math.random() * 1000),
-                        username: this.user[0].username,
-                        avatar: this.user[0].avatar,
-                        post_id: postId,
-                        content: this.commentData,
-                        created_time: Hours,
-                        parent_id: parentId,
-                        feedback: []
-                    };
-
-                    this.$emit('load-comment',newComment)
-                    this.commentData = '';
-                    this.showReply = false
-                } catch (error) {
-                    console.error("Error:", error);
-                }
-        },
+       
     },
-    components: {
-
+    computed: {
+        childCommentData(){
+            console.log("this.nodeData.feedback", this.nodeData.feedback)
+            return this.nodeData.feedback;
+        }
     },
-
     created() {
         this.user = userApi.User()
-        this.treeFeedback = feedbackApi.feedback()
+        console.log("niode", this.nodeData)
     },
 })
 </script>
