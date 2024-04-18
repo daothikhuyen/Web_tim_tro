@@ -98,8 +98,8 @@ export default defineComponent(
             },
 
             ShowWriteComment(index){
-                this.showWriteComment = false
-                console.log(this.showWriteComment)
+                this.ShowWriteComment = false
+                console.log(this.ShowWriteComment)
             },
 
             // Send comment

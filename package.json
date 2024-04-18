@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@vueuse/core": "^10.9.0",
+        "boostrap": "^2.0.0",
         "vue-axios": "^3.5.2",
         "vue-dropdowns": "^1.1.2",
         "vue-router": "^4.3.0",
