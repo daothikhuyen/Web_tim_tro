@@ -1,34 +1,32 @@
 <template>
     <!-- <div class="TreeFeedBack"> -->
         <ul class="show_feedback">
-            <node-tree v-for="comment in treeData" :key="comment" :node="comment" @load-comment="handleLoadComment" ></node-tree>
+            <FeedBackNode v-for="comment in treeData" :key="comment" :nodeData="comment" :add="add" ></FeedBackNode>
         </ul>
     <!-- </div> -->
 </template>
 
 <script>
-import { ref,onMounted,onUnmounted, defineComponent } from 'vue'
-import { useDateFormat, useNow } from '@vueuse/core'
 
-import userApi from '../../Api/userApi'
-import feedbackApi from '../../Api/feedbackApi'
 
-import NodeTree from './FeedBackNode.vue'
+import FeedBackNode from './childComment.vue'
 
 export default {
     name: "FeedBackTree",
 
     mounted() {
-        console.log(this.treeData)
+        console.log("treeData",this.treeData)
 
     },
     components: {
-        NodeTree
+        FeedBackNode
     },
     props: {
+        add: Function,
+
         treeData: {
             type: Array,
-        }
+        },
 
     },
     data() {
@@ -41,9 +39,6 @@ export default {
             console.log(newComment)
             this.treeFeedback.feedback.push(newComment);
         }
-    },
-    created() {
-        this.treeFeedback = feedbackApi.feedback()
     },
 }
 </script>
