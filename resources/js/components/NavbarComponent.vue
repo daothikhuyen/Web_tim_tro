@@ -52,7 +52,7 @@
                                 </div>
                                 <ul class="dropdown-menu mt-2 p-1" aria-labelledby="navbarDropdown">
                                     <li class="menu-child border-bottom py-1">
-                                        <a class="dropdown-item" href="#">📝 Đăng tin cho thuê</a>
+                                        <a class="dropdown-item" href="/addPost">📝 Đăng tin cho thuê</a>
                                     </li>
                                     <li class="menu-child border-bottom py-1">
                                         <a class="dropdown-item" href="#">📑 Quản lí tin đăng</a>
@@ -63,9 +63,6 @@
                                     <li class="menu-child border-bottom py-1">
                                         <a class="dropdown-item" href="#">💖 Tin đã yêu thích</a>
                                     </li>
-                                    <!-- <li>
-                                        <hr class="dropdown-divider">
-                                    </li> -->
                                     <li>
                                         <a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i> Thoát</a>
                                     </li>

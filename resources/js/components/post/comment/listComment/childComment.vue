@@ -38,14 +38,14 @@
                             <div class="avatar_comment">
                                 <img :src="user.avatar" alt="" class="avatar">
                             </div>
-                        </div>     
-                        <AddComment :add="add" :postId="nodeData.post_id" :nodeData="nodeData"></AddComment>                   
-                    </div>                    
+                        </div>
+                        <AddComment :add="add" :postId="nodeData.post_id" :nodeData="nodeData"></AddComment>
+                    </div>
                 </div>
             </div>
         </div>
         <ul v-if="nodeData.feedback && nodeData.feedback.length ">
-            <FeedBackNode v-for="childNodeData in childCommentData" :nodeData="childNodeData" :add="add"></FeedBackNode>
+            <FeedBackNode v-for="childNodeData in childCommentData"  :key="childNodeData.id" :nodeData="childNodeData" :add="add"></FeedBackNode>
         </ul>
 
     </li>
@@ -80,7 +80,7 @@ export default defineComponent ({
         relpyComment(index){
             this.showReply = true
         },
-       
+
     },
     computed: {
         childCommentData(){
