@@ -1,6 +1,6 @@
 <template>
     <aside :class="`${is_expanded && 'is_expanded'}`">
-        <div class=" d-flex align-items-center mt-2">
+        <div class="sidebarPost d-flex align-items-center mt-2">
             <div class="avatar inline-block">
                 <img :src="user[0].avatar" alt="avatar" class="image_avatar_user">
             </div>
@@ -17,27 +17,11 @@
             </button>
         </div>
         <hr class="dropdown-divider border-bottom mb-2 mt-1">
-        <div class="menu">
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-house"></i></span>
-                    <span class="text">Trang Chủ</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Tài Khoản</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-notes-medical"></i></span>
-                    <span class="text">Đăng Bài</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-list-check"></i></span>
-                    <span class="text">Quản lý tin đăng</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-heart"></i></span>
-                    <span class="text">Tin Đã Like</span>
-                </a>
+        <div class="menu" v-for="menuAttribute in menuAttributes" :key="menuAttribute.id">
+            <router-link class="button" :to="menuAttribute.url">
+                <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
+                <span class="text">{{menuAttribute.title}}</span>
+            </router-link>
         </div>
     </aside>
 </template>
@@ -54,15 +38,52 @@ export default defineComponent({
     },
     data() {
         const is_expanded = ref(false)
+        const menuAttributes = ref([])
 
         return {
             user: [],
-            is_expanded
+            is_expanded,
+            menuAttributes
         }
+    },
+    mounted() {
+        this.addMenuAttribute();
     },
     methods: {
         ToggleMenu() {
             this.is_expanded = !this.is_expanded
+        },
+
+        addMenuAttribute(){
+            const listMenus = [
+                {
+                    icon : 'fa-solid fa-house',
+                    title : 'Trang chủ',
+                    url : '/'
+                },
+                {
+                    icon : 'fa-solid fa-user',
+                    title : 'Tài khoản',
+                    url : '/postManagement/account'
+                },
+                {
+                    icon : 'fa-solid fa-notes-medical',
+                    title : 'Đăng bài',
+                    url : '/postManagement/index'
+                },
+                {
+                    icon : 'fa-solid fa-list-check',
+                    title : 'Quản lí tin đăng',
+                    url : '/postManagement/ports'
+                },
+                {
+                    icon : 'fa-solid fa-heart',
+                    title : 'Tin đã yêu thích',
+                    url : "{ name: '/postManagement/index/creator/next', params: { postInfo: 'xin choà' } }"
+                },
+            ]
+
+            this.menuAttributes = listMenus
         }
     },
     created() {
@@ -74,15 +95,24 @@ export default defineComponent({
 
 <style scoped>
     aside {
-        position: sticky;
+        position:static ;
         display: flex;
         flex-direction: column;
         width: calc(2rem + 32px);
+        /* height: 100vh;
+        overflow-y: scroll; */
         min-height: 100vh;
         overflow: hidden;
-        padding: 1rem;
         background-color: #f3f3f3;
         transition: 0.2s ease-out;
+    }
+
+    aside::-webkit-scrollbar{
+        width: 0%;
+    }
+
+    aside .sidebarPost{
+        padding: 5rem 1rem 1rem 1rem;
     }
 
     .avatar img{
@@ -116,6 +146,7 @@ export default defineComponent({
 
     aside .menu-toggle-wrap .material-icons{
         font-size: 1rem;
+        padding: 1rem;
     }
 
     aside h3,
@@ -130,6 +161,7 @@ export default defineComponent({
         text-decoration: none;
         padding: 0rem 0.5rem;
         transition: 0.2s ease-out;
+        padding-left: 1rem;
     }
 
     aside .menu .button .material-icons{
@@ -145,7 +177,6 @@ export default defineComponent({
     }
 
     aside .menu .button:hover{
-        border-radius: 8px;
         background-color: var(--hover-color)
     }
 
@@ -173,10 +204,29 @@ export default defineComponent({
         margin-right: 1rem;
     }
 
+    .menu .button:hover{
+        color: var(--primary-color);
+    }
+
+    .menu .button.router-link-active{
+        border-right: 5px solid var(--primary-color);
+        color: var(--primary-color);
+        background-color: var(--hover-color);
+    }
+
+    /* .hover {
+        border-radius: 8px;
+        background-color: var(--hover-color);
+    } */
+
     @media (max-width: 768px) {
         aside{
             position: fixed;
             z-index: 99;
+        }
+
+        aside .sidebarPost{
+            padding: 5rem 1rem 0rem 1rem;
         }
 
     }

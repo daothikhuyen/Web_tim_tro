@@ -1,3 +1,4 @@
+
 :root{
     --primary-color: #ff5d26;
     --second-color: #ffff;
@@ -9,6 +10,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
 button {
@@ -100,11 +102,13 @@ ul , li {
 
 
 /* Post */
-.main_home .avatar_name .avatar .image_avatar_post{
+.avatar_name .avatar .image_avatar_post{
     height: 40px;
     width: 40px;
+    border: 1px solid rgb(128, 128, 128,0.25);
     border-radius: 100rem;
     object-fit: cover;
+    object-position: center;
 
 }
 
@@ -137,7 +141,7 @@ ul , li {
     margin: 4px 0;
 }
 
-.info_post .description .title{
+.info_post .title{
     font-size: 15px;
    font-weight: 600;
 }
@@ -192,6 +196,7 @@ ul , li {
     overflow: hidden;
 }
 
+.swiper-slide video,
 .swiper-slide img {
   width: 100%;
   max-width: 100%;

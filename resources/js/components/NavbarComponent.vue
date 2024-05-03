@@ -52,7 +52,7 @@
                                 </div>
                                 <ul class="dropdown-menu mt-2 p-1" aria-labelledby="navbarDropdown">
                                     <li class="menu-child border-bottom py-1">
-                                        <a class="dropdown-item" href="/addPost">📝 Đăng tin cho thuê</a>
+                                        <a class="dropdown-item" href="/postManagement/index/creator">📝 Đăng tin cho thuê</a>
                                     </li>
                                     <li class="menu-child border-bottom py-1">
                                         <a class="dropdown-item" href="#">📑 Quản lí tin đăng</a>
@@ -98,7 +98,6 @@ import apiUser from '../Api/userApi'
 export default {
     mounted() {
         console.log('Component mounted.')
-        console.log(this.user.username)
         this.loadViewInfo()
     },
     data() {

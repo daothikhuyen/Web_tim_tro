@@ -34,7 +34,6 @@
                     </div>
                 </div>
                 <AddComment :add="add" :postId="postId" :nodeData="1"></AddComment>
-
             </div>
         </div>
     </div>
@@ -89,6 +88,7 @@ export default defineComponent({
             return feedBacks.map((feedBackChild) => {
                 if (feedBackChild.id_feedback === parentId) {
                     feedBackChild.feedBack.push(newComment)
+
                     return feedBackChild
                 }
                 return addCommentToNode(feedBackChild.feedBack, parentId)
@@ -117,6 +117,7 @@ export default defineComponent({
                     nodeData.feedback.push(newComment)
                 }
 
+                this.showWriteComment = true
 
             } catch (error) {
                 console.error("Error:", error);
