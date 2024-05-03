@@ -8,7 +8,7 @@
             </span>
         </section>
         <div class="address">
-            <i class="bi bi-geo-alt"></i>
+            <i class="fa-solid fa-location-dot"></i>
             <span>{{ postData.full_address }}</span>
         </div>
         <div class="description p-2">

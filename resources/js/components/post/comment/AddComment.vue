@@ -1,8 +1,8 @@
 <template>
     <div class="content_writeComment">
-        <form action="" class="fromSubmitComment">
+        <form action="" class="fromSubmitComment" @submit.prevent="onAddComment">
             <input type="text" class="inputComment w-100" placeholder="Viết bình luận..." ref="input" v-model="commentContent">
-            <button class="btn_send" type="button" @click="onAddComment">
+            <button class="btn_send" type="submit" >
                 <i class="bi bi-send-fill" style="color:#ea4e27 "></i>
             </button>
         </form>
@@ -16,6 +16,7 @@ export default defineComponent({
         add: Function,
         postId: Number,
         nodeData: Object,
+        showReply: Boolean,
 
     },
     data(){
@@ -26,8 +27,8 @@ export default defineComponent({
     },
     methods:{
         onAddComment(){
-            console.log(this.postId, this.nodeData)
-            this.add(this.postId, this.nodeData, this.commentContent)
+            console.log(this.postId, this.nodeData,this.showReply)
+            this.add(this.postId, this.nodeData, this.commentContent,this.showReply)
             this.commentContent = ""
         }
     }

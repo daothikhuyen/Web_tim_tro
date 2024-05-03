@@ -1,6 +1,6 @@
 
 <template>
-    <div class="header_navbar px-0 bg-white">
+    <div class="header_navbar bg-white">
         <div class="header py-2 bg-light">
             <div class="d-flex justify-content-between aglin-items-center text-center">
                 <div class="ps-5">
@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light px-0 position-sticky" id="navbar-menu">
+        <nav class="navbar navbar-expand-lg navbar-light" id="navbar-menu">
             <div class="container">
                 <a class="navbar-brand" href="/">
                     <div class="logo w-100">
@@ -64,7 +64,9 @@ export default {
     }
 
     .navbar{
+        position: fixed;
         box-shadow: rgba(33, 35, 38, 0.2) 0px 10px 10px -10px;
+        z-index: 100;
     }
 
     .header_navbar .navbar .navbar-brand{
@@ -84,10 +86,6 @@ export default {
     .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
         color: var(--primary-color);
     }
-/*
-    .navbar-nav .nav-item:hover a{
-        color: black;
-    } */
 
     .navbar .nav-item_post:hover a{
         background-color: #ea4e27;

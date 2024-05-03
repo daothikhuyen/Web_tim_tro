@@ -1,6 +1,6 @@
 <template>
     <aside :class="`${is_expanded && 'is_expanded'}`">
-        <div class=" d-flex align-items-center mt-2">
+        <div class="sidebarPost d-flex align-items-center mt-2">
             <div class="avatar inline-block">
                 <img :src="user[0].avatar" alt="avatar" class="image_avatar_user">
             </div>
@@ -17,27 +17,11 @@
             </button>
         </div>
         <hr class="dropdown-divider border-bottom mb-2 mt-1">
-        <div class="menu">
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-house"></i></span>
-                    <span class="text">Trang Chủ</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Tài Khoản</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-notes-medical"></i></span>
-                    <span class="text">Đăng Bài</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-list-check"></i></span>
-                    <span class="text">Quản lý tin đăng</span>
-                </a>
-                <a href="/" class="button">
-                    <span class="material-icons" to="/"><i class="fa-solid fa-heart"></i></span>
-                    <span class="text">Tin Đã Like</span>
-                </a>
+        <div class="menu" v-for="menuAttribute in menuAttributes" :key="menuAttribute.id">
+            <a :href="menuAttribute.url" class="button">
+                <span class="material-icons" to="/"><i :class="menuAttribute.icon"></i></span>
+                <span class="text">{{menuAttribute.title}}</span>
+            </a>
         </div>
     </aside>
 </template>
@@ -53,16 +37,53 @@ export default defineComponent({
     components: {
     },
     data() {
-        const is_expanded = ref(false)
+        const is_expanded = ref(true)
+        const menuAttributes = ref([])
 
         return {
             user: [],
-            is_expanded
+            is_expanded,
+            menuAttributes
         }
+    },
+    mounted() {
+        this.addMenuAttribute();
     },
     methods: {
         ToggleMenu() {
             this.is_expanded = !this.is_expanded
+        },
+
+        addMenuAttribute(){
+            const listMenus = [
+                {
+                    icon : 'fa-solid fa-house',
+                    title : 'Trang chủ',
+                    url : '/'
+                },
+                {
+                    icon : 'fa-solid fa-user',
+                    title : 'Tài khoản',
+                    url : '/setUpProfile'
+                },
+                {
+                    icon : 'fa-solid fa-notes-medical',
+                    title : 'Đăng bài',
+                    url : '/addPost'
+                },
+                {
+                    icon : 'fa-solid fa-list-check',
+                    title : 'Quản lí tin đăng',
+                    url : '/list'
+                },
+                {
+                    icon : 'fa-solid fa-heart',
+                    title : 'Tin đã yêu thích',
+                    url : '/likePost'
+                },
+            ]
+
+            this.menuAttributes = listMenus
         }
     },
     created() {
@@ -80,7 +101,7 @@ export default defineComponent({
         width: calc(2rem + 32px);
         min-height: 100vh;
         overflow: hidden;
-        padding: 1rem;
+        padding: 6rem 1rem 1rem 1rem;
         background-color: #f3f3f3;
         transition: 0.2s ease-out;
     }
@@ -173,9 +194,15 @@ export default defineComponent({
         margin-right: 1rem;
     }
 
+    .hover {
+        border-radius: 8px;
+        background-color: var(--hover-color);
+    }
+
     @media (max-width: 768px) {
         aside{
             position: fixed;
+            padding: 4rem 1rem 1rem 1rem;
             z-index: 99;
         }
 

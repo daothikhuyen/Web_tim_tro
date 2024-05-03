@@ -33,7 +33,7 @@ const listPost = () => {
                 arceage:25,
                 user_id: 1,
                 category_id:1,
-                number_like: 136
+                number_like: 13
 
             },
             images :[

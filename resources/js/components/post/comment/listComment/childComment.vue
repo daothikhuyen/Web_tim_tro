@@ -24,22 +24,12 @@
                         <div class="created_time">
                             {{ nodeData.created_time }}
                         </div>
-                        <div class="reply ps-4" @click.prevent="relpyComment()">
+                        <div class="reply ps-4" @click.prevent="">
                            Thích
                         </div>
                         <div class="reply ps-4" @click.prevent="relpyComment()">
                             Trả lời
                         </div>
-                    </div>
-                </div>
-                <div class="writeComment" :class="{hide : !showReply}">
-                    <div class="d-flex align-items-center">
-                        <div v-for="user in user" :key="user.id" class="user_writeComment">
-                            <div class="avatar_comment">
-                                <img :src="user.avatar" alt="" class="avatar">
-                            </div>
-                        </div>
-                        <AddComment :add="add" :postId="nodeData.post_id" :nodeData="nodeData"></AddComment>
                     </div>
                 </div>
             </div>
@@ -49,6 +39,16 @@
         </ul>
 
     </li>
+    <div class="writeComment" :class="{hide : !showReply}">
+        <div class="d-flex align-items-center">
+            <div v-for="user in user" :key="user.id" class="user_writeComment">
+                <div class="avatar_comment">
+                    <img :src="user.avatar" alt="" class="avatar">
+                </div>
+            </div>
+            <AddComment :add="add" :postId="nodeData.post_id" :nodeData="nodeData" :showReply="showReply"></AddComment>
+        </div>
+    </div>
 </template>
 
 <script>

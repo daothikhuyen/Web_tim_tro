@@ -4,8 +4,9 @@ import { createRouter, createWebHistory} from "vue-router"
 import HomeComponent from '../components/HomeComponent.vue';
 import LoginComponent from '../components/LoginComponent.vue';
 import SignUpComponent from '../components/SignUpComponent.vue';
-import AddPost from '../components/ManagerUser/View_ManagerUser/addPost.vue'
+import viewAddPost from '../components/ManagerUser/View_ManagerUser/index.vue'
 import listPost from '../components/ManagerUser/View_ManagerUser/list.vue'
+import newPostNext from '../components/ManagerUser/View_ManagerUser/viewChildren/newPostNext.vue'
 
 const routes = [
     {
@@ -26,13 +27,19 @@ const routes = [
     {
         name: 'addPost',
         path: '/addPost',
-        component:AddPost
+        component:viewAddPost
+    },
+    {
+        name: 'seeBefore',
+        path: '/addPost/next',
+        component:newPostNext
     },
     {
         name: 'ListPost',
         path: '/listpost',
         component:listPost
-    }
+    },
+
   ];
 
 
