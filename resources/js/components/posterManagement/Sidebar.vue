@@ -69,12 +69,12 @@ export default defineComponent({
                 {
                     icon : 'fa-solid fa-notes-medical',
                     title : 'Đăng bài',
-                    url : '/postManagement/index'
+                    url : '/postManagement/index/creator'
                 },
                 {
                     icon : 'fa-solid fa-list-check',
                     title : 'Quản lí tin đăng',
-                    url : '/postManagement/ports'
+                    url : '/postManagement/ports/creator'
                 },
                 {
                     icon : 'fa-solid fa-heart',
