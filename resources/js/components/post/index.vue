@@ -2,7 +2,7 @@
     <div>
         <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in infoPost" :key="index">
             <Poster :user=listPost.user></Poster>
-            <PostContent :postData="listPost.postData" :images="listPost.images"></PostContent>
+            <PostContent :postData="listPost.postData" :images="listPost.images" :extensions="listPost.extensions" :videos="listPost.videos"></PostContent>
             <Comment :postId="listPost.postData.id" :numberLike="listPost.postData.number_like"></Comment>
         </div>
     </div>
@@ -43,8 +43,6 @@ export default defineComponent(
             }
         },
         methods: {
-
-                      
 
         },
         created() {

@@ -5,11 +5,21 @@
  */
 
 import './bootstrap';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
 import { createApp } from 'vue';
 
 
 import app from './App.vue'
 import router from './router/index.js';
 
-createApp(app).use(router).mount('#app')
+const vueApp = createApp(app)
+
+
+vueApp.use(router)
+vueApp.use(CKEditor)
+vueApp.mount('#app')
+
+export default vueApp
 

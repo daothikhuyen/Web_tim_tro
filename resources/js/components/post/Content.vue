@@ -8,15 +8,23 @@
             </span>
         </section>
         <div class="address">
-            <i class="bi bi-geo-alt"></i>
-            <span>{{ postData.full_address }}</span>
+            <i class="fa-solid fa-location-dot"></i>
+            <span class="ps-1">{{postData.full_address }}</span>
+        </div>
+        <div class="extension ps-2" v-if="extensions.length != 0">
+            <span class="title">Tiện ích:</span>
+            <span class="ps-1" v-for="(extension,index) in extensions" :key="index">
+                <span >{{extension.name}}</span>
+                <span v-if="index !== extensions.length -1">,</span>
+            </span>
         </div>
         <div class="description p-2">
             <span class="title">Mô tả chi tiết:</span> <br>
-            <span>
-                <span class="ps-2 content" id="descriptionContent">
-                    {{ isSeeMoreDescription ? postData.description : postData.description.substring(0, 500) }}
-                </span>
+            <span  v-if="isSeeMoreDescription">
+                <span class="ps-2 content" id="descriptionContent" v-html="postData.description"></span>
+            </span>
+            <span v-else>
+                <span class="ps-2 content" id="descriptionContent" v-html="postData.description.substring(0, 500)"></span>
                 <span class="description_etc" :class="{ hide: isSeeMoreDescription }">...</span>
             </span>
 
@@ -32,8 +40,14 @@
         <div class="post_image mt-2 px-2 py-1">
             <div class="swiper">
                 <Carousel class="swiper-wrapper">
-                    <Slide v-for="slide in images" :key="slide.id" class="swiper-slide">
-                        <img :src="slide.image" alt="" class="carousel__item">
+
+                    <Slide v-for="slideOne in videos" :key="slideOne.id" class="swiper-slide">
+                        <video width="320" height="240" controls class="carousel__item">
+                            <source :src="slideOne.video" type="video/mp4">
+                        </video>
+                    </Slide>
+                    <Slide v-for="slideTwo in images" :key="slideTwo.id" class="swiper-slide">
+                        <img :src="slideTwo.image" alt="">
                     </Slide>
                     <template #addons>
                         <Navigation />
@@ -53,6 +67,8 @@ export default defineComponent({
     props: {
         postData: Object,
         images: Array,
+        videos: Array,
+        extensions: Array
     },
     components: {
         Carousel,
@@ -61,6 +77,7 @@ export default defineComponent({
         Navigation,
     },
     data() {
+        console.log("hello" + this.video)
         const isSeeMoreDescription = ref(this.postData.description.length < 500)
         const isPostContextTooLong = ref(this.postData.description.length > 500)
         return {

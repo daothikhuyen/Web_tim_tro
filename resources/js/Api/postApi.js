@@ -33,9 +33,22 @@ const listPost = () => {
                 arceage:25,
                 user_id: 1,
                 category_id:1,
-                number_like: 136
+                number_like: 13
 
             },
+            extensions : [
+                {
+                    id: 1,
+                    name: "Máy Lạnh",
+                    post_id: 1
+                },
+                {
+                    id: 1,
+                    name: "Máy Nước Nóng",
+                    post_id: 1
+                },
+            ],
+
             images :[
                 {
                     id: 1,
@@ -47,7 +60,8 @@ const listPost = () => {
                     image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
                     post_id: 1
                 }
-            ]
+            ],
+
 
         },
         {
@@ -71,6 +85,9 @@ const listPost = () => {
                 number_like: 136
 
             },
+            extensions : [
+
+            ],
             images :[
                 {
                     id: 1,
@@ -82,14 +99,15 @@ const listPost = () => {
                     image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
                     post_id: 2
                 }
+            ],
+            videos :[
             ]
-
 
         },
         {
             user : {
                 id: 2,
-                username: "Đào Khuyên",
+                username: "Đao Khuyên",
                 password: "123456",
                 email: "daothikhuyen30@gmail.com",
                 phone: "0835667553",
@@ -121,6 +139,8 @@ const listPost = () => {
                 number_like: 136
 
             },
+            extensions : [
+            ],
             images :[
                 {
                     id: 1,
@@ -132,6 +152,9 @@ const listPost = () => {
                     image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
                     post_id: 3
                 }
+            ],
+            videos :[
+
             ]
 
         },
