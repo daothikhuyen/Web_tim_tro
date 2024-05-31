@@ -13,7 +13,7 @@
         </div>
         <nav class="navbar navbar-expand-lg navbar-light" id="navbar-menu">
             <div class="container">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/home">
                     <div class="logo w-100">
                         <img class="w-100" src="../../../image/logo.png" alt="">
                     </div>

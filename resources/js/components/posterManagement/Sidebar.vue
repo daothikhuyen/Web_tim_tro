@@ -1,12 +1,13 @@
 <template>
-    <aside :class="`${is_expanded && 'is_expanded'}`">
+    <aside v-if="authUser" :class="`${is_expanded && 'is_expanded'}`">
         <div class="sidebarPost d-flex align-items-center mt-2">
             <div class="avatar inline-block">
-                <img :src="user[0].avatar" alt="avatar" class="image_avatar_user">
+                <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_user">
+                <img v-else class="image_avatar_user" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="">
             </div>
             <div class="name ps-3 d-block" >
-                <div style="font-size:15px" class=" fw-semibold">{{ user[0].username }}</div>
-                <div style="font-size:14px"><small>{{ user[0].phone }}</small></div>
+                <div style="font-size:15px" class=" fw-bold">{{authUser.username}}</div>
+                <div style="font-size:14px" class=""><small>{{authUser.email}}</small></div>
             </div>
         </div>
         <div class="menu-toggle-wrap">
@@ -28,20 +29,21 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
+import {mapState,mapActions} from 'vuex'
 
 import userApi from '../../Api/userApi'
 
 
 export default defineComponent({
     name: "Siderbar",
-    components: {
+    computed: {
+        ...mapState(['authUser'])
     },
     data() {
         const is_expanded = ref(false)
         const menuAttributes = ref([])
 
         return {
-            user: [],
             is_expanded,
             menuAttributes
         }
@@ -77,17 +79,17 @@ export default defineComponent({
                     url : '/postManagement/ports/creator'
                 },
                 {
-                    icon : 'fa-solid fa-heart',
-                    title : 'Tin đã yêu thích',
-                    url : "{ name: '/postManagement/index/creator/next', params: { postInfo: 'xin choà' } }"
-                },
+                    icon: 'fa-solid fa-right-from-bracket',
+                    title: 'Đăng xuất',
+                    url : "/logout"
+                }
             ]
 
             this.menuAttributes = listMenus
         }
     },
     created() {
-        this.user = userApi.User()
+       this.$store.dispatch('getUser');
     },
 
 })

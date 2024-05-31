@@ -5,59 +5,76 @@
         <navbar-component></navbar-component>
         <div class="view_home container-fluid mt-3" style="">
             <div class="row">
-                <div class="col-md-2 d-flex align-items-center">
+                <div class="col-lg-2 advertise">
                     <div class="advertisement w-100">
                         <img class="w-100" src="../../image/advertisement/advertisement_01.png" alt="">
                     </div>
                 </div>
-                <div class="col-md-8 mt-3">
-                    <div class="header_search px-2 py-2 rounded-3 d-flex justify-content-between align-items-center"
-                        style="background-color:#C9C0BB">
-                        <div class="category d-flex align-items-center border border-1 rounded-3 ps-3">
-                            <span>
+                <div class="col-lg-8 col-md-12 col-sm-12 view_main mt-3">
+                    <div class="row header_search px-2 py-2 rounded-3" style="background-color:#C9C0BB">
+                        <div class="col-lg-3 category">
+                            <div class="search_item">
+                                <span class="icon_default">
                                 <i class="bi bi-house"></i>
                             </span>
-                            <select class="form-select border-0 " aria-label="Default select example">
-                                <option selected>Phòng trọ, nhà trọ</option>
-
-                            </select>
-                        </div>
-                        <div class="location border border-1 rounded-3 ps-3">
-                            <span>
-                                <i class="bi bi-map"></i>
+                            <span class="">
+                                <div class="ps-3 select">Phòng trọ, nhà trọ</div>
                             </span>
-                            <select class="form-select border-0" aria-label="Default select example">
-                                <option selected>Toàn quốc</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <!-- <span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </span> -->
+                            </div>
                         </div>
-                        <div class="location border border-1 rounded-3 ps-3 bg-secondary-subtle">
-                            <span>
-                                <i class="bi bi-geo-alt"></i>
-                            </span>
-                            <select class="form-select border-0" aria-label="Default select example" disabled>
-                                <option selected>Tất cả</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="search-info">
-
-                            <button type="submit" class="btn-search ">
-                                Tìm Kiếm
-                                <span>
-                                    <i class="bi bi-search"></i>
+                        <div class="col-lg-3 location">
+                            <div class="search_item">
+                                <span class="icon_default">
+                                    <i class="bi bi-map"></i>
                                 </span>
-                            </button>
+                                <span>
+                                    <select class="form-select border-0" aria-label="Default select example">
+                                        <option selected>Đà Nẵng</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 location">
+                            <div class="search_item">
+                                <span class="icon_default">
+                                    <i class="bi bi-cash-coin"></i>
+                                </span>
+                                <span>
+                                    <select class="form-select border-0" aria-label="Default select example">
+                                        <option selected>Chọn giá</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 location">
+                            <div class="search_item">
+                                <span class="icon_default">
+                                    <i class="bi bi-rulers"></i>
+                                </span>
+                                <span>
+                                    <select class="form-select border-0" aria-label="Default select example">
+                                        <option selected>Chọn diện tích</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="main_home py-3 mt-3">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-8 postcomponet">
                                 <PostComponent></PostComponent>
                             </div>
                             <div class="col-md-4 float-md-start">
@@ -98,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2 d-flex justify-content-center align-items-center">
+                <div class="col-lg-2 advertise">
                     <div class="advertisement w-100 ">
                         <img class="w-100" src="../../image/advertisement/advertisement_01.png" alt="">
                     </div>
@@ -115,7 +132,7 @@ import postApi from "../Api/postApi"
 import imageApi from "../Api/imageApi"
 import feedback from "../Api/feedbackApi"
 
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, onMounted } from 'vue'
 import { useDateFormat, useNow } from '@vueuse/core'
 import NavbarComponent from './NavbarComponent.vue'
 
@@ -130,6 +147,7 @@ export default defineComponent(
         },
         data() {
             const commentData = ref(null)
+
             return {
                 infoPost: [],
                 imagePost: [],
@@ -139,6 +157,10 @@ export default defineComponent(
             }
         },
         methods: {
+
+            checkUser(){
+                axios.post('checkSession')
+            },
 
             filterFeedBackData(post_id) {
                 return this.treeFeedback.feedback.filter(item => item.post_id === post_id)

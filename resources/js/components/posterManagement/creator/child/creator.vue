@@ -15,7 +15,7 @@
                             <div class="">
                                 <h5>Địa chỉ cho thuê</h5>
                             </div>
-                            <div class="error w-100 ps-3 pb-3">
+                            <div class="w-100 ps-3 pb-3">
                                 <span class="text-danger">{{error['address']}}</span>
                             </div>
                             <addAddress :createAddress="createAddress" />
@@ -37,17 +37,22 @@
                                     <div class="post_title">
                                         Tiêu đề <span class="text-danger">*</span>
                                     </div>
-                                    <input type="text" name="title" id="title" class="input_item w-100 " v-model="title">
-                                    <div class="error w-100 ps-2">
-                                        <span class="text-danger"><small>{{error['title']}}</small></span>
+                                    <input type="text" name="title" id="title" class="input_item w-100 " placeholder="Cho Thuê Nhà Ở Đà Nẵng" v-model="title">
+                                    <div class="w-100 ps-2">
+                                        <span v-if="!error['title']" class=""><small>Tối thiếu 30 ký tự, tối đa 99 ký tự</small></span>
+                                        <span v-else class="text-danger"><small>{{error['title']}}</small></span>
                                     </div>
                                 </div>
                                 <div class="info-item mt-3">
                                     <div class="post_title mt-0">
                                         Giá cho thuê <span class="text-danger">*</span>
                                     </div>
-                                    <input type="text" name="title" id="title" class="input_item w-100" placeholder="Nhập đầy đủ các số, ví dụ 1000000" v-model="textPrice">
-                                    <div class="error w-100 ps-2">
+                                    <div class="input_special d-flex justify-content-between align-items-center">
+                                        <input type="text" name="price" id="price" class="input_item" placeholder="Nhập đầy đủ các số, ví dụ 1000000" v-model="textPrice">
+                                        <div class="">VND/Tháng</div>
+                                    </div>
+                                    <div class="w-100 ps-2">
+                                        <!-- <span v-if="!error['price']" class="attention"><small>Tối thiếu 30 ký tự, tối đa 99 ký tự</small></span> -->
                                         <span class="text-danger"><small>{{error['price']}}</small></span>
                                     </div>
                                 </div>
@@ -56,10 +61,10 @@
                                         Diện tích <span class="text-danger">*</span>
                                     </div>
                                     <div class="input_special d-flex justify-content-between align-items-center">
-                                        <input type="text" class="input_item" placeholder="15" v-model="textArea">
+                                        <input type="text" class="input_item" placeholder="Nhập diện tích, VD: 20" v-model="textArea">
                                         <div class="">m<sup>2</sup></div>
                                     </div>
-                                    <div class="error w-100 ps-2">
+                                    <div class="w-100 ps-2">
                                         <span class="text-danger"><small>{{error['area']}}</small></span>
                                     </div>
                                 </div>
@@ -68,7 +73,7 @@
                                         Nội dung mô tả <span class="text-danger">*</span>
                                     </div>
                                     <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
-                                    <div class="error w-100 ps-2">
+                                    <div class="w-100 ps-2">
                                         <span class="text-danger"><small>{{error['description']}}</small></span>
                                     </div>
                                 </div>
@@ -79,7 +84,7 @@
                 </section>
 
                 <div class="btn_submit ps-2 d-flex justify-content-md-end justify-content-center">
-                    <button class="button" @click.prevent="ValidatorForm()">Tiếp theo</button>
+                    <button class="button" type="submit" @click.prevent="ValidatorForm()">Tiếp theo</button>
                 </div>
             </div>
             <div class="col-lg-3 d-lg-block d-none mt-5 pt-5">
@@ -91,7 +96,9 @@
                         <li>Các bạn nên điền đầy đủ thông tin để tin có thể đạt hiểu suất nhanh</li>
                         <li>Để để tạo sự tin cậy các bạn nên đăng ảnh và video rõ ràng , địa chỉ cũ thể !</li>
                     </ul>
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -99,6 +106,7 @@
 
 <script lang="ts">
 import {ref,defineComponent } from 'vue'
+import {mapState,mapActions} from 'vuex'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import user from '../../../../Api/userApi'
 
@@ -108,16 +116,21 @@ import Extension from './listChild/extension.vue'
 
 export default defineComponent({
     name: 'CreatePoster',
+    computed: {
+        ...mapState(['authUser'])
+    },
     components: {
         addImage,
         addAddress,
         Extension,
-
     },
     data() {
+
         const error= ref([])
+        const user = ref({})
         const fullAddress = ref([])
-        const newPostInfo = ref({})
+        const location_id = ref([])
+        const newPostInfo = ref(null)
         const arrayImage = ref([])
         const arrayvideo = ref([])
         const arrayExtension = ref([])
@@ -125,12 +138,12 @@ export default defineComponent({
         const title = ref("")
         const textPrice = ref("")
         const textArea = ref("")
-        const textFullAfress = ref("")
+        const textFullAddress = ref("")
 
 
         return {
             editor: ClassicEditor,
-            editorData: '',
+            editorData: '<p>Nhập nội dung mô tả tại đây</p>',
             editorConfig: {
                 toolbar: {
                     items: [
@@ -144,12 +157,14 @@ export default defineComponent({
                 }
             },
             error,
+            user,
             title,
             textPrice,
             textArea,
-            textFullAfress,
-            newPostInfo,
+            textFullAddress,
+            location_id,
             fullAddress,
+            newPostInfo,
             arrayImage ,
             arrayvideo,
             arrayExtension
@@ -162,17 +177,11 @@ export default defineComponent({
             console.log(this.arrayExtension)
         },
 
-        createAddress(address,title){
-            this.fullAddress = address
-            this.title = "Cho Thuê Nhà Ở " +  title
-
-        },
-
         UpdateImage(imgae){
             console.log(imgae)
             const newImage = {
                 id:  Math.floor(Math.random() * 1000),
-                image: imgae,
+                link_image: imgae,
                 post_id: Math.floor(Math.random() * 1000),
             }
             this.arrayImage.push(newImage)
@@ -182,7 +191,7 @@ export default defineComponent({
 
             const newvideo = {
                 id:  Math.floor(Math.random() * 1000),
-                video: video,
+                link_video: video,
                 post_id: Math.floor(Math.random() * 1000),
             }
             this.arrayvideo.push(newvideo)
@@ -192,38 +201,32 @@ export default defineComponent({
         ValidatorForm(){
             let checkValidator = ref(false)
             this.error = []
-
-            const arrayInput = [
-                {
-                    value: this.fullAddress,
-                    name:  "address"
-                },
-                {
-                    value: this.arrayImage,
-                    name: "image"
-                }
-            ]
-
             const arrayText = [
-                {
-                    value: this.title,
-                    name : "title"
-                },
-                {
-                    value: this.textPrice,
-                    name: "price"
-                },
-                {
-                    value: this.textArea,
-                    name: "area"
-                },
-                {
-                    value: this.editorData,
-                    name: "description"
-                }
+                { value: this.title,      name: "title" },
+                { value: this.textPrice,  name: "price" },
+                { value: this.textArea ,  name: "area" },
+                { value: this.editorData, name: "description" }
             ]
+            const arrayInput = [
+                { value: this.fullAddress, name:  "address"},
+                { value: this.arrayImage,  name: "image"}
+            ]
+
+            console.log(arrayText);
+
 
             arrayText.forEach(element => {
+                if(element.name == "title" && element.value.length < 30 && element.value.length >99){
+                    console.log(element.value.length)
+                    this.error[element.name] = "Bạn nhập chưa đúng định dạng"
+                }
+
+                const match = /^[0-9]+$/;
+                if(element.name == "price" && !element.value.match(match)){
+                    console.log(element.value.length)
+                    this.error[element.name] = "Bạn phải nhập đủ các số VD: 100000"
+                }
+
                 if(element.value == ""){
                     this.error[element.name] = "Bạn cần nhập thông tin này"
                 }
@@ -235,49 +238,67 @@ export default defineComponent({
                 }
             });
 
-            console.log(Object.keys(this.error))
+
             if(Object.keys(this.error).length === 0){
+                console.log("hello")
                 checkValidator.value = true
             }
-            console.log(checkValidator.value)
 
             if(checkValidator.value){
+                 console.log("hi")
                 this.seenBefore()
             }
         },
 
+        createAddress(address,title,location_id){
+            this.fullAddress = address
+            this.location_id = location_id
+            this.title = "Cho Thuê Nhà Ở " +  title
+
+        },
+
         seenBefore(){
-            this.fullAddress.forEach((element,index) => {
-                this.textFullAfress += element
-                if(index < this.fullAddress.length -1){
-                    this.textFullAfress += " - "
+
+            try {
+                this.user = this.authUser
+                this.fullAddress.forEach((element,index) => {
+                    this.textFullAddress += element
+                    if(index < this.fullAddress.length -1){
+                        this.textFullAddress += " - "
+                    }
+                });
+
+                const newPost = {
+                    user : this.user,
+                    postData: {
+                        id:  Math.floor(Math.random() * 1000),
+                        title: this.title,
+                        description: this.editorData,
+                        full_address: this.textFullAddress,
+                        price: this.textPrice,
+                        arceage:this.textArea,
+                        user_id: this.user.id,
+                        province_id: this.location_id['province_id'],
+                        district_id: this.location_id['district_id'],
+                        ward_id: this.location_id['ward_id'],
+                        street_id: this.location_id['street_id'] ?this.location_id['street_id']: "",
+                        category_id:1,
+                        number_like: 0
+
+                    },
+                    extensions: this.arrayExtension,
+                    images :this.arrayImage,
+                    videos : this.arrayvideo
                 }
-            });
 
-            const newPost = {
-                user : user.User()[0],
-                postData: {
-                    id:  Math.floor(Math.random() * 1000),
-                    title: this.title,
-                    description: this.editorData,
-                    full_address: this.textFullAfress,
-                    price: this.textPrice,
-                    arceage:this.textArea,
-                    user_id: 1,
-                    category_id:1,
-                    number_like: 0
+                // this.$store.commit('CREATE_NEW_POST',newPost)
 
-                },
-                extensions: this.arrayExtension,
-                images :this.arrayImage,
-                videos : this.arrayvideo
+                this.newPostInfo = newPost
+                const jsonData = JSON.stringify(this.newPostInfo);
+                this.$router.push({name :'next',params: {data: jsonData}})
+            } catch (error) {
+                console.log(error)
             }
-
-            console.log(this.arrayImage)
-
-            this.newPostInfo = newPost
-            const jsonData = JSON.stringify(this.newPostInfo);
-            this.$router.push({name : 'next', params: {data: jsonData}})
 
         }
 
@@ -396,6 +417,13 @@ export default defineComponent({
 
     input:hover{
         border: 1px solid black;
+    }
+
+    .attention small {
+        font-size: 11px;
+        line-height: 16px;
+        font-weight: 450;
+        color:rgb(162, 160, 160,1);
     }
 
     @media (max-width: 768px) {

@@ -3,19 +3,17 @@
         <div class="main_title">
             <h5>Hình Ảnh </h5>
         </div>
-        <div class="post_title">
-            Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn
-        </div>
+        <div class="attention mb-1 ms-3"><small> Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn</small></div>
         <div class="upload_image mb-1">
             <div class="imagePreviewWrapper">
                 <div>Thêm ảnh</div>
-                <img src="/storage/uploads/2024/05/09/camera.png" alt="">
+                <img src="/storage/uploads/2024/05/31/camera.png" alt="">
             </div>
             <div class="rightRound" id="upload">
                 <input type="file" name="file" class="file" ref="fileInput" multiple accept=".png,.jpg" @change="onUploadFile">
             </div>
         </div>
-        <div class="error w-100 ps-2">
+        <div class=" w-100 ps-2">
             <span class="text-danger"><small>{{notifi}}</small></span>
         </div>
         <div class="container">
@@ -31,13 +29,11 @@
         <div class="main_title">
             <h5>Video</h5>
         </div>
-        <div class="post_title">
-            Upload video của bạn
-        </div>
+        <div class="attention mb-1 ms-3"><small>Upload video của bạn</small></div>
         <div class="upload_image">
             <div class="imagePreviewWrapper">
                 <div>Thêm video</div>
-                <img src="/storage/uploads/2024/05/09/video.png" alt="">
+                <img src="/storage/uploads/2024/05/31/video.png" alt="">
             </div>
             <div class="rightRound" id="upload">
                 <input type="file" name="file" class="file" ref="fileInput" accept=".mp4" multiple @change="onUploadFile">
@@ -109,7 +105,7 @@ export default defineComponent({
                     this.showProgress = true
                 }
 
-                axios.post('upload-file', formData, {
+                axios.post('/api/upload-file', formData, {
                     onUploadProgress: ({loaded, total}) => {
                         // console.log(file.type.split('/')[0])
                         if(file.type.split('/')[0] == 'image'){

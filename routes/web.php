@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\UploadFileController;
+use App\Http\Controllers\Users\LoginController;
+use App\Http\Controllers\Users\SiginUpController;
+use App\Http\Controllers\VerificaionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/{any}', function () {
     return view('HomeWeb');
-})->where('any','.*');
-
-Route::post('postManagement/index/upload-file', [UploadFileController::class, 'uploadFile']);
+})->where('any','.*')->name('home');

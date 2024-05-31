@@ -2,163 +2,191 @@
 const listPost = () => {
     return [
         {
-            user : {
-                id: 1,
-                username: "Khuyên Khuyên",
-                password: "123456",
-                email: "daothikhuyen30@gmail.com",
-                phone: "0835667553",
-                avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg'
+          postData: {
+            "id": 11,
+            "title": "Cho Thuê Nhà Ở Thành Phố Đà Nẵng",
+            "description": "<p>Nhập nội dung mô tả tại đây</p>",
+            "price": 1000000,
+            "area": 20,
+            "full_address": "Đường 10 - Phường Hoà An - Cẩm Lệ - Đà Nẵng",
+            "user_id": 34,
+            "category_id": 1,
+            "number_like": 0,
+            "created_at": "2024-05-27T05:00:26.000000Z",
+            "updated_at": "2024-05-27T05:00:26.000000Z",
+            "province_id": 3,
+            "district_id": 4,
+            "ward_id": 6,
+            "street_id": 6
+          },
+          user: {
+            "id": 34,
+            "username": "Huyền Khuyên",
+            "email": "khuyendt.22itb@vku.udn.vn",
+            "email_verified_at": null,
+            "created_at": "2024-05-17T15:24:07.000000Z",
+            "updated_at": "2024-05-17T15:24:45.000000Z",
+            "phone": 0,
+            "avatar": null,
+            "level": 2,
+            "is_activated": 1
+          },
+          images: [
+            {
+              "id": 5,
+              "link_image": "/storage/uploads/2024/05/27/nguyenton31.jpg",
+              "post_id": 11,
+              "created_at": "2024-05-27T05:00:26.000000Z",
+              "updated_at": "2024-05-27T05:00:26.000000Z"
             },
-            postData: {
-                id: 1,
-                title: "Phòng full nt ở Bùi Đình Tuý Bình Thạnh",
-                description: `
-                Phòng cho thuê cao cấp - Oledo maison
-                Giá chỉ: 2.5 triệu/ tháng - Diện tích: 25m2
-
-                Một không gian sống văn minh, trong lành, yên tĩnh, an ninh trong lòng TP, với đầy đủ tiện nghi, không chung chủ và tự do về giờ giấc
-                - Địa chỉ: Đường Tôn Đản - TP Đà Nẵng
-                + Vị trí nằm trong TTTP, chỉ với 5p đến Bến xe Trung Tâm, gần cầu vượt ngã ba Huế hiện đại nút giao thông Điện Biên Phủ – Tôn Đức Thắng - Trường Chinh, 10-15p đến Coop mart, Sân Bay Quốc tế ĐN, ĐH Duy Tân, Bách Khoa, Sư Phạm, Big C, Bến xe, Ga tàu,...
-                + Hẻm dân cư rộng 3m
-                * Đầy đủ tiện nghi thoải mái
-                - Camera, hệ thống điều hòa, nóng lạnh, truyền hình cáp quang FPT, Wifi tốc độ cao, bãi để xe rộng rãi, sân phơi, sân sinh hoạt chung, hệ thống điện nước âm tường, trần đóng thạch cao, đồng hồ điện nước riêng.
-                - Có gác lửng đúc, WC, bếp sạch sẽ, sang trọng
-                * Giá thuê hấp dẫn bất ngờ chỉ từ 2.5trđ - 2.9trđ/ tháng
-                * Thời gian thuận tiện liên hệ xem phòng: 13h - 17h (thứ 7 và CN). Hoặc sau 19h hàng ngày
-                * Gọi ngay cho tôi Mr Thành: ***
-                + Mail: phuocthanh85@gmail.com`,
-                full_address: " Đường Tôn Đản - TP Đà Nẵng",
-                price: "2,5 triệu/tháng",
-                arceage:25,
-                user_id: 1,
-                category_id:1,
-                number_like: 13
-
+            {
+              "id": 6,
+              "link_image": "/storage/uploads/2024/05/27/nguyenton32.jpg",
+              "post_id": 11,
+              "created_at": "2024-05-27T05:00:27.000000Z",
+              "updated_at": "2024-05-27T05:00:27.000000Z"
             },
-            extensions : [
-                {
-                    id: 1,
-                    name: "Máy Lạnh",
-                    post_id: 1
-                },
-                {
-                    id: 1,
-                    name: "Máy Nước Nóng",
-                    post_id: 1
-                },
-            ],
-
-            images :[
-                {
-                    id: 1,
-                    image: 'https://cloud.mogi.vn/images/2024/03/29/570/3c707d8330004321b870d719942f2db1.jpg',
-                    post_id: 1
-                },
-                {
-                    id: 2,
-                    image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
-                    post_id: 1
-                }
-            ],
-
-
+            {
+              "id": 7,
+              "link_image": "/storage/uploads/2024/05/27/nguyenton33.jpg",
+              "post_id": 11,
+              "created_at": "2024-05-27T05:00:27.000000Z",
+              "updated_at": "2024-05-27T05:00:27.000000Z"
+            }
+          ],
+          videos: [],
+          extensions: []
         },
         {
-            user : {
-                id: 2,
-                username: "Minh Khả",
-                password: "123456",
-                email: "daothikhuyen30@gmail.com",
-                phone: "0835667553",
-                avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg'
+          postData: {
+            "id": 18,
+            "title": "Cho Thuê Nhà Ở Thành Phố Đà Nẵng",
+            "description": "<p>Nhà rất đẹp</p>",
+            "price": 900000000,
+            "area": 25,
+            "full_address": "Đường 10 - Phường Hoà An - Cẩm Lệ - Đà Nẵng",
+            "user_id": 34,
+            "category_id": 1,
+            "number_like": 0,
+            "created_at": "2024-05-27T05:24:13.000000Z",
+            "updated_at": "2024-05-27T05:24:13.000000Z",
+            "province_id": 3,
+            "district_id": 4,
+            "ward_id": 6,
+            "street_id": 7
+          },
+          user: {
+            "id": 34,
+            "username": "Huyền Khuyên",
+            "email": "khuyendt.22itb@vku.udn.vn",
+            "email_verified_at": null,
+            "created_at": "2024-05-17T15:24:07.000000Z",
+            "updated_at": "2024-05-17T15:24:45.000000Z",
+            "phone": 0,
+            "avatar": null,
+            "level": 2,
+            "is_activated": 1
+          },
+          images: [
+            {
+              "id": 26,
+              "link_image": "/storage/uploads/2024/05/27/nguyenton31.jpg",
+              "post_id": 18,
+              "created_at": "2024-05-27T05:24:13.000000Z",
+              "updated_at": "2024-05-27T05:24:13.000000Z"
             },
-            postData: {
-                id: 2,
-                title: "Phòng full nt ở Bùi Đình Tuý Bình Thạnh",
-                description: "Một không gian sống văn minh, trong lành, yên tĩnh, an ninh trong lòng TP, với đầy đủ tiện nghi, không chung chủ và tự do về giờ giấc",
-                full_address: " Đường Tôn Đản - TP Đà Nẵng",
-                price: "2,5 triệu/tháng",
-                arceage:25,
-                user_id: 1,
-                category_id:1,
-                number_like: 136
-
+            {
+              "id": 27,
+              "link_image": "/storage/uploads/2024/05/27/nguyenton33.jpg",
+              "post_id": 18,
+              "created_at": "2024-05-27T05:24:13.000000Z",
+              "updated_at": "2024-05-27T05:24:13.000000Z"
             },
-            extensions : [
-
-            ],
-            images :[
-                {
-                    id: 1,
-                    image: 'https://cloud.mogi.vn/images/2024/03/29/570/3c707d8330004321b870d719942f2db1.jpg',
-                    post_id: 2
-                },
-                {
-                    id: 2,
-                    image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
-                    post_id: 2
-                }
-            ],
-            videos :[
-            ]
-
+            {
+              "id": 28,
+              "link_image": "/storage/uploads/2024/05/27/nguyenton32.jpg",
+              "post_id": 18,
+              "created_at": "2024-05-27T05:24:13.000000Z",
+              "updated_at": "2024-05-27T05:24:13.000000Z"
+            }
+          ],
+          videos: [
+            {
+              "id": 2,
+              "link_video": "/storage/uploads/2024/05/27/635133321350383515.mp4",
+              "post_id": 18,
+              "created_at": "2024-05-27T05:24:13.000000Z",
+              "updated_at": "2024-05-27T05:24:13.000000Z"
+            }
+          ],
+          extensions: []
         },
         {
-            user : {
-                id: 2,
-                username: "Đao Khuyên",
-                password: "123456",
-                email: "daothikhuyen30@gmail.com",
-                phone: "0835667553",
-                avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg'
+          postData: {
+            "id": 20,
+            "title": "Cho Thuê Nhà Ở Thành Phố Đà Nẵng",
+            "description": "<p>Nhập nội dung mô tả tại đây</p>",
+            "price": 900000005,
+            "area": 1000,
+            "full_address": "Đường 10 - Phường Hoà An - Cẩm Lệ - Đà Nẵng",
+            "user_id": 34,
+            "category_id": 1,
+            "number_like": 0,
+            "created_at": "2024-05-27T05:39:51.000000Z",
+            "updated_at": "2024-05-27T05:39:51.000000Z",
+            "province_id": 3,
+            "district_id": 4,
+            "ward_id": 6,
+            "street_id": 7
+          },
+          user: {
+            "id": 34,
+            "username": "Huyền Khuyên",
+            "email": "khuyendt.22itb@vku.udn.vn",
+            "email_verified_at": null,
+            "created_at": "2024-05-17T15:24:07.000000Z",
+            "updated_at": "2024-05-17T15:24:45.000000Z",
+            "phone": 0,
+            "avatar": null,
+            "level": 2,
+            "is_activated": 1
+          },
+          images: [
+            {
+              "id": 30,
+              "link_image": "/storage/uploads/2024/05/27/126d9638795b2dc43765f3a2f6544399.jpg",
+              "post_id": 20,
+              "created_at": "2024-05-27T05:39:51.000000Z",
+              "updated_at": "2024-05-27T05:39:51.000000Z"
+            }
+          ],
+          videos: [
+            {
+              "id": 4,
+              "link_video": "/storage/uploads/2024/05/27/635133321350383515.mp4",
+              "post_id": 20,
+              "created_at": "2024-05-27T05:39:51.000000Z",
+              "updated_at": "2024-05-27T05:39:51.000000Z"
+            }
+          ],
+          extensions: [
+            {
+              "id": 1,
+              "title": "Máy lạnh",
+              "post_id": 20,
+              "created_at": "2024-05-27T05:39:51.000000Z",
+              "updated_at": "2024-05-27T05:39:51.000000Z"
             },
-            postData: {
-                id: 3,
-                title: "Phòng full nt ở Bùi Đình Tuý Bình Thạnh",
-                description: `
-                Phòng cho thuê cao cấp - Oledo maison
-                Giá chỉ: 2.5 triệu/ tháng - Diện tích: 25m2
-
-                Một không gian sống văn minh, trong lành, yên tĩnh, an ninh trong lòng TP, với đầy đủ tiện nghi, không chung chủ và tự do về giờ giấc
-                - Địa chỉ: Đường Tôn Đản - TP Đà Nẵng
-                + Vị trí nằm trong TTTP, chỉ với 5p đến Bến xe Trung Tâm, gần cầu vượt ngã ba Huế hiện đại nút giao thông Điện Biên Phủ – Tôn Đức Thắng - Trường Chinh, 10-15p đến Coop mart, Sân Bay Quốc tế ĐN, ĐH Duy Tân, Bách Khoa, Sư Phạm, Big C, Bến xe, Ga tàu,...
-                + Hẻm dân cư rộng 3m
-                * Đầy đủ tiện nghi thoải mái
-                - Camera, hệ thống điều hòa, nóng lạnh, truyền hình cáp quang FPT, Wifi tốc độ cao, bãi để xe rộng rãi, sân phơi, sân sinh hoạt chung, hệ thống điện nước âm tường, trần đóng thạch cao, đồng hồ điện nước riêng.
-                - Có gác lửng đúc, WC, bếp sạch sẽ, sang trọng
-                * Giá thuê hấp dẫn bất ngờ chỉ từ 2.5trđ - 2.9trđ/ tháng
-                * Thời gian thuận tiện liên hệ xem phòng: 13h - 17h (thứ 7 và CN). Hoặc sau 19h hàng ngày
-                * Gọi ngay cho tôi Mr Thành: ***
-                + Mail: phuocthanh85@gmail.com`,
-                full_address: " Đường Tôn Đản - TP Đà Nẵng",
-                price: "2,5 triệu/tháng",
-                arceage:25,
-                user_id: 1,
-                category_id:1,
-                number_like: 136
-
-            },
-            extensions : [
-            ],
-            images :[
-                {
-                    id: 1,
-                    image: 'https://cloud.mogi.vn/images/2024/03/29/570/3c707d8330004321b870d719942f2db1.jpg',
-                    post_id: 3
-                },
-                {
-                    id: 2,
-                    image: 'https://cloud.mogi.vn/images/2024/03/29/571/7f61404c62a6412ca109ff5beceaff55.jpg',
-                    post_id: 3
-                }
-            ],
-            videos :[
-
-            ]
-
-        },
-    ]
+            {
+              "id": 2,
+              "title": "Máy nước nóng",
+              "post_id": 20,
+              "created_at": "2024-05-27T05:39:51.000000Z",
+              "updated_at": "2024-05-27T05:39:51.000000Z"
+            }
+          ]
+        }
+      ]
 }
 
 export default {

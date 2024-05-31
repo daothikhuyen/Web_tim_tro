@@ -3,7 +3,8 @@
         <div class="show_writeComment d-flex" :id="nodeData.id_feedback">
             <div class="avatar_name d-flex ">
                 <div class="avatar inline-block">
-                    <img :src="nodeData.avatar" alt="avatar" class="image_avatar_feedback">
+                    <img v-if="nodeData.avatar != null" :src="nodeData.avatar" alt="avatar" class="image_avatar_feedback">
+                    <img v-else src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="avatar" class="image_avatar_feedback">
                 </div>
             </div>
             <div class="NameAndFeedback w-100 pe-3">

@@ -13,7 +13,7 @@
         </div>
         <nav class="navbar navbar-expand-lg navbar-light px-0" id="navbar-menu">
             <div class="container">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/home">
                     <div class="logo w-100">
                         <img class="w-100" src="../../image/logo.png" alt="">
                     </div>
@@ -24,7 +24,7 @@
                 <div class="collapse navbar-collapse d-md-flex align-items-center"  id="navbarSupportedContent">
 
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
-                        <li class="nav-item dropdown" :class="{hide: isUser}">
+                        <li class="nav-item dropdown" v-if="!isLoggedIn" >
                             <a class="nav-link d-flex align-items-center" href="/login" >
                                 <div class="avatar d-flex align-items-center">
                                    <i class="bi bi-person-plus-fill"></i>
@@ -32,7 +32,7 @@
                                 <small><span class="ps-1">Đăng Nhập</span></small>
                             </a>
                         </li>
-                        <li class="nav-item dropdown" :class="{hide: isUser}">
+                        <li class="nav-item dropdown" v-if="!isLoggedIn">
                             <a class="nav-link d-flex align-items-center" href="/signup" >
                                 <div class="avatar d-flex align-items-center">
                                     <i class="bi bi-box-arrow-in-right"></i>
@@ -40,14 +40,16 @@
                                 <small><span class="ps-1">Đăng Kí</span></small>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li  class="nav-item dropdown" v-if="isLoggedIn && authUser">
                             <div class="userLogin w-100">
+
                                 <div class="avatar_name d-flex align-items-center dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="avatar inline-block">
-                                        <img :src="user[0].avatar" alt="avatar" class="image_avatar_post">
+                                        <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_post">
+                                        <img v-else class="image_avatar_post" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="">
                                     </div>
                                     <div class="name ps-1 fw-semibold" >
-                                        <span style="font-size:15px">{{ user[0].username }}</span>
+                                        <span style="font-size:15px">{{authUser.username}}</span>
                                     </div>
                                 </div>
                                 <ul class="dropdown-menu mt-2 p-1" aria-labelledby="navbarDropdown">
@@ -64,7 +66,7 @@
                                         <a class="dropdown-item" href="#">💖 Tin đã yêu thích</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i> Thoát</a>
+                                        <a class="dropdown-item" href="/login" @click.prevent="logoutWeb" ><i class="fa-solid fa-right-from-bracket"></i> Thoát</a>
                                     </li>
                                 </ul>
                             </div>
@@ -72,7 +74,7 @@
 
                         <li class="nav-item_post">
                             <div class=" dropdown ms-md-4 ms-sm-0 ">
-                                <a class="post_new nav-link d-flex align-items-center px-4 w-sm-auto" href="/addPost" >
+                                <a class="post_new nav-link d-flex align-items-center px-4 w-sm-auto" href="/postManagement/index/creator" >
                                     <div class="avatar d-flex align-items-center">
                                         <i class="bi bi-file-earmark-plus-fill"></i>
                                     </div>
@@ -84,7 +86,6 @@
                 </div>
             </div>
         </nav>
-
     </div>
 
 
@@ -92,36 +93,42 @@
 
 <script>
 import { ref } from 'vue'
-
-import apiUser from '../Api/userApi'
+import {mapState,mapActions} from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
+    computed: {
+        ...mapState(['isLoggedIn']),
+        ...mapState(['authUser'])
+    },
     mounted() {
         console.log('Component mounted.')
-        this.loadViewInfo()
     },
     data() {
-        const isUser = ref(false)
-
         return {
-            isUser,
-            user: []
+
         }
     },
     methods: {
-        loadViewInfo(){
-            if(this.user.length != 0){
-                this.isUser = true
-            }else{
-                this.isUser = false
-            }
+
+        // ...mapActions(['logout']),
+        logoutWeb(){
+            console.log("1")
+            Swal.fire({
+                title: "Thông Báo!",
+                text: "Banh Muốn Rời Web!",
+                icon: "success",
+                confirmButtonText: "Đồng Ý",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$store.dispatch('logout');
+                }
+            });
         }
-    },
-    computed: {
 
     },
     created() {
-        this.user = apiUser.User()
+        this.user = this.$store.dispatch('getUser');
     },
 }
 
@@ -188,6 +195,11 @@ export default {
         color: var(--bs-dropdown-link-active-color);
         text-decoration: none;
         background-color: #f4f4f4;
+    }
+
+    .navbar-light .navbar-nav .nav-link:focus,
+    .navbar-light .navbar-nav .nav-link:hover {
+        color: rgb(255, 93, 38,0.7);
     }
 </style>
 

@@ -16,7 +16,7 @@ const getLocation =()=> {
                             id: 5,
                             name: "Hoà Quý",
                             title: 'Phường Xã',
-                            parent_id: 3,
+                            parent_id: 2,
                             location : [
                                 {
                                     id: 7,
@@ -32,7 +32,7 @@ const getLocation =()=> {
                             id: 6,
                             name: "Khuê Mỹ",
                             title: 'Phường Xã',
-                            parent_id: 3,
+                            parent_id: 2,
                             location : [
 
                             ]

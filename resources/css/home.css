@@ -13,6 +13,16 @@
 
 }
 
+/* body{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: scroll;
+}
+
+body::-webkit-scrollbar{
+    display: none;
+} */
+
 button {
     outline: none;
     border: none;
@@ -28,6 +38,17 @@ ul , li {
     list-style: none;
 }
 
+.icon{
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    font-weight: 300;
+    color: rgb(119, 119, 119,0.5);
+    text-align: center;
+}
+
 .App.fix_body #navbar-menu {
     position: fixed;
     top: 0;
@@ -41,45 +62,63 @@ ul , li {
     background-color: #fff;
 }
 
-.header_search .location,
-.header_search .category {
-    position: relative;
-    background-color: #fff;
+body .view_home .advertise .advertisement{
+    height: 100vh;
+    overflow: hidden;
+    
 }
 
-.header_search .location span i,
-.header_search .category span i {
+/* Thanh tìm kiếm */
+
+.header_search{
+    align-items: center;
+}
+
+.header_search div .search_item{
+    width: 100%;
+    height: 35px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #f3f3f3;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    border-radius: 3px;
+}
+
+.header_search span.icon_default i {
     position: absolute;
     top: 6px;
     bottom: 0;
     left: 8px;
+    color: #777;
+    font-weight: 200;
 }
 
-.header_search .location .form-select,
-.header_search .category .form-select{
-    width: 235px;
+.header_search span:nth-child(2){
+    width: 100%;
+    padding-left:20px;
+    display: flex;
+    align-items: center;
 }
 
-.header_search .location .form-select:focus,
-.header_search .category .form-select:focus{
+.header_search span:nth-child(2) select{
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.header_search .form-select:focus{
     outline: none;
     border: none;
     box-shadow: none;
 }
 
-
-.search-info .btn-search{
-    background-color: var(--primary-color);
-    color: #ffff;
-    font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 20px;
-    cursor: pointer;
-}
-
-.search-info .btn-search:hover{
-    background-color: #ea4e27;
+.header_search div:nth-child(1) .search_item{
+    height: 35px;
+    padding: 5px 0;
+    font-weight: 500;
+    font-size: 90%;
 }
 
 /* Search frame */
@@ -139,6 +178,8 @@ ul , li {
     line-height: 22px;
     font-weight: 400;
     margin: 4px 0;
+    display: flex;
+    align-items: center;
 }
 
 .info_post .title{
@@ -328,5 +369,12 @@ ul , li {
     width: 40px;
     border-radius: 50px;
     background-color: rgb(54, 54, 54,0.10);
+}
+
+/* css cho quảng cáo */
+.view_home .advertise{
+    max-height: 100vh;
+    overflow: hidden;
+    position: static;
 }
 

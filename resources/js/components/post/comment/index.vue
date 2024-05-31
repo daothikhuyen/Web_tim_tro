@@ -40,6 +40,8 @@
 </template>
 <script>
 import { ref, defineComponent } from 'vue'
+import {mapState,mapActions} from 'vuex'
+
 import feedbackApi from "../../../Api/feedbackApi"
 import ListComment from "./listComment/index.vue"
 import userApi from "../../../Api/userApi"
@@ -47,6 +49,9 @@ import AddComment from "./AddComment.vue"
 import { useDateFormat, useNow } from '@vueuse/core'
 
 export default defineComponent({
+    computed: {
+        ...mapState(['authUser'])
+    },
     props: {
         postId: Number,
         numberLike: Number,
@@ -101,8 +106,8 @@ export default defineComponent({
                 const parent_id = 0 ? nodeData === 1 : nodeData.id_feedback
                 const newComment = {
                     id_feedback: Math.floor(Math.random() * 1000),
-                    username: this.users[0].username,
-                    avatar: this.users[0].avatar,
+                    username: this.authUser.username,
+                    avatar: this.authUser.avatar,
                     post_id: postId,
                     content: commentData,
                     created_time: Hours,

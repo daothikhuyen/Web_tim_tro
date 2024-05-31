@@ -21,10 +21,10 @@
             </select>
         </div>
         <div class="location pb-3">
-            <select class="input_item" name="stressLocation" id="stressLocation" @change="getFullAddress(selectedStress)" v-model="selectedStress">
+            <select class="input_item" name="streetLocation" id="streetLocation" @change="getFullAddress(selectedStreet)" v-model="selectedStreet">
                 <option :value="null" disabled selected>--Chọn Đường/Phố--</option>
                 <option v-if="!selectedWard" value=""></option>
-                <option v-else v-for="stress in selectedWard.location" :key="stress"  :value="stress" >{{stress.name}}</option>
+                <option v-else v-for="street in selectedWard.location" :key="street"  :value="street" >{{street.name}}</option>
             </select>
         </div>
     </section>
@@ -40,6 +40,7 @@
                     {{item}}
                     <span v-if="index != fullAdress.length -1 ">- </span>
                 </span>
+
             </div>
         </div>
     </div>
@@ -47,10 +48,14 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
+import {mapState,mapActions} from 'vuex'
 import locationApi from '../../../../../Api/locationApi.js'
 
 export default defineComponent({
     name : "addAdress",
+    computed: {
+        ...mapState(['getLocation'])
+    },
     props:{
         createAddress : Function
     },
@@ -62,27 +67,27 @@ export default defineComponent({
         const selectedCity = ref(null)
         const selectedDistrict = ref(null)
         const selectedWard = ref(null)
-        const selectedStress = ref(null)
+        const selectedStreet = ref(null)
         const numberHome = ref(null)
 
         return {
             selected,
-            getLocation: [],
+            // getLocation: [],
             textFullAfress,
 
             index,
             getCity : [],
             fullAdress : [],
+            location_id : [],
             selectedCity,
             selectedDistrict,
             selectedWard,
-            selectedStress,
+            selectedStreet,
             numberHome,
         }
     },
     mounted(){
     },
-
     methods: {
 
 
@@ -93,42 +98,50 @@ export default defineComponent({
                 case "Thành Phố":
                     this.selectedDistrict = ref(null)
                     this.selectedWard = ref(null)
-                    this.selectedStress = ref(null)
+                    this.selectedStreet = ref(null)
                     this.numberHome = ref(null)
                     array = [this.selectedCity.name]
-
+                    this.location_id['province_id'] = this.selectedCity.id
                     break;
 
                 case "Quận Huyện":
                     this.selectedWard = ref(null)
-                    this.selectedStress = ref(null)
+                    this.selectedStreet = ref(null)
                     this.numberHome = ref(null)
                     array = [this.selectedDistrict.name, this.selectedCity.name]
+                    this.location_id['district_id'] = this.selectedDistrict.id
 
                     break;
                 case "Phường Xã":
-                    this.selectedStress = ref(null)
+                    this.selectedStreet = ref(null)
                     this.numberHome = ref(null)
                     array = [this.selectedWard.name, this.selectedDistrict.name, this.selectedCity.name]
+                    this.location_id['ward_id'] = this.selectedWard.id
                     break;
                 case "Đường Phố":
                     this.numberHome = ref(null)
-                    array = [this.selectedStress.name, this.selectedWard.name, this.selectedDistrict.name, this.selectedCity.name]
+                    array = [this.selectedStreet.name, this.selectedWard.name, this.selectedDistrict.name, this.selectedCity.name]
+                    this.location_id['street_id'] = this.selectedStreet.id
                     break;
                 default:
-                    array = [this.numberHome,this.selectedStress.name, this.selectedWard.name, this.selectedDistrict.name, this.selectedCity.name]
+                    console.log(this.selectedStreet)
+                    if(this.selectedStreet != null){
+                        array = [this.numberHome,this.selectedStreet.name, this.selectedWard.name, this.selectedDistrict.name, this.selectedCity.name]
+                    }else{
+                         array = [this.numberHome, this.selectedWard.name, this.selectedDistrict.name, this.selectedCity.name]
+                    }
                     break;
             }
 
             this.fullAdress= array
 
-            this.createAddress(this.fullAdress,this.selectedCity.name)
+            this.createAddress(this.fullAdress,this.selectedCity.name,this.location_id)
         },
 
 
     },
     created(){
-        this.getLocation = locationApi.getLocation()
+        this.getLocation = this.$store.dispatch('getLocation');
     }
 })
 </script>

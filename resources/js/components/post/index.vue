@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in infoPost" :key="index">
+        <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in getAllPosts" :key="index">
             <Poster :user=listPost.user></Poster>
             <PostContent :postData="listPost.postData" :images="listPost.images" :extensions="listPost.extensions" :videos="listPost.videos"></PostContent>
             <Comment :postId="listPost.postData.id" :numberLike="listPost.postData.number_like"></Comment>
@@ -11,6 +11,7 @@
 <script>
 
 import { ref, defineComponent } from 'vue'
+import {mapState,mapActions} from 'vuex'
 
 import userApi from "../../Api/userApi"
 import postApi from "../../Api/postApi"
@@ -28,7 +29,9 @@ export default defineComponent(
             Poster,
             PostContent,
             Comment,
-
+        },
+        computed:{
+            ...mapState(['getAllPosts'])
         },
         data() {
             const commentData = ref(null)
@@ -46,10 +49,11 @@ export default defineComponent(
 
         },
         created() {
-            this.infoPost = postApi.listPost(),
-            this.imagePost = imageApi.imagePost(),
-            this.user = userApi.User();
-            this.treeFeedback = feedbackApi.getFeedback()
+            this.$store.dispatch('getPosts')
+            // this.infoPost = postApi.listPost(),
+            // this.imagePost = imageApi.imagePost(),
+            // this.user = userApi.User();
+            // this.treeFeedback = feedbackApi.getFeedback()
         }
     }
 )

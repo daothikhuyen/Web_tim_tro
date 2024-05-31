@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="btn_submit ps-2 d-flex justify-content-md-end justify-content-center">
-                    <a href="listpost/see" class="button">Đăng Bài</a>
+                    <a href="listpost/see" @click.prevent="insertPost" class="button">Đăng Bài</a>
                 </div>
             </div>
             <div class="col-lg-3 d-lg-block d-none mt-5 pt-5">
@@ -44,6 +44,8 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
+import {mapState,mapActions} from 'vuex'
+import Swal from 'sweetalert2'
 
 import Poster from "../../../post/Poster.vue"
 import PostContent from "../../../post/Content.vue"
@@ -56,14 +58,17 @@ export default defineComponent({
         PostContent,
         Comment,
     },
+    computed: {
+    },
     props:{
         nextScreenCreator: {
             type: Object,
-            default: {} // Giá trị mặc định nếu props không được truyền
+            default: {}
         }
     },
     mounted(){
-        this.checkDemoPost(this.$route.params.data)
+        // console.log(this.newPosts);
+        this.checkDemoPost(this.newPosts)
     },
     data() {
         const demo = ref(null)
@@ -74,13 +79,52 @@ export default defineComponent({
         }
     },
     methods: {
+
+        insertPost(){
+            const csrfToken = localStorage.getItem('token');
+
+            const jsonData = this.$route.params.data;
+            const data = JSON.parse(jsonData);
+
+            axios.post('http://localhost:8000/api/posts/create', {data}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${csrfToken}`
+                },
+            }).then((result) => {
+
+                if(result.data.error == false){
+                     Swal.fire({
+                        title: "Thông Báo!",
+                        text: "Đăng Bài Thành Công",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        this.$router.push('/home')
+                    });
+                }
+            })
+            .catch(error => {
+                 Swal.fire({
+                        title: "Thông Báo!",
+                        text: "Đăng Bài Đã Xảy Ra Lỗi",
+                        showConfirmButton: false,
+                        icon: "error",
+                        timer: 1500
+                    })
+                console.error(error);
+            })
+        },
         checkDemoPost(){
             const jsonData = this.$route.params.data;
             const data = JSON.parse(jsonData);
-            this.demo = data
-            console.log(this.demo.videos)
 
+            this.demo = data
         }
+    },
+    created() {
+
     }
 })
 </script>
