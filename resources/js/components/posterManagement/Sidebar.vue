@@ -19,10 +19,14 @@
         </div>
         <hr class="dropdown-divider border-bottom mb-2 mt-1">
         <div class="menu" v-for="menuAttribute in menuAttributes" :key="menuAttribute.id">
-            <router-link class="button" :to="menuAttribute.url">
+            <router-link v-if="menuAttribute.title != 'Đăng xuất' " class="button" :to="menuAttribute.url">
                 <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
                 <span class="text">{{menuAttribute.title}}</span>
             </router-link>
+            <a v-else href="#" class="button" @click.prevent="logoutWeb">
+                <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
+                <span class="text">{{menuAttribute.title}}</span>
+            </a>
         </div>
     </aside>
 </template>
@@ -30,6 +34,7 @@
 <script>
 import { ref, defineComponent } from 'vue'
 import {mapState,mapActions} from 'vuex'
+import Swal from 'sweetalert2'
 
 import userApi from '../../Api/userApi'
 
@@ -81,11 +86,25 @@ export default defineComponent({
                 {
                     icon: 'fa-solid fa-right-from-bracket',
                     title: 'Đăng xuất',
-                    url : "/logout"
+                    url : "/logout",
                 }
             ]
 
             this.menuAttributes = listMenus
+        },
+
+        logoutWeb(){
+            console.log("1")
+            Swal.fire({
+                title: "Thông Báo!",
+                text: "Banh Muốn Rời Web!",
+                icon: "success",
+                confirmButtonText: "Đồng Ý",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$store.dispatch('logout');
+                }
+            });
         }
     },
     created() {

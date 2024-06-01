@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in getAllPosts" :key="index">
-            <Poster :user=listPost.user></Poster>
+    
+            <Poster :user="listPost.user" :created_at="listPost.postData.created_at"></Poster>
             <PostContent :postData="listPost.postData" :images="listPost.images" :extensions="listPost.extensions" :videos="listPost.videos"></PostContent>
             <Comment :postId="listPost.postData.id" :numberLike="listPost.postData.number_like"></Comment>
         </div>

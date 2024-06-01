@@ -51,7 +51,7 @@ export default {
     data(){
         const error = [];
         const schema = yup.object().shape({
-            otp: yup.string().required('Vui lòng nhập thông tin').matches(/[0-9]{4}/,'số').min(4)
+            otp: yup.string().required('Vui lòng nhập thông tin').matches(/[0-9]{4}/,'').min(4)
 
         })
         return {
@@ -85,7 +85,7 @@ export default {
 
                     }else{
                         this.error['error'] = results.data.message
-                        
+
                     }
                 })
                 .catch(error => {

@@ -4,7 +4,7 @@
             <h6 class="title">{{ postData.title }}</h6>
             <span class="info_price_arceage px-2">
                 <span class="price">{{ postData.price }}</span>
-                <span class="arceage"> - {{ postData.arceage }}m<sup>2</sup> </span>
+                <span class="arceage"> - {{ postData.area }}m<sup>2</sup> </span>
             </span>
         </section>
         <div class="address">
@@ -65,7 +65,7 @@
 import 'vue3-carousel/dist/carousel.css'
 
 import { Carousel, Navigation, Pagination, Slide } from 'vue3-carousel'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 export default defineComponent({
     props: {
         postData: Object,
@@ -79,16 +79,25 @@ export default defineComponent({
         Pagination,
         Navigation,
     },
+    mounted(){
+        this.formatPrice()
+    },
     data() {
-        console.log("hello" + this.video)
         const isSeeMoreDescription = ref(this.postData.description.length < 500)
         const isPostContextTooLong = ref(this.postData.description.length > 500)
+
         return {
             isSeeMoreDescription,
             isPostContextTooLong,
         }
     },
     methods: {
+
+        formatPrice(){
+            this.postData.price = this.postData.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
+            console.log(this.postData.price)
+        },
+
         SeeMoreDescription(index) {
             this.isSeeMoreDescription = true;
         },
