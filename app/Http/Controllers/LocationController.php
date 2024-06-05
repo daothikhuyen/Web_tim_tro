@@ -19,11 +19,8 @@ class LocationController extends Controller
 
                 $children = $this->Recursive($request,$value['id']);
 
-
                 if(!empty($children)){
-
                     $value['location'] = $children;
-
                 }
 
                 $result[] = $value;
@@ -34,19 +31,18 @@ class LocationController extends Controller
     }
 
     public function getLocation(){
-        $array = [];
         $location = Location::select()->get();
-        $this->Recursive($location,0);
+        $result = $this->Recursive($location,0);
 
-        if($location){
+        if($result){
             return response()->json([
                 'error' => false,
-                'message' => $location
+                'message' => $result
             ]);
         }else{
             return response()->json([
                 'error' => true,
-                'message' => $location
+                'message' => $result
             ]);
         }
     }

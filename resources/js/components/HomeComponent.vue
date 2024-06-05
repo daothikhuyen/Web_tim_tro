@@ -129,7 +129,6 @@
 
 import userApi from "../Api/userApi"
 import postApi from "../Api/postApi"
-import imageApi from "../Api/imageApi"
 import feedback from "../Api/feedbackApi"
 
 import { ref, defineComponent, onMounted } from 'vue'
@@ -192,9 +191,7 @@ export default defineComponent(
 
         },
         created() {
-            this.infoPost = postApi.listPost(),
-            this.imagePost = imageApi.imagePost(),
-            this.user = userApi.User();
+            this.infoPost = postApi.listPost()
         }
     }
 )

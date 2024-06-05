@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Feedbacks\FeedbackController;
+use App\Http\Controllers\Feedbacks\Ratting_PostController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\Posts\CreatePosts;
 use App\Http\Controllers\UploadFileController;
@@ -26,9 +28,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signup',[AuthController::class, 'signup']);
 Route::post('/check/verifyOTP',[AuthController::class, 'is_activated']);
-Route::post('/login',[AuthController::class, 'store']);
-Route::get('/getLocation',[LocationController::class,'getLocation']);
-Route::get('/getallPosts',[CreatePosts::class,'index']);
+Route::post('/login',[AuthController::class, 'store'])->name("login");
+
+Route::prefix('get')->group(function(){
+    Route::get('/getLocation',[LocationController::class,'getLocation']);
+    Route::get('/getallPosts',[CreatePosts::class,'index']);
+
+});
+
+Route::prefix('feedback')->group(function(){
+    Route::post('/getFeedbacks/{posts}',[FeedbackController::class, 'index']);
+    Route::post('/insert',[FeedbackController::class, 'store']);
+
+});
+
+Route::prefix('ratting')->group(function(){
+    Route::get('/getLikePost',[Ratting_PostController::class,'index_Post']);
+    Route::post('/likePost',[Ratting_PostController::class,'store_Post']);
+
+    Route::post('/getlikeFeddback',[Ratting_PostController::class,'index_Feedback']);
+    Route::post('/likeFeddback',[Ratting_PostController::class,'store_Feedback']);
+});
 
 Route::middleware('auth:sanctum')->group(function(){
 

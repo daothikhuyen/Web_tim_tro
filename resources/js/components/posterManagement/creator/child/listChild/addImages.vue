@@ -89,6 +89,9 @@ export default defineComponent({
             showProgress
         }
     },
+    mounted(){
+        console.log("image")
+    },
     methods:{
 
         onUploadFile(event){

@@ -32,12 +32,12 @@ class CreatePostsService {
 
     public function store($request){
 
-        $postData = $request->input("data")["postData"];
-        $images = $request->input("data")["images"];
-        $videos = $request->input("data")["videos"];
-        $extensions = $request->input("data")["extensions"];
+        $postData = $request->input("postData");
+        $images = $request->input("images");
+        $videos = $request->input("videos");
+        $extensions = $request->input("extensions");
 
-        // dd($request);
+
         $posts = Post::create([
             'title' =>$postData['title'],
             'description' => $postData['description'],

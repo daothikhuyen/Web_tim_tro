@@ -3,7 +3,7 @@
         <div class="location pb-3">
             <select class="input_item" name="cityLocation" id="cityLocation" @change="getFullAddress(selectedCity)"  v-model="selectedCity">
                 <option :value="null" disabled selected>--Chọn Tỉnh/TP--</option>
-                <option v-for="city in getLocation" :key="city"  :value="city" >{{city.name}}</option>
+                <option v-for="city in getLocation.message" :key="city"  :value="city" >{{city.name}}</option>
             </select>
         </div>
         <div class="location pb-3">
@@ -54,7 +54,7 @@ import locationApi from '../../../../../Api/locationApi.js'
 export default defineComponent({
     name : "addAdress",
     computed: {
-        ...mapState(['getLocation'])
+        // ...mapState(['getLocation'])
     },
     props:{
         createAddress : Function
@@ -72,7 +72,7 @@ export default defineComponent({
 
         return {
             selected,
-            // getLocation: [],
+            getLocation: [],
             textFullAfress,
 
             index,
@@ -140,8 +140,10 @@ export default defineComponent({
 
 
     },
-    created(){
-        this.getLocation = this.$store.dispatch('getLocation');
+    async created(){
+        // this.getLocation = this.$store.dispatch('getLocation');
+        this.getLocation = await locationApi.getLocation()
+        console.log(this.getLocation.message)
     }
 })
 </script>

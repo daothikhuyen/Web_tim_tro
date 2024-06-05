@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import {ref,defineComponent } from 'vue'
-import {mapState,mapActions} from 'vuex'
+import {mapGetters,mapActions} from 'vuex'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import user from '../../../../Api/userApi'
 
@@ -117,11 +117,11 @@ import Extension from './listChild/extension.vue'
 export default defineComponent({
     name: 'CreatePoster',
     computed: {
-        ...mapState(['authUser'])
+        ...mapGetters(['authUser'])
     },
     components: {
-        addImage,
         addAddress,
+        addImage,
         Extension,
     },
     data() {
@@ -253,7 +253,7 @@ export default defineComponent({
         createAddress(address,title,location_id){
             this.fullAddress = address
             this.location_id = location_id
-            this.title = "Cho Thuê Nhà Ở " +  title
+            this.title = "Cho Thuê Nhà Ở Thành Phố " +  title
 
         },
 

@@ -40,6 +40,7 @@ import * as yup from 'yup';
 import Swal from 'sweetalert2'
 
 import NavbarComponent from '../../NavbarComponent.vue'
+import userApi from '../../../Api/userApi';
 
 export default {
     name: "LoginComponent",
@@ -61,37 +62,32 @@ export default {
     },
     methods: {
 
-        Validate(values) {
-            console.log(values.otp)
+        async Validate(values) {
+
             const array = {
                 email :  this.$route.params.otp,
                 token : values.otp
             }
-            axios.post('/api/check/verifyOTP', array)
-                .then((results) => {
-                    if(results.data.error == false){
 
-                        Swal.fire({
-                            icon: "success",
-                            title: "Đăng Kí Tài Khoản Thành Công",
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(()=> {
+            const result = await userApi.verifyOTP(array);
 
-                            this.error['success'] = results.data.message
-                            this.$router.push({name : 'login'})
-                        });
+            if(result.error === false){
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Đăng Kí Tài Khoản Thành Công",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(()=> {
+                    this.error['success'] = result.message
+                    this.$router.push({name : 'login'})
+                });
 
 
-                    }else{
-                        this.error['error'] = results.data.message
-
-                    }
-                })
-                .catch(error => {
-                    alert("Đã Xảy Ra lỗi")
-                    console.error(error);
-                })
+            }else{
+                console.log(result.message)
+                this.error['error'] = result.message
+            }
         },
     }
 }

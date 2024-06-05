@@ -105,6 +105,7 @@ import {mapState,mapActions} from 'vuex'
 
 import NavbarComponent from '../NavbarComponent.vue'
 import FooterComponent from '../FooterComponent.vue'
+import userApi from '../../Api/userApi';
 
 export default {
     name: "LoginComponent",
@@ -137,25 +138,17 @@ export default {
     methods: {
 
         async signup(values) {
-            await axios.post('http://localhost:8000/api/signup', values)
-                .then((results) => {
-                    if(results.data.error == false){
+            const result = await userApi.signup(values)
+            if(result.error == false){
+                this.$store.commit('OTP',result.otp)
+                this.$router.push({name : 'verify_otp', params: {otp: values.email}})
 
-                        this.$store.commit('OTP',results.data.otp)
-                        this.$router.push({name : 'verify_otp', params: {otp: values.email}})
-
-                    }else{
-                        this.error['error'] = results.data.message
-                    }
-                })
-                .catch(error => {
-                    alert("Đã Xảy Ra lỗi")
-                    console.error(error);
-                })
+            }else{
+                this.error['error'] = result.message
+            }
         },
     }
 }
-
 
 </script>
 

@@ -1,17 +1,30 @@
 <template>
     <div class="content_writeComment">
-        <form action="" class="fromSubmitComment" @submit.prevent="onAddComment">
-            <input type="text" class="inputComment w-100" placeholder="Viết bình luận..." ref="input" v-model="commentContent">
-            <button class="btn_send" type="submit" >
-                <i class="bi bi-send-fill" style="color:#ea4e27 "></i>
-            </button>
-        </form>
+        <div class="d-flex align-items-center">
+            <div class="user_writeComment">
+                <div class="avatar_comment border rounded-circle">
+                    <img v-if="authUser != null && authUser.avatar != null" :src="user.avatar" alt="" class="avatar">
+                    <img v-else src="/storage/uploads/2024/06/04/profile.jpg" alt="" class="avatar">
+                </div>
+            </div>
+            <form action="" class="fromSubmitComment w-100" @submit.prevent="onAddComment">
+                <input type="text" class="inputComment w-100" placeholder="Viết bình luận..." ref="input" v-model="commentContent">
+                <button class="btn_send" type="submit" >
+                    <i class="bi bi-send-fill" style="color:#ea4e27 "></i>
+                </button>
+            </form>
+        </div>
     </div>
 </template>
 <script>
 import { ref, defineComponent } from 'vue'
+import {mapGetters,mapActions} from 'vuex'
+
 export default defineComponent({
     name: "AddComment",
+     computed: {
+        ...mapGetters(['authUser'])
+    },
     props:{
         add: Function,
         postId: Number,

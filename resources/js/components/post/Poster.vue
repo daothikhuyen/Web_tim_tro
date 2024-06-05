@@ -2,7 +2,7 @@
     <div class="avatar_name d-flex align-items-center">
         <div class="avatar inline-block">
             <img  v-if="user.avatar != null" :src="user.avatar" alt="avatar" class="image_avatar_post">
-             <img  v-else src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="avatar" class="image_avatar_post">
+             <img  v-else src="/storage/uploads/2024/06/04/profile.jpg" alt="avatar" class="image_avatar_post">
         </div>
         <div class="name px-2">
             <span>{{ user.username }}</span>

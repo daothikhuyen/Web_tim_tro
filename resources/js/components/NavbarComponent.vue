@@ -46,7 +46,7 @@
                                 <div class="avatar_name d-flex align-items-center dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="avatar inline-block">
                                         <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_post">
-                                        <img v-else class="image_avatar_post" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="">
+                                        <img v-else class="image_avatar_post" src="/storage/uploads/2024/06/04/profile.jpg" alt="">
                                     </div>
                                     <div class="name ps-1 fw-semibold" >
                                         <span style="font-size:15px">{{authUser.username}}</span>
@@ -93,27 +93,24 @@
 
 <script>
 import { ref } from 'vue'
-import {mapState,mapActions} from 'vuex'
+import {mapState,mapGetters,mapActions} from 'vuex'
 import Swal from 'sweetalert2'
+
+import userApi from '../Api/userApi'
 
 export default {
     computed: {
-        ...mapState(['isLoggedIn']),
-        ...mapState(['authUser'])
+        ...mapGetters(['isLoggedIn']),
+        ...mapGetters(['authUser'])
     },
     mounted() {
         console.log('Component mounted.')
     },
     data() {
-        return {
-
-        }
     },
     methods: {
 
-        // ...mapActions(['logout']),
         logoutWeb(){
-            console.log("1")
             Swal.fire({
                 title: "Thông Báo!",
                 text: "Banh Muốn Rời Web!",

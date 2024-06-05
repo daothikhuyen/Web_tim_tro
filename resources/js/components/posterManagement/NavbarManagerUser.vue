@@ -47,7 +47,7 @@ export default {
 
     },
     created() {
-        this.user = apiUser.User()
+
     },
 }
 

@@ -12,7 +12,7 @@ import { createApp } from 'vue';
 
 import app from './App.vue'
 import router from './router/index.js';
-import store from './router/store.js'
+import store from './store/index.js'
 
 const vueApp = createApp(app)
 

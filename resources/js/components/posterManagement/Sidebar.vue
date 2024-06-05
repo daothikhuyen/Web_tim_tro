@@ -33,16 +33,13 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
-import {mapState,mapActions} from 'vuex'
+import {mapState,mapGetters,mapActions} from 'vuex'
 import Swal from 'sweetalert2'
-
-import userApi from '../../Api/userApi'
-
 
 export default defineComponent({
     name: "Siderbar",
     computed: {
-        ...mapState(['authUser'])
+        ...mapGetters(['authUser'])
     },
     data() {
         const is_expanded = ref(false)
@@ -108,7 +105,7 @@ export default defineComponent({
         }
     },
     created() {
-       this.$store.dispatch('getUser');
+        this.$store.dispatch('getUser');
     },
 
 })

@@ -67,8 +67,9 @@ class AuthController extends Controller
         ])){
             return response()->json([
                 'error' => true,
-                'message' => 'Invalid credentials'
-            ],401);
+                'token' => "",
+                'message' => 'Thông tin không hợp lệ'
+            ]);
 
         }
 
@@ -83,7 +84,9 @@ class AuthController extends Controller
     }
 
     public function getUser(){
+
         return Auth::user();
+
     }
 
 

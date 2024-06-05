@@ -50,6 +50,7 @@ import Swal from 'sweetalert2'
 import Poster from "../../../post/Poster.vue"
 import PostContent from "../../../post/Content.vue"
 import Comment from '../../../post/comment/index.vue'
+import postApi from '../../../../Api/postApi'
 
 export default defineComponent({
     name: "HomeManager",
@@ -80,33 +81,24 @@ export default defineComponent({
     },
     methods: {
 
-        insertPost(){
-            const csrfToken = localStorage.getItem('token');
+        async insertPost(){
 
             const jsonData = this.$route.params.data;
             const data = JSON.parse(jsonData);
 
-            axios.post('http://localhost:8000/api/posts/create', {data}, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${csrfToken}`
-                },
-            }).then((result) => {
-
-                if(result.data.error == false){
-                     Swal.fire({
-                        title: "Thông Báo!",
-                        text: "Đăng Bài Thành Công",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        this.$router.push('/home')
-                    });
-                }
-            })
-            .catch(error => {
-                 Swal.fire({
+            const result = await postApi.createPost(data)
+            if(result.error == false){
+                    Swal.fire({
+                    title: "Thông Báo!",
+                    text: "Đăng Bài Thành Công",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    this.$router.push('/home')
+                });
+            }else{
+                Swal.fire({
                         title: "Thông Báo!",
                         text: "Đăng Bài Đã Xảy Ra Lỗi",
                         showConfirmButton: false,
@@ -114,8 +106,9 @@ export default defineComponent({
                         timer: 1500
                     })
                 console.error(error);
-            })
+            }
         },
+
         checkDemoPost(){
             const jsonData = this.$route.params.data;
             const data = JSON.parse(jsonData);

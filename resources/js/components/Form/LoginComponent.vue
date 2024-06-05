@@ -76,6 +76,7 @@ import Swal from 'sweetalert2'
 
 import NavbarComponent from '../NavbarComponent.vue'
 import FooterComponent from '../FooterComponent.vue'
+import userApi from '../../Api/userApi';
 
 export default {
     name: "LoginComponent",
@@ -102,29 +103,26 @@ export default {
     },
     methods: {
         async Validate(values) {
-            await axios.post('http://localhost:8000/api/login', values)
-                .then((results) => {
-                    if(results.data.token){
-                        localStorage.setItem('token',results.data.token);
+            const result = await userApi.login(values)
 
-                        this.$store.dispatch('getUser');
-                        this.$store.commit('LOGIN')
+            if(!result.error){
+                localStorage.setItem('token',result.token);
 
-                        Swal.fire({
-                            icon: "success",
-                            title: "Đăng Nhập Thành Công",
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(()=> {
+                this.$store.dispatch('getUser');
+                this.$store.commit('LOGIN')
 
-                            this.$router.push('/home')
-                        });
-                    }
-                })
-                .catch(error => {
-                    this.error['error'] = "Email hoặc mật khẩu lỗi"
-                    console.error(error);
-                })
+                Swal.fire({
+                    icon: "success",
+                    title: "Đăng Nhập Thành Công",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(()=> {
+
+                    this.$router.push('/home')
+                });
+            }else{
+                this.error['error'] = result.message
+            }
         },
     }
 }
