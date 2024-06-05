@@ -42,11 +42,10 @@ class CreatePostsService {
             'title' =>$postData['title'],
             'description' => $postData['description'],
             'price' => $postData['price'],
-            'area' => $postData['arceage'],
+            'area' => $postData['area'],
             'full_address' => $postData['full_address'],
             'user_id' => $postData['user_id'],
             'category_id' => $postData['category_id'],
-            // 'video_link' =>  $postData['video_link'],
             'province_id' => $postData['province_id'],
             'district_id' => $postData['district_id'],
             'ward_id' => $postData['ward_id'],
@@ -81,6 +80,17 @@ class CreatePostsService {
             return false;
         }
 
+    }
 
+    public function destroy($request){
+        $id = (int) $request->input('id');
+
+        $posts = Post::where('id', $id)->first();
+
+        if($posts){
+            return Post::where('id', $id)->delete();
+        }
+
+        return false;
     }
 }

@@ -2,9 +2,7 @@
 
 <template>
     <div class="container-fluid px-0 bg-white h-100">
-        <navbar/>
         <div class="listPost">
-            <sidebar/>
             <div class="viewListPost w-100">
                 <div class="bg-secondary-subtle p-2 ps-3 w-100">
                     <span class="title">PhongTot</span> / <span class="title">Quản lí </span>/ <span>Danh sách</span>
@@ -24,47 +22,31 @@
                         <thead class="table_list">
                             <tr class="bg-secondary text-center">
                                 <th scope="col STT">STT</th>
-                                <th scope="col Title">Title</th>
-                                <th scope="col Price">Price</th>
-                                <th scope="col Acrege">Acrege</th>
-                                <th scope="col Adress">Adress</th>
+                                <th scope="col Title">Tiêu đề</th>
+                                <th scope="col Price">Giá phòng</th>
+                                <th scope="col Acrege">Diện tích</th>
+                                <th scope="col Adress">Địa chỉ</th>
                                 <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody class="table_list">
-                            <tr>
-                                <th scope="row" class="STT">1</th>
-                                <td class="Title">Mark Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    Repellendus modi architecto iure quidem aut dicta a aliquam vero eum,</td>
-                                <td class="Price">2500000 VNĐ</td>
-                                <td class="Acrege">3,2 m<sup>2</sup></td>
-                                <td class="Adress">Hoà Khành, Đại Nghĩa , Đà Nẵng</td>
+                            <tr v-for="(attribute,index) in my_posts" :key="index">
+                                <th scope="row" class="STT">{{ index+1}}</th>
+                                <td class="Title">{{ attribute.postData.title }}</td>
+                                <td class="Price" id="Price">{{ attribute.postData.price }}</td>
+                                <td class="Acrege">{{ attribute.postData.area }} m<sup>2</sup></td>
+                                <td class="Adress">{{ attribute.postData.full_address }}</td>
                                 <td class="text-center">
-                                    <a class="btn btn-primary btn-sm" href="">
+                                    <a class="btn btn-primary btn-sm" href="./edit.vue">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a class="btn btn-danger btn-sm ms-1"  href="">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="STT">2</th>
-                                <td class="Title">Mark Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                <td class="Price">2500000 VNĐ</td>
-                                <td class="Acrege">3,2 m<sup>2</sup></td>
-                                <td class="Adress">Hoà Khành, Đại Nghĩa , Đà Nẵng</td>
-                                 <td class="text-center">
-                                    <a class="btn btn-primary btn-sm" href="">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    <a class="btn btn-danger btn-sm ms-1"  href="">
+                                    <a class="btn btn-danger btn-sm ms-1"  @click.prevent="deletePosts(attribute.postData.id)">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
                         </tbody>
-                        </table>
+                    </table>
                 </section>
             </div>
         </div>
@@ -73,15 +55,74 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
+import {mapState,mapGetters,mapActions} from 'vuex'
+import Swal from 'sweetalert2'
+import postApi from '../../../Api/postApi'
 
 import Navbar from '../NavbarManagerUser.vue'
 import Sidebar from '../Sidebar.vue'
 
 export default defineComponent({
     name: "HomeManager",
+    computed:{
+        ...mapGetters(['authUser'])
+    },
     components: {
         Navbar,
         Sidebar
+    },
+    data() {
+        const error = ref([])
+        const my_posts = ref([])
+
+        return {
+            my_posts
+        }
+    },
+    mounted(){
+    },
+    methods : {
+
+        formatPrice(){
+            console.log(document.querySelectorAll("#Price"))
+            // this.my_posts.postData.price = this.postData.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
+        },
+
+        filterPosts(){
+             this.my_posts =  this.my_posts.message.filter(item => item.postData.user_id == this.authUser.id)
+        },
+
+        async deletePosts($id){
+
+            const value = {
+                "id" : $id
+            }
+
+            if(confirm('Xoá bài viết. Xoá Không Khôi Phục ?')){
+
+            const result = await postApi.deletePosts(value);
+                if(result){
+                    Swal.fire({
+                        title: "Thông Báo!",
+                        text: "Xoá bài viết thành công",
+                        icon: "success",
+                          showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                          location.reload()
+                    });
+                }else{
+                    this.error['error'] = "Đã xảy ra lỗi, vui lòng kiểm tra lại"
+                }
+            }
+
+        }
+    },
+
+    async created(){
+        this.my_posts = await postApi.listPost();
+        this.filterPosts(),
+        this.formatPrice()
     }
 })
 </script>

@@ -12,9 +12,16 @@ const createPost = (data) => baseApi.baseApi({
     data: data
 })
 
+const deletePosts = (data) => baseApi.baseApi({
+    method: 'DELETE',
+    url : 'http://localhost:8000/api/posts/destroy',
+    data: data
+})
+
 export default {
     listPost,
-    createPost
+    createPost,
+    deletePosts
 }
 
 

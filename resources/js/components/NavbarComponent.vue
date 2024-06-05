@@ -57,7 +57,7 @@
                                         <a class="dropdown-item" href="/postManagement/index/creator">📝 Đăng tin cho thuê</a>
                                     </li>
                                     <li class="menu-child border-bottom py-1">
-                                        <a class="dropdown-item" href="#">📑 Quản lí tin đăng</a>
+                                        <a class="dropdown-item" href="/postManagement/my_posts">📑 Quản lí tin đăng</a>
                                     </li>
                                     <li class="menu-child border-bottom py-1">
                                         <a class="dropdown-item" href="#">👤 Thông tin tài khoản</a>

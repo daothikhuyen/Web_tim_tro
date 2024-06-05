@@ -12,6 +12,8 @@ import index from '../components/posterManagement/creator/index.vue'
 import account from '../components/posterManagement/account/index.vue'
 import creator from '../components/posterManagement/creator/child/creator.vue'
 import next from '../components/posterManagement/creator/child/nextCreator.vue'
+import my_posts from '../components/posterManagement/my_posts/list.vue'
+import edit_post from '../components/posterManagement/my_posts/edit.vue'
 
 const routes = [
     {
@@ -67,6 +69,18 @@ const routes = [
                 path: 'account',
                 component: account
             },
+            {
+                name: 'my_posts',
+                path: 'my_posts',
+                component: my_posts,
+                children: [
+                    {
+                        name: 'edit_post',
+                        path: 'edit_post',
+                        component: edit_post,
+                    },
+                ]
+            }
         ]
     },
 

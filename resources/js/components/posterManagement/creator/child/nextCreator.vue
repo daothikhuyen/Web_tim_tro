@@ -87,6 +87,7 @@ export default defineComponent({
             const data = JSON.parse(jsonData);
 
             const result = await postApi.createPost(data)
+            console.log(result)
             if(result.error == false){
                     Swal.fire({
                     title: "Thông Báo!",
@@ -114,6 +115,7 @@ export default defineComponent({
             const data = JSON.parse(jsonData);
 
             this.demo = data
+            console.log(this.demo.postData)
         }
     },
     created() {

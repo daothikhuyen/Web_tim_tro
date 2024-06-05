@@ -78,7 +78,7 @@ export default defineComponent({
                 {
                     icon : 'fa-solid fa-list-check',
                     title : 'Quản lí tin đăng',
-                    url : '/postManagement/ports/creator'
+                    url : '/postManagement/my_posts'
                 },
                 {
                     icon: 'fa-solid fa-right-from-bracket',

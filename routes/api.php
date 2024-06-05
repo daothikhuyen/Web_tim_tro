@@ -57,6 +57,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::prefix('posts')->group(function(){
         Route::post('/create',[CreatePosts::class,'store']);
+        Route::DELETE('/destroy',[CreatePosts::class,'destroy']);
     });
 
 });

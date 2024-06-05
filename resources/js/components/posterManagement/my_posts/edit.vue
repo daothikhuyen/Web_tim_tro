@@ -108,11 +108,10 @@
 import {ref,defineComponent } from 'vue'
 import {mapGetters,mapActions} from 'vuex'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import user from '../../../../Api/userApi'
 
-import addImage from './listChild/addImages.vue'
-import addAddress from './listChild/addAddress.vue'
-import Extension from './listChild/extension.vue'
+import addImage from '../../posterManagement/creator/child/listChild/addImages.vue'
+import addAddress from '../../posterManagement/creator/child/listChild/addAddress.vue'
+import Extension from '../../posterManagement/creator/child/listChild/extension.vue'
 
 export default defineComponent({
     name: 'CreatePoster',

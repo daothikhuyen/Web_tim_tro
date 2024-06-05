@@ -46,6 +46,14 @@ class CreatePosts extends Controller
                 'message' => 'Thất bại'
             ]);
         }
+    }
 
+    public function destroy(Request $request){
+        
+        $result = $this->createpostsService->destroy($request);
+
+        return response()->json([
+            'error' => $result?false:true,
+        ]);
     }
 }
