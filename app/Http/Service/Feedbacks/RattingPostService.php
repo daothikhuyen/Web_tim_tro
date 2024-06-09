@@ -15,7 +15,8 @@ class RattingPostService {
     }
 
     public function getLike_Feedback($request){
-        $result = Ratting_Feedback::where("feedback_id",$request->input("id"))->get();
+
+        $result = Ratting_Feedback::where("feedback_id",$request->input("feedback_id"))->get();
         return $result;
     }
 

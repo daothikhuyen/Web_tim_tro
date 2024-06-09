@@ -1,50 +1,40 @@
 // view wirte post
 
 <template>
-    <div class="ViewPost w-100 m-auto pb-4">
-        <div class="row">
-            <div class="col-lg-9 col-md-12 mt-5">
-                <div class="p-2 ps-3 mx-2 rounded-3 w-100" style="background-color: rgb(162, 160, 160,0.25)">
-                    <span class="title">PhongTot</span> / <span class="title">Quản lí </span>/ <span>Đăng tin mới</span>
-                </div>
-                <div class="interfacePost">
-                    <div class="">
-                        <section class="seeBefore m-2">
-                            <div class="seeItem" v-if="demo != null">
-                                <div class="post px-2 py-3 bg-white rounded-3 mb-2">
-                                    <Poster :user="demo.user"></Poster>
-                                    <PostContent :postData="demo.postData" :images="demo.images" :extensions="demo.extensions" :videos="demo.videos"></PostContent>
+    <div class="ViewPost bg-white container-fluid">
+        <div class="bg-white mb-5">
+            <div class="">
+                <div class="border viewPostItems">
+                    <div class="title_main w-100"  style="">
+                        <h5 class="ps-3 pt-1 text-white">Đăng Tin Mới</h5>
+                    </div>
+                    <div class="interfacePost">
+                        <div class="">
+                            <section class="seeBefore m-2">
+                                <div class="seeItem" v-if="demo != null">
+                                    <div class="post px-2 py-3 bg-white mb-2">
+                                        <Poster :user="demo.user"></Poster>
+                                        <PostContent :postData="demo.postData" :images="demo.images" :extensions="demo.extensions" :videos="demo.videos"></PostContent>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="seeItem" v-else>
-                            </div>
-                        </section>
+                                <div class="seeItem" v-else>
+                                </div>
+                            </section>
 
+                        </div>
+                    </div>
+                    <div class="btn_submit">
+                        <a href="listpost/see" @click.prevent="insertPost" class="button">Đăng Bài</a>
                     </div>
                 </div>
-                <div class="btn_submit ps-2 d-flex justify-content-md-end justify-content-center">
-                    <a href="listpost/see" @click.prevent="insertPost" class="button">Đăng Bài</a>
-                </div>
             </div>
-            <div class="col-lg-3 d-lg-block d-none mt-5 pt-5">
-                <div class="note_post">
-                    <h3>Lưu ý khi đăng tin</h3>
-                    <ul class="">
-                        <li>Nội dung phải viết bằng Tiếng Việt, có dấu</li>
-                        <li>Tiêu đề không dài quá 100 kí tự</li>
-                        <li>Các bạn nên điền đầy đủ thông tin để tin có thể đạt hiểu suất nhanh</li>
-                        <li>Để để tạo sự tin cậy các bạn nên đăng ảnh và video rõ ràng , địa chỉ cũ thể !</li>
-                    </ul>
-                </div>
-            </div>
-
         </div>
     </div>
 </template>
 
 <script>
 import { ref, defineComponent } from 'vue'
-import {mapState,mapActions} from 'vuex'
+import {mapGetters,mapState,mapActions} from 'vuex'
 import Swal from 'sweetalert2'
 
 import Poster from "../../../post/Poster.vue"
@@ -60,6 +50,7 @@ export default defineComponent({
         Comment,
     },
     computed: {
+        ...mapGetters(['newPost'])
     },
     props:{
         nextScreenCreator: {
@@ -81,10 +72,16 @@ export default defineComponent({
     },
     methods: {
 
+        formatPrice(price){
+            // const number = Number(price)
+            return Number(price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        },
+
         async insertPost(){
 
             const jsonData = this.$route.params.data;
             const data = JSON.parse(jsonData);
+            console.log(data);
 
             const result = await postApi.createPost(data)
             console.log(result)
@@ -125,6 +122,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
     .homeManager{
         display: flex;
     }
@@ -132,10 +130,15 @@ export default defineComponent({
     .homeManager .ViewPost{
         padding-top: 50px;
         margin:30px;
+        position: relative;
     }
 
     .homeManager .ViewPost span{
         font-size: 15px;
+    }
+
+    .homeManager .ViewPost .seeBefore .post{
+        box-shadow: none;
     }
 
     .homeManager .ViewPost .title{
@@ -190,6 +193,11 @@ export default defineComponent({
         overflow: hidden;
     }
 
+    .homeManager .ViewPost .btn_submit{
+        margin: auto;
+        text-align: center;
+    }
+
     .homeManager .ViewPost .btn_submit .button{
         width: 15%;
         background-color: var(--primary-color);
@@ -221,21 +229,7 @@ export default defineComponent({
         font-size: 18px;
     }
 
-    @media (max-width: 768px) {
-        .homeManager .ViewPost{
-            padding-left: 5rem;
-        }
-
-        .homeManager .ViewPost .info .Address_detail select{
-            width: 100%;
-            padding: 5px;
-            border: 1px solid rgb(162, 160, 160,0.5);
-            border-radius: 2px;
-        }
-
-    }
-
-    /* giao diện bài đăng xem trước */
+        /* giao diện bài đăng xem trước */
     .interfacePost{
         width: 70%;
         margin: auto;
@@ -244,5 +238,14 @@ export default defineComponent({
         border-radius: 3px;
         margin-top: 20px;
     }
+
+    @media (max-width:992px) {
+        .interfacePost{
+            width: 100%;
+            border: none;
+            box-shadow: none;
+        }
+    }
+
 
 </style>

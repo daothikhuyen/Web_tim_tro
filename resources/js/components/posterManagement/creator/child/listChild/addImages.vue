@@ -10,7 +10,7 @@
                 <img src="/storage/uploads/2024/05/31/camera.png" alt="">
             </div>
             <div class="rightRound" id="upload">
-                <input type="file" name="file" class="file" ref="fileInput" multiple accept=".png,.jpg" @change="onUploadFile">
+                <input type="file" name="file" class="file" ref="fileInput" multiple accept=".png,.jpg,.jpeg" @change="onUploadFile">
             </div>
         </div>
         <div class=" w-100 ps-2">
@@ -19,7 +19,7 @@
         <div class="container">
             <div class="card_picture" v-for="(image,index) in images" :key="index">
                 <span class="delete" @click="deleteImage(index)">&times;</span>
-                <img :src="image.url"/>
+                <img :src="image.link_image"/>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             </div>
         </div>
         <section class="loading-area">
-            <div class="row_area" v-for="(file,index) in files" :key="index">
+            <div class="row_area" v-for="(file,index) in files_loading" :key="index">
                 <i class="icon fa-solid fa-file" style="font-size: 30px;"></i>
                 <div class="content upload" >
                     <div class="detail">
@@ -55,15 +55,18 @@
         </section>
         <section class="upload-area" >
             <div class="row_area" v-for="(file,index) in uploadFiles" :key="index">
-                <div class="content upload">
-                    <i class="icon fa-solid fa-file" style="font-size: 30px;" aria-hidden="true"></i>
-                    <div class="detail">
-                        <span class="name">{{ file.name }}</span>
-                        <span class="size">{{ file.size }}</span>
+                <div class="d-flex justify-content-between w-100">
+                    <div class="content upload">
+                        <i class="icon fa-solid fa-file" style="font-size: 30px;" aria-hidden="true"></i>
+                        <div class="detail">
+                            <span class="name">{{ file.name }}</span>
+                            <span class="size">{{ file.size }}</span>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <i class="icon fa-solid fa-check"></i>
+                    <div class="icon">
+                        <span class="delete" @click="deleteVideo(index)">&times;</span>
+                        <!-- <i class="fa-solid fa-check " style="font-size: 20px;"></i> -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -72,37 +75,65 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent,watch  } from 'vue'
 
 export default defineComponent({
     name: "Add image into post",
     props: {
-        notifi : String
+        notifi : String,
+        dataImage: Array,
+        dataVideo: Array
     },
     data(){
 
         const showProgress = ref(false)
         return {
             images : [],
+            videos : [],
             uploadFiles: [],
             files: [],
             showProgress
         }
     },
-    mounted(){
-        console.log("image")
+    watch: {
+        dataImage(image){
+            this.uploadImage(image)
+        },
+
+        dataVideo(video){
+            console.log(video)
+            this.uploadVideo(video)
+        }
     },
     methods:{
+        uploadImage(value){
+            value.forEach(element => {
+                console.log(element)
+                this.images.push(element)
+
+            });
+            this.$emit('loadImage', this.images)
+        },
+
+        uploadVideo(value){
+            value.forEach(element => {
+                const video = element.link_video.split("/")
+                this.uploadFiles.push({name: video[6], size: "123KB"});
+                this.videos.push(element)
+            });
+                this.$emit('loadVideo', this.videos)
+        },
 
         onUploadFile(event){
-            const files = event.target.files
-            if(files.length == 0) return
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i]
+            const files_loading = event.target.files
+            if(files_loading.length == 0) return
+            for (let i = 0; i < files_loading.length; i++) {
+                const file = files_loading[i]
                 const fileName = (file.name.length >= 12) ? file.name.substring(0,13) + '....'+ file.name.split('.')[1]: file.name
 
                 const formData = new FormData()
                 formData.append("file", file)
+                console.log(formData);
                 if(file.type.split('/')[0] == 'video'){
                     this.files.push({name: fileName, loading : 0})
                     this.showProgress = true
@@ -110,29 +141,37 @@ export default defineComponent({
 
                 axios.post('/api/upload-file', formData, {
                     onUploadProgress: ({loaded, total}) => {
-                        // console.log(file.type.split('/')[0])
-                        if(file.type.split('/')[0] == 'image'){
-                            if(!this.images.some((e) => e.name == files[i].name)){
-                                this.images.push({name: files[i].name, url: URL.createObjectURL(files[i])})
-                            }
-
-                        }
-                        else if(file.type.split('/')[0] == 'video'){
+                        console.log(this.files)
+                        if(file.type.split('/')[0] == 'video'){
                             this.files[this.files.length - 1].loading = Math.floor((loaded/total)*100);
                             if(loaded == total){
                                 const fileSize = (total > 1024)? total + 'KB' : (loaded/(1024*1024)).toFixed(2) + 'MB'
                                 this.uploadFiles.push({name: fileName, size: fileSize});
-                                this.files = [];
                                 this.showProgress = false
                             }
                         }
                     }
                 }).then((result) => {
+
                     if(file.type.split('/')[0] == 'image'){
-                        this.$emit('loadImage', result.data.url)
+
+                        const link = {
+                            id : "",
+                            link_image : result.data.url,
+                        }
+                        const name = link.link_image.split("/")
+
+                        this.images.push({id: "", link_image:result.data.url})
+                        this.$emit('loadImage', this.images)
                     }
                     if(file.type.split('/')[0] == 'video'){
-                        this.$emit('loadVideo', result.data.url)
+                        const link = {
+                            id : "",
+                            link_video : result.data.url,
+                        }
+
+                        this.videos.push(link)
+                        this.$emit('loadVideo', this.videos)
                     }
 
                 })
@@ -142,11 +181,21 @@ export default defineComponent({
                 })
             }
 
+
         },
 
         deleteImage(index){
             this.images.splice(index,1)
+            this.$emit('loadImage', this.images)
+
         },
+
+        deleteVideo(index){
+            this.videos.splice(index,1)
+            this.uploadFiles.splice(index,1)
+            this.$emit('loadImage', this.images)
+        }
+
 
     }
 })
@@ -296,6 +345,7 @@ export default defineComponent({
     .upload-area {
         max-height: 232px;
         overflow-y: scroll;
+        position: relative;
     }
 
     .upload-area.onprogress{
@@ -310,6 +360,20 @@ export default defineComponent({
         display: flex;
         margin-left: 15px;
         flex-direction: column;
+    }
+
+    .upload-area .icon span.delete {
+        font-size: 30px;
+        font-weight: 800;
+        cursor: pointer;
+        padding-bottom: 2rem;
+    }
+
+    @media (max-width:400px) {
+        .image .container .card_picture{
+            width: 60px;
+            height: 60px;
+        }
     }
 
 </style>

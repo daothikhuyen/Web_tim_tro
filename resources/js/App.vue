@@ -16,15 +16,15 @@ export default {
     const isScroll = ref(false)
 
     const handleScroll = () => {
-      isScroll.value = window.scrollY > 0
+        isScroll.value = window.scrollY > 0
     }
 
     onMounted(() => {
-      window.addEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', handleScroll)
     })
 
     onUnmounted(() => {
-      window.removeEventListener('scroll', handleScroll)
+        window.removeEventListener('scroll', handleScroll)
     })
 
     return {

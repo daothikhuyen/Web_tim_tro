@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center">
             <div class="user_writeComment">
                 <div class="avatar_comment border rounded-circle">
-                    <img v-if="authUser != null && authUser.avatar != null" :src="user.avatar" alt="" class="avatar">
+                    <img v-if="authUser != null && authUser.avatar != null" :src="authUser.avatar" alt="" class="avatar">
                     <img v-else src="/storage/uploads/2024/06/04/profile.jpg" alt="" class="avatar">
                 </div>
             </div>

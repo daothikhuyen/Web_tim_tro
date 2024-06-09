@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('district_id');
             $table->bigInteger('ward_id');
             $table->bigInteger('street_id')->nullable();
+            $table->integer('is_deleted')->default(0)->comment('0: Bài không bị xoá, 1: Bài bị xoá');
         });
     }
 

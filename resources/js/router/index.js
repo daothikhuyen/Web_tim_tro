@@ -4,16 +4,29 @@ import { createRouter, createWebHistory} from "vue-router"
 import HomeComponent from '../components/HomeComponent.vue';
 import LoginComponent from '../components/Form/LoginComponent.vue';
 import SignUpComponent from '../components/Form/SignUpComponent.vue';
-import VerifyOTP from '../components/Form/SendOtp/verifyOTPComponent.vue';
+import VerifyOTP from '../components/Form/SendEmail/verifyOTPComponent.vue';
+import ForgotPassword from '../components/Form/SendEmail/ForgotPassword_Component.vue';
+import ResetPassword from '../components/Form/Reset_PasswordComponent.vue';
 
 // quản lí đăng tin của người dùng
 import posterManagement from '../components/posterManagement/index.vue'
 import index from '../components/posterManagement/creator/index.vue'
 import account from '../components/posterManagement/account/index.vue'
+import personal_info from '../components/posterManagement/account/account-child/personal_info.vue'
+import account_setup from '../components/posterManagement/account/account-child/account_setup.vue'
+
 import creator from '../components/posterManagement/creator/child/creator.vue'
 import next from '../components/posterManagement/creator/child/nextCreator.vue'
-import my_posts from '../components/posterManagement/my_posts/list.vue'
+
+import my_posts from '../components/posterManagement/my_posts/index.vue'
+import list_posts from '../components/posterManagement/my_posts/list.vue'
 import edit_post from '../components/posterManagement/my_posts/edit.vue'
+
+// Admin
+import list_user from '../components/posterManagement/admin/list_user.vue';
+import list_posts_user from '../components/posterManagement/admin/list_posts_user.vue';
+import posts_detail from '../components/posterManagement/admin/posts_detail.vue';
+import list_feedback from '../components/posterManagement/admin/list_feedback.vue';
 
 const routes = [
     {
@@ -42,6 +55,20 @@ const routes = [
         meta: { public: true }
     },
     {
+        name: 'reset_password',
+        path: '/account/reset_password/:data',
+        component: ResetPassword,
+        props: true,
+        meta: { public: true },
+    },
+    {
+        name: 'forgot_password',
+        path: '/account/forgot_password',
+        component: ForgotPassword,
+        props: true,
+        meta: { public: true },
+    },
+    {
         name: 'postManagement',
         path: '/postManagement',
         component: posterManagement,
@@ -67,7 +94,18 @@ const routes = [
             {
                 name: 'account',
                 path: 'account',
-                component: account
+                children: [
+                    {
+                        name: 'personal_info',
+                        path: 'personal_info',
+                        component: personal_info,
+                    },
+                    {
+                        name: 'account_setup',
+                        path: 'account_setup',
+                        component: account_setup,
+                    }
+                ]
             },
             {
                 name: 'my_posts',
@@ -75,10 +113,42 @@ const routes = [
                 component: my_posts,
                 children: [
                     {
-                        name: 'edit_post',
-                        path: 'edit_post',
-                        component: edit_post,
+                        name: 'list_posts',
+                        path: 'list_posts',
+                        component: list_posts,
                     },
+                    {
+                        name: 'edit_post',
+                        path: 'edit_post/:id',
+                        component: edit_post,
+                        props: true
+                    }
+                ]
+            },
+            {
+                name: 'admin',
+                path: 'admin',
+                children: [
+                    {
+                        name: 'list_user',
+                        path: 'list_user',
+                        component: list_user,
+                    },
+                    {
+                        name: 'list_posts_user',
+                        path: 'list_posts_user',
+                        component: list_posts_user,
+                    },
+                    {
+                        name: 'posts_detail',
+                        path: 'posts_detail/:id',
+                        component: posts_detail,
+                    },
+                    {
+                        name: 'list_feedback',
+                        path: 'list_feedback/:id',
+                        component: list_feedback,
+                    }
                 ]
             }
         ]

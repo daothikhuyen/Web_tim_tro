@@ -18,8 +18,8 @@ return new class extends Migration
             $table->boolean("like");
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('feedback_id')->references('id')->on('feedback');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('feedback_id')->references('id')->on('feedback')->onDelete('cascade');
         });
     }
 

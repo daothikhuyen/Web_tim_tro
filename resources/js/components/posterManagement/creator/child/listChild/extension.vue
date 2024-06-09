@@ -48,7 +48,8 @@ export default defineComponent({
 
     },
     props: {
-        loadExtension : Function
+        loadExtension : Function,
+        dataExtensions: Array
     },
     data() {
 
@@ -56,32 +57,48 @@ export default defineComponent({
         const titleExtention = ref(null)
         const isBlock = ref(false)
         return {
+            array : [],
             extension : [],
             checkExtension,
             titleExtention,
             isBlock
         }
     },
-    mounted(){
+    watch : {
+        dataExtensions(extensions){
+            this.uploadExtension(extensions)
+        }
     },
     methods: {
 
-        getExtension(){
-            const array = []
-            this.checkExtension.forEach(element => {
-                const newExtension = {
-                    id: Math.floor(Math.random() * 1000),
-                    name : element,
-                    post_id : Math.floor(Math.random() * 1000)
-                }
+        uploadExtension(value){
 
-                array.push(newExtension)
+            value.forEach(element => {
+                this.checkExtension.push(element.name)
+                this.array.push(element)
             });
 
-            this.loadExtension(array)
+            this.loadExtension(this.array)
+
+        },
+
+        getExtension(){
+            this.array = []
+            this.checkExtension.forEach(element => {
+                const newExtension = {
+                    id: "",
+                    name : element,
+                }
+
+                this.array.push(newExtension)
+            });
+            console.log(this.checkExtension);
+
+            this.loadExtension(this.array)
         },
 
         addExtension(){
+
             const newExtension = {
                 id : Math.floor(Math.random() * 1000),
                 name : this.titleExtention
@@ -113,7 +130,7 @@ export default defineComponent({
 
     @supports selector(::-webkit-scrollbar) {
         .columExtension::-webkit-scrollbar {
-            width: 7px;
+            width: 4px;
             background: #ffff;
         }
         .columExtension::-webkit-scrollbar-thumb {

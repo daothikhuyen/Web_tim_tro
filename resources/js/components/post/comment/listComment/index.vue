@@ -16,7 +16,7 @@ export default {
         ...mapGetters(['authUser'])
     },
     mounted() {
-        console.log("treeData",this.treeData)
+        // console.log("treeData",this.treeData)
     },
     components: {
         FeedBackNode

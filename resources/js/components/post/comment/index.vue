@@ -83,7 +83,6 @@ export default defineComponent({
         }
     },
     mounted(){
-        console.log("xin chào")
     },
     methods: {
 
@@ -186,7 +185,6 @@ export default defineComponent({
                     if (result.isConfirmed) {
                         this.$router.push('/login')
                     }
-
                 })
             }
         },

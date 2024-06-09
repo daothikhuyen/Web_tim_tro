@@ -1,8 +1,8 @@
 // HomeComponent.vue
 
 <template>
-    <navbar-component></navbar-component>
-    <div class="SignComponent" >
+    <div class="SignComponent " :class="{loading: showLoading}">
+        <navbar-component></navbar-component>
         <div class="view_home container-fluid mt-3" style="">
             <div class="row">
                 <div class="col-md-2">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-md-8 py-3">
                     <Form @submit="signup" :validation-schema="schema" v-slot="{errors}">
-                        <div class="from_login login">
+                        <div class="from_sign sign">
                             <div class="form-group">
                                 <h3 class="text-center">Đăng Kí Tài Khoản</h3>
                             </div>
@@ -28,17 +28,13 @@
                                 <label for="" class="pt-2 pb-1 ps-2">Họ Tên</label>
                                 <Field type="text" name="name" id="name" class="form-control" :class="{'is-invalid' : errors.name}" />
                                 <span class="invalid-feedback">{{errors.name}}</span>
+                                 <!-- <ErrorMessage name="name" class="invalid-feedback" /> -->
                             </div>
                             <div class="form-group">
                                 <label for="" class="pt-2 pb-1 ps-2">Email</label>
                                 <Field type="email" name="email" id="" class="form-control" :class="{'is-invalid' : errors.email}" />
                                  <span class="invalid-feedback">{{errors.email}}</span>
                             </div>
-                            <!-- <div class="form-group">
-                                <label for="" class="pt-2 pb-1 ps-2">Số điện thoại</label>
-                                <Field type="text" name="phone" id="" class="form-control" :class="{'is-invalid' : errors.phone}"/>
-                                 <span class="invalid-feedback">{{errors.phone}}</span>
-                            </div> -->
                             <div class="form-group">
                                 <label for="" class="pt-2 pb-1 ps-2">Mật Khẩu</label>
                                 <Field type="password" name="password" id="" class="form-control" :class="{'is-invalid' : errors.password}"/>
@@ -79,8 +75,8 @@
 
                 </div>
             </div>
-            <div class="row">
-                <div class="contact_us offset-2 col-md-8 bg-white mb-4">
+            <!-- <div class="row">
+                <div class="contact_us offset-md-2 col-md-8 offset-sm-1 col-sm-10 bg-white mb-4">
                     <div class="contact_img w-50 mx-auto d-flex justify-content-center" >
                         <img class="w-75 " src="../../../image/contact.png" alt="">
                     </div>
@@ -91,10 +87,20 @@
                         <button class="btn_contact p-2 px-3">Gửi Liên Hệ</button>
                     </div>
                 </div>
+            </div> -->
+        </div>
+    </div>
+    <div :class="{hide: !showLoading}">
+        <div class="page_loading">
+            <div>
+                <div></div>
+                <div class="">
+                    Loading...
+                </div>
             </div>
         </div>
-        <footer-component></footer-component>
     </div>
+    <footer-component></footer-component>
 </template>
 
 <script>
@@ -117,6 +123,7 @@ export default {
     },
     data(){
         const error = [];
+        const showLoading = ref(false)
         const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         const schema = yup.object().shape({
@@ -130,7 +137,8 @@ export default {
         })
         return {
             schema,
-            error
+            error,
+            showLoading
         }
     },
     mounted() {
@@ -138,8 +146,11 @@ export default {
     methods: {
 
         async signup(values) {
+            this.showLoading = !this.showLoading
             const result = await userApi.signup(values)
+
             if(result.error == false){
+                this.showLoading = !this.showLoading
                 this.$store.commit('OTP',result.otp)
                 this.$router.push({name : 'verify_otp', params: {otp: values.email}})
 
@@ -158,27 +169,30 @@ export default {
         --primary-color: #ff5d26
     }
 
+    .SignComponent{
+        position: relative;
+    }
 
-    .from_login{
+    .from_sign{
         background-color: #fff;
         border: 1px solid #dedede;
         border-radius: 8px;
     }
 
-    .from_login.login{
+    .from_sign.sign{
         max-width: 600px;
         margin: 0 auto;
         padding: 30px 30px 100px;
         background-color: #fff;
     }
 
-    .from_login .form-group .btn-login{
+    .from_sign .form-group .btn-login{
         background-color: var(--primary-color);
         color: #ffff;
         font-size: 18px;
     }
 
-    .from_login .form-group.footer_form a{
+    .from_sign .form-group.footer_form a{
         list-style: none;
         text-decoration: none;
     }
@@ -228,6 +242,67 @@ export default {
         transition: all .3s ease-in;
         display: flex;
         align-items: center;
+    }
+
+    /* trang loading */
+    .hide {
+        display: none;
+    }
+
+    .loading{
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .page_loading{
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgb(0, 0, 0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .page_loading > div {
+        margin: auto;
+    }
+
+    .page_loading div > div:nth-child(1){
+        height: 50px;
+        width: 50px;
+        border: 8px solid #45474b;
+        border-top-color: #ffff ;
+        border-radius: 50%;
+        animation: spin 1.5s infinite linear;
+    }
+
+    .page_loading div > div:nth-child(2){
+        color:#fff;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    @keyframes spin {
+        100%{
+            transform: rotate(360deg);
+        }
+    }
+
+    @media only screen and (max-width: 420px) {
+        .row>* {
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+
+        .from_sign{
+            border-radius:0px ;
+        }
     }
 
 </style>

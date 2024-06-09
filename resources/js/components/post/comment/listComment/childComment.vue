@@ -3,7 +3,7 @@
         <div class="show_writeComment d-flex" :id="nodeData.id">
             <div class="avatar_name d-flex ">
                 <div class="avatar inline-block">
-                    <img  v-if="authUser != null && authUser.avatar != null" :src="user.avatar" class="image_avatar_feedback">
+                    <img  v-if="nodeData['user'].avatar != null" :src="nodeData['user'].avatar" class="image_avatar_feedback">
                      <img v-else src="/storage/uploads/2024/06/04/profile.jpg" alt="" class="image_avatar_feedback">
                 </div>
             </div>
@@ -77,7 +77,7 @@ export default defineComponent ({
         const showLike = ref(false)
         const date = ref(null)
         const numbe_like_feedback = ref(null)
-        const like = ref([])
+        const like = ref({})
 
         return {
             treeFeedback: [],
@@ -130,17 +130,16 @@ export default defineComponent ({
 
         loadLike(){
             if(this.like != null){
-                this.like.message.forEach(element => {
-                    if(element.feedback_id == this.nodeData.id ){
-                        console.log(element.feedback_id)
+                this.like.data.forEach(element => {
 
-                        this.numbe_like_feedback = this.numbe_like_feedback + 1;
-
-                        if(element.user_id == this.authUser.id){
-                            this.showLike = !this.showLike
+                    if(this.authUser){
+                        if(element.feedback_id == this.nodeData.id ){
+                            if(element.user_id == this.authUser.id){
+                                this.showLike = !this.showLike
+                            }
                         }
-
                     }
+                    this.numbe_like_feedback = this.numbe_like_feedback + 1;
                 });
             }
         }
@@ -148,12 +147,11 @@ export default defineComponent ({
     },
     computed: {
         childCommentData(){
-            console.log("this.nodeData.feedback", this.nodeData.feedback)
             return this.nodeData.feedback;
         },
     },
     async created() {
-        this.like = await ratting_api.getLikeFeedback(this.nodeData.id,this.authUser)
+        this.like = await ratting_api.getLikeFeedback(this.nodeData.id)
         this.loadLike()
     },
 })

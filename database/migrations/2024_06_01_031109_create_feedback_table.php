@@ -17,10 +17,11 @@ return new class extends Migration
             $table->bigInteger("post_id")->unsigned();
             $table->string("comment");
             $table->integer("parent_id");
+            $table->integer("is_deleted")->default(0)->comment('0: chưa xoá, 1: xoá rồi');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

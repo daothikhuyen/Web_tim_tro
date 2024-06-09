@@ -1,251 +1,268 @@
 <template>
-    <aside v-if="authUser" :class="`${is_expanded && 'is_expanded'}`">
-        <div class="sidebarPost d-flex align-items-center mt-2">
-            <div class="avatar inline-block">
-                <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_user">
-                <img v-else class="image_avatar_user" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="">
-            </div>
-            <div class="name ps-3 d-block" >
-                <div style="font-size:15px" class=" fw-bold">{{authUser.username}}</div>
-                <div style="font-size:14px" class=""><small>{{authUser.email}}</small></div>
-            </div>
-        </div>
-        <div class="menu-toggle-wrap">
-            <button class="menu-toggle" @click="ToggleMenu()">
-                <span class="material-icons">
-                    <i class="fa-solid fa-angles-right"></i>
+    <div class="menu" :class="[{ 'small-menu': smallMenu },showSidebar?'show':'hide']">
+        <div class="header_sidebar">
+            <div class="brand-link">
+                <span class="brand-text font-weight-light">
+                    <h5>
+                        <span class="avatar inline-block">
+                            <img class="image_avatar_user" src="/storage/uploads/2024/06/27/chutruong.png" alt="" style="height:2rem;width:2rem;">
+                        </span>
+                        Chủ Trương
+                    </h5>
+                    <h6>
+                        An Toàn Và Chất Lượng
+                    </h6>
                 </span>
-            </button>
+            </div>
+            <div class="sidebarPost d-flex align-items-center mb-1" v-if="authUser">
+                <div class="avatar inline-block" style="padding: 0 .5rem;">
+                    <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_user">
+                    <img v-else class="image_avatar_user" src="/storage/uploads/2024/06/04/profile.jpg" alt="">
+                </div>
+                <div class="name d-block" >
+                    <div >{{authUser.username}}</div>
+                    <div class=""><small>{{authUser.email}}</small></div>
+                </div>
+            </div>
+            <div v-else class="sidebarPost  d-flex justify-content-between align-items-center px-3 mb-1">
+                <div class="btn_Login">
+                    <a class="nav-link d-flex align-items-center" href="/login" >
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </div>
+                        <small><span class="ps-1">Đăng Nhập</span></small>
+                    </a>
+                </div>
+                <div class="btn_Register">
+                    <a class="nav-link d-flex align-items-center" href="/signup" >
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                        </div>
+                        <small><span class="ps-1">Đăng Kí</span></small>
+                    </a>
+                </div>
+            </div>
         </div>
-        <hr class="dropdown-divider border-bottom mb-2 mt-1">
-        <div class="menu" v-for="menuAttribute in menuAttributes" :key="menuAttribute.id">
-            <router-link v-if="menuAttribute.title != 'Đăng xuất' " class="button" :to="menuAttribute.url">
-                <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
-                <span class="text">{{menuAttribute.title}}</span>
-            </router-link>
-            <a v-else href="#" class="button" @click.prevent="logoutWeb">
-                <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
-                <span class="text">{{menuAttribute.title}}</span>
-            </a>
+
+        <SidebarItem v-for="(item, index) in menuTree.user" :key="index" :data_children="item.children" :data="item" :depth="0" :smallMenu="smallMenu"/>
+        <div v-if="authUser && authUser.level == 1">
+             <SidebarItem v-for="(item, index) in menuTree.admin" :key="index" :data_children="item.children" :data="item" :depth="0" :smallMenu="smallMenu"/>
         </div>
-    </aside>
+        <SidebarItem v-for="(item, index) in menuTree.logout" :key="index" :data_children="item.children" :data="item" :depth="0" :smallMenu="smallMenu"/>
+        <i @click="smallMenu = !smallMenu" class="fa-solid fa-bars"></i>
+    </div>
+    <div class="overlay" @click="sidebarOpen" :class="{show:showSidebar}" id="overlay"></div>
+
 </template>
 
 <script>
 import { ref, defineComponent } from 'vue'
 import {mapState,mapGetters,mapActions} from 'vuex'
-import Swal from 'sweetalert2'
+import SidebarItem from './SidebarItem.vue';
 
-export default defineComponent({
-    name: "Siderbar",
+import userApi from '../../Api/userApi';
+import menuApi from '../../Api/menuApi';
+
+export default {
+    name: 'recursive-menu',
+    components: {
+        SidebarItem
+    },
     computed: {
         ...mapGetters(['authUser'])
     },
-    data() {
-        const is_expanded = ref(false)
-        const menuAttributes = ref([])
-
-        return {
-            is_expanded,
-            menuAttributes
+    props: {
+        open: Boolean
+    },
+    watch: {
+        open(value){
+            this.showSidebar = value
         }
     },
-    mounted() {
-        this.addMenuAttribute();
+    data (){
+        const showSidebar = ref(false)
+        const smallMenu = ref(false);
+        const menuTree = ref([])
+        return {
+            showSidebar,
+            smallMenu,
+            menuTree,
+        }
     },
     methods: {
-        ToggleMenu() {
-            this.is_expanded = !this.is_expanded
-        },
-
-        addMenuAttribute(){
-            const listMenus = [
-                {
-                    icon : 'fa-solid fa-house',
-                    title : 'Trang chủ',
-                    url : '/'
-                },
-                {
-                    icon : 'fa-solid fa-user',
-                    title : 'Tài khoản',
-                    url : '/postManagement/account'
-                },
-                {
-                    icon : 'fa-solid fa-notes-medical',
-                    title : 'Đăng bài',
-                    url : '/postManagement/index/creator'
-                },
-                {
-                    icon : 'fa-solid fa-list-check',
-                    title : 'Quản lí tin đăng',
-                    url : '/postManagement/my_posts'
-                },
-                {
-                    icon: 'fa-solid fa-right-from-bracket',
-                    title: 'Đăng xuất',
-                    url : "/logout",
-                }
-            ]
-
-            this.menuAttributes = listMenus
-        },
-
-        logoutWeb(){
-            console.log("1")
-            Swal.fire({
-                title: "Thông Báo!",
-                text: "Banh Muốn Rời Web!",
-                icon: "success",
-                confirmButtonText: "Đồng Ý",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.$store.dispatch('logout');
-                }
-            });
+        sidebarOpen(){
+            this.showSidebar = !this.showSidebar
+            this.$emit('changeValueOpen',!this.open)
         }
     },
-    created() {
-        this.$store.dispatch('getUser');
-    },
-
-})
+    created (){
+        this.user = this.$store.dispatch('getUser');
+        this.menuTree = menuApi.Menus();
+    }
+}
 </script>
 
 <style scoped>
-    aside {
-        position:static ;
-        display: flex;
-        flex-direction: column;
-        width: calc(2rem + 32px);
-        /* height: 100vh;
-        overflow-y: scroll; */
-        min-height: 100vh;
-        overflow: hidden;
-        background-color: #f3f3f3;
-        transition: 0.2s ease-out;
+    .menu {
+        position: fixed;
+        height: 100vh;
+        width: 280px;
+        left: 0;
+        top: 0;
+        border-right: 1px solid #ececec;
+        background-color: #fff;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        transition: all .3s ease;
+        overflow: auto;
+        z-index: 9999;
     }
 
-    aside::-webkit-scrollbar{
-        width: 0%;
+    .menu i {
+        position: static;
+        font-size: 17px;
+        user-select: none;
+        cursor: pointer;
+        transition: all .3s ease;
     }
 
-    aside .sidebarPost{
-        padding: 5rem 1rem 1rem 1rem;
+    .menu i.fa-solid.fa-bars{
+        position: fixed;
+        left: 290px;
+        font-size: 17px;
+        top: 15px;
+        user-select: none;
+        cursor: pointer;
+        transition: all .3s ease;
     }
 
-    .avatar img{
+    .small-menu {
+        overflow: inherit;
+        width: 60px;
+        padding-top: 50px;
+    }
+
+    .small-menu  i {
+        left: 20px;
+    }
+
+    .menu.small-menu i.fa-solid.fa-bars{
+        position: fixed;
+        left: 22px;
+        top: 15px;
+        font-size: 22px;
+    }
+
+    .menu .avatar img{
+        height: 4rem;
+        width: 4rem;
+        border-radius: 100rem;
+        object-fit: cover;
+    }
+
+    .menu .sidebarPost .btn_Register a{
+        background-color: #ff5d26;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .menu .sidebarPost .btn_Login a{
+        border: 1px solid #ff5d26;
+        color: #ff5d26;
+        border-radius: 8px;
+    }
+
+    .menu .sidebarPost .name div:nth-child(1){
+        font-size: 18px;
+        line-height: 28px;
+        font-weight: 500;
+        letter-spacing: -0.2px;
+        color: rgb(44, 44, 44);
+    }
+
+    .menu .sidebarPost .name div:nth-child(2){
+        font-size: 15px;
+
+    }
+
+    .menu.small-menu .avatar img{
         height: 2rem;
         width: 2rem;
         border-radius: 100rem;
         object-fit: cover;
     }
 
-    aside .name div:nth-child(1){
-        line-height: 15px;
-        margin-top: 4px;
+    .menu .sidebarPost{
+        padding: 1rem 0rem 1rem 0rem;
+        color: black;
+        margin: 0 5px;
+        border-bottom: 1px solid #cdcdcd;
+
     }
 
-    aside.is_expanded{
-        width: 300px;
-        transition: 0.2s ease-in;
-    }
-
-    aside .menu-toggle-wrap{
-        display: flex;
-        justify-content: flex-end;
-        position: relative;
-        top: 0;
-        transition: 0.2s ease-out;
-    }
-
-    aside.is_expanded .menu-toggle-wrap{
-        top: -3rem;
-    }
-
-    aside .menu-toggle-wrap .material-icons{
-        font-size: 1rem;
+    .menu .brand-link{
+        /* width: 250px;
+        color: #c2c7d0; */
+        display: block;
+        font-size: 1.25rem;
+        line-height: 1.5;
         padding: 1rem;
+        transition: width .3s ease-in-out;
+        white-space: nowrap;
+        text-align: center;
+        border-bottom: 1px solid #cdcdcd;
     }
 
-    aside h3,
-    aside .button .text{
+    .menu.small-menu .sidebarPost .name,
+    .menu.small-menu .brand-link {
+        display: none;
         opacity: 0;
-        transition: 0.3s ease-out;
+     }
+
+    .overlay {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        top: 0;
+        left: 0;
+        opacity: 0.5;
+        z-index: 9998;
+        display: none;
     }
 
-    aside .menu .button {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        padding: 0rem 0.5rem;
-        transition: 0.2s ease-out;
-        padding-left: 1rem;
+    .hide{
+        display: block;
     }
 
-    aside .menu .button .material-icons{
-        font-size: 1rem;
-        /* color: var( --primary-color); */
-        margin-right: 1rem;
-        transition: 0.2s ease-out;
+     @media only screen and (min-width: 1200px) {
+
+        .menu {
+            position: sticky;
+        }
     }
 
-    aside .menu .button .text{
-        /* color: var( --primary-color); */
-        transition: 0.2s ease-out;
-    }
-
-    aside .menu .button:hover{
-        background-color: var(--hover-color)
-    }
-
-    aside.is_expanded .logo img{
-        width: 10rem;
-        margin: auto;
-    }
-
-    aside.is_expanded .menu-toggle-wrap{
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    aside.is_expanded .menu-toggle-wrap .menu-toggle{
-        transform: rotate(-180deg);
-    }
-
-    aside.is_expanded h3,
-    aside.is_expanded .button .text{
-        opacity: 1;
-    }
-
-    aside.is_expanded .button .material-icons{
-        padding: 0.5rem 1rem;
-        margin-right: 1rem;
-    }
-
-    .menu .button:hover{
-        color: var(--primary-color);
-    }
-
-    .menu .button.router-link-active{
-        border-right: 5px solid var(--primary-color);
-        color: var(--primary-color);
-        background-color: var(--hover-color);
-    }
-
-    /* .hover {
-        border-radius: 8px;
-        background-color: var(--hover-color);
-    } */
-
-    @media (max-width: 768px) {
-        aside{
-            position: fixed;
-            z-index: 99;
+     @media only screen and (max-width: 992px) {
+        .hide{
+            display: none;
         }
 
-        aside .sidebarPost{
-            padding: 5rem 1rem 0rem 1rem;
+        .menu{
+            right: 0;
+            left: auto;
         }
+        .menu i.fa-solid.fa-bars{
+            display: none;
+        }
+
+        .menu.show{
+            display: block;
+            transition: margin-right 2s;
+        }
+
+        .overlay.show{
+            display: block;
+        }
+
 
     }
 </style>

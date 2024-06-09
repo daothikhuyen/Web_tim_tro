@@ -18,7 +18,7 @@ return new class extends Migration
             $table->double('price');
             $table->double('area');
             $table->string('full_address');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id');
             $table->integer('number_like')->default(0);
             $table->timestamps();

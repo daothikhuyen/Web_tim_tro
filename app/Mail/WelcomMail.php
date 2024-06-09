@@ -41,7 +41,6 @@ class WelcomMail extends Mailable
     {
         return new Content(
             view: 'mail.notifiOTP',
-
         );
     }
 

@@ -31,19 +31,32 @@ class LocationController extends Controller
     }
 
     public function getLocation(){
-        $location = Location::select()->get();
-        $result = $this->Recursive($location,0);
 
-        if($result){
-            return response()->json([
-                'error' => false,
-                'message' => $result
-            ]);
-        }else{
-            return response()->json([
-                'error' => true,
-                'message' => $result
-            ]);
+        $location = Location::select()->get();
+
+        return $location;
+    }
+
+    public function getNameLocation(Request $request){
+        $array = [];
+
+        foreach ($request as $key => $value) {
+            if($request[$key] !== null){
+                $array[$key] = $request[$key];
+            }
         }
+
+        return Location::whereIn('id',$request)->get();
+    }
+
+    public function getLocationByParent_id(Request $request){
+        $result = Location::where('parent_id',$request->parent_id)
+                        ->where('type',$request->type)->get();
+
+        return response()->json([
+            'error' => $result?false:true,
+            'locations' => $result
+        ]);
+
     }
 }

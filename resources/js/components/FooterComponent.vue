@@ -1,39 +1,33 @@
 
 <template>
-    <div class="footer bg-white py-5">
-        <div class="container">
+    <div class="footer bg-white">
+        <div class="container-fluid">
             <div class="row">
                 <!-- <div class="col-md-1"></div> -->
-                <div class="col-md-11 py-2 ms-2 d-flex justify-content-between align-items-center">
+                <div class="footer_main">
                     <div class="row w-100">
-                        <div class="col-md-5">
+                        <div class="col-lg-5 col-md-12 col-sm-12">
                             <div class="info_footer">
                                 <div class="logo_info">
                                     <img src="../../image/logo.png" alt="" class="w-100">
                                 </div>
-                                <span class="text-secondary">
+                                <div class="text-secondary ms-auto w-100">
                                     <b>PhongTot</b> <small>luôn tự tin mang đến cho người dùng <br>  các cơ hội tìm nhà tốt nhất.</small>
-                                </span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-7 d-flex justify-content-between align-content-center">
+                        <div class="customer col-lg-7 col-md-12 col-sm-12">
                             <div class="customer_support">
                                 <span class="footer-col-title fw-semibold pb-3">Thông tin về PhongTot</span>
                                 <ul class="list-unstyled">
                                     <li>
-                                        <a href="#" class="text-decoration-none text-black">Trang chủ</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="text-decoration-none text-black">Tin tức</a>
+                                        <a href="#" class="text-decoration-none text-black">Trang chủ, Tin tức</a>
                                     </li>
                                     <li>
                                         <a href="#" class="text-decoration-none text-black">Quy chế hoạt động</a>
                                     </li>
                                     <li>
                                         <a href="#" class="text-decoration-none text-black">Chính sách bảo mật</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="text-decoration-none text-black">Liên hệ </a>
                                     </li>
                                     <li>
                                         <a href="#" class="text-decoration-none text-black">Quy định sử dụng</a>
@@ -79,8 +73,37 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <div class="col-md-1"></div>
+                <hr class="my-3">
+                <div class="row py-2">
+                    <div class="col-lg-6 col-md-6">
+                        <span>
+                            <ul class="ps-0">
+                                <li>
+                                    Chịu trách nhiệm sàn GDTMĐT: Ông Danh Lợi
+                                </li>
+                                <li>
+                                    Quy chế, quy định giao dịch có hiệu lực từ 08/08/2024
+                                </li>
+
+                            </ul>
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <ul class="ps-0">
+                            <li>
+                                Ghi rõ nguồn "PhongTot.com" khi phát hành lại thông tin từ website này.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="py-3">
+                    <div>
+                        <img src="../../image/da-dang-ki-bct.svg" alt="">
+                    </div>
+                </div>
+                <!-- <div class="col-md-1"></div> -->
             </div>
         </div>
     </div>
@@ -109,13 +132,29 @@
         --primary-color: #ff5d26
     }
 
+    .footer .footer_main{
+        padding: auto 5px;
+        margin-left: 2px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .footer{
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        /* padding: 20px; */
+        padding: 25px 0px 0px 0px;
     }
 
     .footer .info_footer .logo_info{
         width: 48%;
         height: auto;
+    }
+
+    .footer .footer_main .customer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .customer_support ul li{
@@ -132,6 +171,7 @@
     .customer_support .footer-col-title{
         display: block;
         font-size: 13px;
+        font-weight: 500;
     }
 
     .social-link a>i{
@@ -169,12 +209,91 @@
         background-repeat: no-repeat;
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 992px) {
+        .footer{
+            padding: 5% 8% 0px 8% ;
+        }
+
+        .footer .footer_main .customer{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+    }
+
+    @media (max-width: 992px) {
         .footer{
             position: sticky;
             z-index: 99;
         }
 
+        .footer .footer_main .customer{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer .customer_support{
+            font-size: 18px;
+        }
+
+        .footer .info_footer .logo_info {
+            width: 38%;
+            height: auto;
+        }
+
+        /* .footer .info_footer .logo_info span{
+            min-width: 100%;
+        } */
+
+        .footer .info_footer{
+            margin-bottom: 20px;
+        }
+
+    }
+
+     @media (max-width: 600px) {
+
+        .row {
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right:  0rem;
+            margin-left: 0rem;
+        }
+        .footer .footer_main .customer .customer_support:nth-child(2){
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: 420px) {
+        .row {
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right:  0rem;
+            margin-left: 0rem;
+        }
+    }
+
+    @media only screen and (max-width: 330px) {
+        .row {
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right:  0rem;
+            margin-left: 0rem;
+        }
+
+        .footer .footer_main .customer{
+            display: block;
+            margin: auto;
+            padding-left: 15px;
+        }
+
+        .footer .footer_main .customer .customer_support:nth-child(3){
+            display: block;
+            margin: 20px 0px;
+
+        }
     }
 
 </style>

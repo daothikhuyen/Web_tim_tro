@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in infoPost.message" :key="index">
+        <div class="post px-2 py-3 bg-white mb-2" v-for="(listPost, index) in infoPost.posts" :key="index">
             <Poster :user="listPost.user" :created_at="listPost.postData.created_at"></Poster>
             <PostContent :postData="listPost.postData" :images="listPost.images" :extensions="listPost.extensions" :videos="listPost.videos"></PostContent>
             <Comment :postId="listPost.postData.id" :numberLike="listPost.postData.number_like" :like="rattig_post.message"></Comment>
@@ -32,7 +32,9 @@ export default defineComponent(
         },
         computed:{
                ...mapGetters(['authUser'])
-
+        },
+        props: {
+            posts: Object
         },
         data() {
             const commentData = ref(null)
@@ -48,7 +50,14 @@ export default defineComponent(
                 rattig_post
             }
         },
-        mounted() {
+        watch: {
+            posts: {
+                handler(newPosts) {
+                    this.infoPost = newPosts;
+                },
+                deep: true,
+                immediate: true,
+            },
         },
         methods: {
 
@@ -62,3 +71,16 @@ export default defineComponent(
 
 
 </script>
+<style>
+    .post {
+        border-radius: 8px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    }
+
+    @media only screen and (max-width: 477px) {
+        .main_home .post {
+            border-radius: 0px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+        }
+    }
+</style>

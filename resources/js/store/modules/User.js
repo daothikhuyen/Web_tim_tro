@@ -7,12 +7,13 @@ export default ({
       isLoggedIn : !!localStorage.getItem('token'),
       verifyOTP : null,
       authUser: null,
-      newPosts: null,
+      isEmailUser: null
     },
 
     getters: {
         isLoggedIn: (state) => state.isLoggedIn,
         authUser:(state) => state.authUser,
+        isEmailUser:(state) => state.isEmailUser
     },
 
     mutations: { // button (instructions)
@@ -27,16 +28,16 @@ export default ({
 
       SET_USER(state,user){
         state.authUser = user
+        // console.log(state.authUser);
       },
 
       OTP(state,otp){
         state.verifyOTP = otp
       },
 
-      CREATE_NEW_POST(state,newpost){
-        state.newPosts = newpost
-        console.log(state.newPost)
-      },
+      SET_EMAIL(state,email){
+        state.isEmailUser = email
+      }
 
     },
 
@@ -67,13 +68,20 @@ export default ({
 
                 if(csrfToken){
                     const response = await userApi.user()
-                    commit('SET_USER',response)
+
+                    if(!response.error){
+                        // console.log(response.user)
+                        commit('SET_USER',response.user)
+                    }else{
+                        dispatch('logout')
+                    }
                 }
 
             } catch (error) {
                 console.error('Lỗi lấy thông tin:', error);
             }
         },
+
     },
 
   })

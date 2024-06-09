@@ -33,8 +33,8 @@ class FeedbackService {
     public function getFeedback($request){
         $array = [];
 
-        $result = Feedback::where('post_id', $request)->with('user')->get();
-        $number = Feedback::where('post_id',$request)->count();
+        $result = Feedback::where('post_id', $request)->where('is_deleted', 0)->with('user')->get();
+        $number = Feedback::where('post_id',$request)->where('is_deleted', 0)->count();
 
         $feedback = $this->Recursive($result,0);
 

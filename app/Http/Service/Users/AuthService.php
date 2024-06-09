@@ -2,8 +2,11 @@
 namespace App\Http\Service\Users;
 
 use App\Jobs\SendMail;
+use App\Jobs\SendMail_ResetPass;
+use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Models\verifytokens;
+use Illuminate\Support\Facades\Auth;
 
 class AuthService {
     public function signup($request){
@@ -27,31 +30,99 @@ class AuthService {
 
             return  $otp;
         }
-
-
     }
 
     public function is_activated($request){
 
         $get_token = verifytokens::where('token',$request->input('token'))
                                 ->where('email',$request->input('email'))->first();
-
         if($get_token){
-            $get_token->is_activated = 1;
-            $get_token->save();
 
             $user = User::where('email',$get_token->email)->first();
             $user->is_activated = 1;
             $user->save();
 
-            $getting_token =verifytokens::where('token',$request->input('token'))
-                            ->where('email',$request->input('email'))->first();
-            $getting_token->delete();
+            $get_token->delete();
 
-            if($getting_token){
+            if($get_token){
                 return true;
             }
         }
 
+    }
+
+    public function update($request,$user){
+        $user->fill($request->input());
+        $user->save();
+
+        return true;
+    }
+
+    public function changePassword($request,$email){
+        $user = User::where('email',$email)->firstOrFail();
+        $user->password = $request->new_password;
+        $user->save();
+
+        return true;
+    }
+
+    public function check_forgot_password($request){
+
+        try {
+            $user = User::where('email', $request->email)->first();
+
+            $token = PasswordResetToken::where('email', $request->email)->get();
+
+            if($token->isNotEmpty()){
+                foreach ($token as $token) {
+                    $token->delete();
+                }
+            }else{
+                $token = \Str::random(50);
+                $time = time();
+
+                $tokenData = [
+                    'email' => $request->email,
+                    'token' => $token,
+                ];
+
+
+                if(PasswordResetToken::create($tokenData)){
+
+                    SendMail_ResetPass::dispatch($user,$token);
+                    return true;
+                }
+                return false;
+            }
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function searchInput($request){
+        // dd($request);
+        if(Auth::check()){
+            $user = Auth::user();
+
+            if($request != null){
+                $items = User::where('username', 'like', "%{$request}%")->paginate(10);
+
+            }else{
+                $items = User::where('user_id', $user->id)->paginate(10);
+            }
+            $response = [
+                'paginate' => [
+                    'total' => $items->total(),
+                    'per_page' => $items->perPage(),
+                    'current_page' => $items->currentPage(),
+                    'last_page' => $items->lastPage(),
+                    'from' => $items->firstItem(),
+                    'to' => $items->lastItem()
+                ],
+                'data' => $items
+            ];
+
+            return response()->json($response);
+        }
     }
 }

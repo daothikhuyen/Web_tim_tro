@@ -13,7 +13,8 @@ class Feedback extends Model
         'user_id',
         'post_id',
         'comment',
-        'parent_id'
+        'parent_id',
+        'is_deleted'
     ];
 
     public function user()

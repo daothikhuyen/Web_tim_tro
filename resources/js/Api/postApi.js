@@ -2,10 +2,15 @@ import baseApi from './base'
 
 const listPost = () => baseApi.baseApi({
     method: 'GET',
-    url : 'http://localhost:8000/api/get/getallPosts',
+    url : 'http://localhost:8000/api/posts/getall',
     data: ""
 })
 
+const getPostByUserId = (page) => baseApi.baseApi({
+    method: 'GET',
+    url : `http://localhost:8000/api/posts/getPost_ForMe?page=${page}`,
+    data: ""
+})
 const createPost = (data) => baseApi.baseApi({
     method: 'POST',
     url : 'http://localhost:8000/api/posts/create',
@@ -18,10 +23,53 @@ const deletePosts = (data) => baseApi.baseApi({
     data: data
 })
 
+const show = (id) => baseApi.baseApi({
+    method: 'GET',
+    url : `http://localhost:8000/api/posts/edit/${id}`,
+    data: ""
+})
+
+const edit = (id,data) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/edit/${id}`,
+    data: data
+})
+
+const searchInput = (data,page) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/searchInput?page=${page}`,
+    data: data
+})
+
+const searchPriceOrArea = (data) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/searchPriceOrArea`,
+    data: data
+})
+
+const searchInputAll = (data) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/searchInput_All`,
+    data: data
+})
+
+const searchByLocation_Id = (data) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/searchByLocation_Id`,
+    data: data
+})
+
 export default {
     listPost,
+    getPostByUserId,
     createPost,
-    deletePosts
+    deletePosts,
+    show,
+    edit,
+    searchInput,
+    searchPriceOrArea,
+    searchInputAll,
+    searchByLocation_Id
 }
 
 

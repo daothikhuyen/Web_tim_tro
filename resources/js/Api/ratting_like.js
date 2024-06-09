@@ -9,19 +9,16 @@ const getLikePost = () => {
     })
 }
 
-const getLikeFeedback = (feedbackId,author) => {
+const getLikeFeedback = (feedbackId) => {
 
-    if(author != null){
-        const value = {
-            "feedback_id" : feedbackId,
-            "user_id" : author.id
-        }
-        return baseApi.baseApi({
-            method: 'POST',
-            url : `http://localhost:8000/api/ratting/getlikeFeddback`,
-            data:value
-        })
+    const value = {
+        "feedback_id" : feedbackId,
     }
+    return baseApi.baseApi({
+        method: 'POST',
+        url : `http://localhost:8000/api/ratting/getlikeFeddback`,
+        data:value
+    })
 
 }
 const createLikePost = (data) => baseApi.baseApi({

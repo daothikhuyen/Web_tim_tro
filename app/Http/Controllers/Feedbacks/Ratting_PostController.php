@@ -31,7 +31,7 @@ class Ratting_PostController extends Controller
 
         return response()->json([
             "error" => $result?false:true,
-            "message" => $result
+            "data" => $result
         ]);
 
     }
