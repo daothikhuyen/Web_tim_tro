@@ -3,7 +3,9 @@
         <section class="header">
             <h6 class="title">{{ postData.title }}</h6>
             <span class="info_price_arceage px-2">
-                <span class="price">{{ postData.price }}</span>
+                <span class="price">
+                    {{formatPrice(postData.price)}}
+                </span>
                 <span class="arceage"> - {{ postData.area }}m<sup>2</sup> </span>
             </span>
         </section>
@@ -80,7 +82,6 @@ export default defineComponent({
         Navigation,
     },
     mounted(){
-        this.formatPrice()
     },
     data() {
         const isSeeMoreDescription = ref(this.postData.description.length < 500)
@@ -93,9 +94,8 @@ export default defineComponent({
     },
     methods: {
 
-        formatPrice(){
-            this.postData.price = this.postData.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
-            console.log(this.postData.price)
+        formatPrice(price){
+            return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
         },
 
         SeeMoreDescription(index) {
@@ -109,3 +109,13 @@ export default defineComponent({
     },
 })
 </script>
+
+<style >
+        /* icon next sdiles */
+    .carousel .carousel__prev,
+    .carousel .carousel__next{
+        background: #fff;
+        margin: 0 1rem;
+    }
+
+</style>

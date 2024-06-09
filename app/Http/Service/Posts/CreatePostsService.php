@@ -4,9 +4,11 @@ namespace App\Http\Service\Posts;
 
 use App\Models\Extension;
 use App\Models\Image;
+use App\Models\Location;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Video;
+use Illuminate\Support\Facades\Auth;
 
 class CreatePostsService {
 
@@ -28,6 +30,24 @@ class CreatePostsService {
         }
 
         return $array;
+    }
+
+    public function getPost_ForMe($id){
+        $items =  Post::where('user_id', $id)->paginate(10);
+
+        $response = [
+            'paginate' => [
+                'total' => $items->total(),
+                'per_page' => $items->perPage(),
+                'current_page' => $items->currentPage(),
+                'last_page' => $items->lastPage(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
+            ],
+            'data' => $items
+        ];
+
+        return response()->json($response);
     }
 
     public function store($request){
@@ -61,9 +81,10 @@ class CreatePostsService {
                 ]);
             }
 
+
             foreach ($videos as $key => $value) {
                 $video = Video::create([
-                    'video_link' => $value['link_video'],
+                    'link_video' => $value['link_video'],
                     'post_id' => $posts->id
                 ]);
             }
@@ -93,4 +114,97 @@ class CreatePostsService {
 
         return false;
     }
+
+    public function show($posts){
+        $location_id = [$posts->province_id,$posts->district_id,$posts->ward_id,$posts->street_id];
+
+        $array = [
+            'postData' => $posts,
+            'images' => Image::where('post_id', $posts->id)->get(),
+            'videos' => Video::where('post_id', $posts->id)->get(),
+            'extensions'=>Extension::where('post_id', $posts->id)->get(),
+            'locations' => Location::whereIn('id',$location_id)->get(),
+        ];
+
+        return $array;
+
+    }
+
+    public function update($request,$posts){
+
+        $posts->fill($request->postData);
+
+
+        $this->updatePosts(Image::class,$request->images,"id","link_image",$posts->id);
+        $this->updatePosts(Video::class,$request->videos,"id","link_video",$posts->id);
+        $this->updatePosts(Extension::class,$request->extensions,"name","name",$posts->id);
+
+
+
+        $posts->save();
+
+        return true;
+    }
+
+    public function updatePosts($class,$request,$columnRequest,$name_create,$postId){
+        $arryRequest = array_column($request, $columnRequest);
+
+
+
+        $selectById = $class::where('post_id', $postId)->get();
+
+        foreach ($selectById as $item) {
+            if (!in_array($item->$columnRequest, $arryRequest)) {
+                $item->delete();
+            }
+        }
+
+        foreach ($request as $value) {
+            $existingExtension = $class::where($columnRequest, $value[$columnRequest])
+                                        ->where('post_id', $postId)
+                                        ->first();
+
+            if (!$existingExtension) {
+                $class::create([
+                    $name_create => $value[$name_create],
+                    'post_id' => $postId
+                ]);
+            }
+        }
+
+    }
+
+    public function searchInput($request){
+
+
+        if(Auth::check()){
+            $user = Auth::user();
+
+            if($request != null){
+                $items = Post::where('user_id', $user->id)
+                        ->where('title', 'like', "%{$request}%")->paginate(10);
+
+            }else{
+                $items = Post::where('user_id', $user->id)->paginate(10);
+            }
+
+
+            $response = [
+                'paginate' => [
+                    'total' => $items->total(),
+                    'per_page' => $items->perPage(),
+                    'current_page' => $items->currentPage(),
+                    'last_page' => $items->lastPage(),
+                    'from' => $items->firstItem(),
+                    'to' => $items->lastItem()
+                ],
+                'data' => $items
+            ];
+
+            return response()->json($response);
+
+
+        }
+    }
+
 }

@@ -32,6 +32,7 @@ Route::post('/login',[AuthController::class, 'store'])->name("login");
 
 Route::prefix('get')->group(function(){
     Route::get('/getLocation',[LocationController::class,'getLocation']);
+    Route::post('/getNameLocation',[LocationController::class,'getNameLocation']);
     Route::get('/getallPosts',[CreatePosts::class,'index']);
 
 });
@@ -56,8 +57,12 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/getUser',[AuthController::class, 'getUser']);
 
     Route::prefix('posts')->group(function(){
+        Route::get('/getPost_ForMe',[CreatePosts::class,'getPost_ForMe']);
         Route::post('/create',[CreatePosts::class,'store']);
         Route::DELETE('/destroy',[CreatePosts::class,'destroy']);
+        Route::get('/edit/{posts}',[CreatePosts::class,'show']);
+        Route::post('/edit/{posts}',[CreatePosts::class,'update']);
+        Route::post('/searchInput',[CreatePosts::class,'searchInput']);
     });
 
 });

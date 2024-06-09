@@ -1,0 +1,28 @@
+import postApi from "../../Api/postApi"
+import router from '../../router/index';
+import axios from 'axios';
+
+export default ({
+    state : { // toy
+      newPost : []
+    },
+
+    getters: {
+        newPost: (state) => state.newPost,
+    },
+
+    mutations: { // button (instructions)
+
+        CREATE(state,newPosts){
+          state.newPost = newPosts
+          console.log(state.newPost)
+        },
+    },
+    actions: {
+        createPosts({ commit }, newPost){
+            console.log(newPost)
+            commit('CREATE',newPost)
+        }
+
+    }
+})

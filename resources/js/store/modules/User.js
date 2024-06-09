@@ -7,7 +7,6 @@ export default ({
       isLoggedIn : !!localStorage.getItem('token'),
       verifyOTP : null,
       authUser: null,
-      newPosts: null,
     },
 
     getters: {
@@ -31,11 +30,6 @@ export default ({
 
       OTP(state,otp){
         state.verifyOTP = otp
-      },
-
-      CREATE_NEW_POST(state,newpost){
-        state.newPosts = newpost
-        console.log(state.newPost)
       },
 
     },
@@ -67,7 +61,12 @@ export default ({
 
                 if(csrfToken){
                     const response = await userApi.user()
-                    commit('SET_USER',response)
+
+                    if(!response.error){
+                        commit('SET_USER',response.user)
+                    }else{
+                        dispatch('logout')
+                    }
                 }
 
             } catch (error) {

@@ -1,53 +1,73 @@
 // view list post
 
 <template>
-    <div class="container-fluid px-0 bg-white h-100">
-        <div class="listPost">
-            <div class="viewListPost w-100">
-                <div class="bg-secondary-subtle p-2 ps-3 w-100">
-                    <span class="title">PhongTot</span> / <span class="title">Quản lí </span>/ <span>Danh sách</span>
-                </div>
-                <section class="search">
-                    <div class="search_item d-flex justify-content-end w-100">
-                        <div class="w-100">
-                            <input type="text" class="border-0 w-100" style="outline: none" placeholder="Tìm kiếm...">
+    <div class="container-fluid">
+        <div class="listPost mt-5">
+            <div class="">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="title_main w-100"  style="">
+                            <h5 class="ps-3 pt-1 text-white">Danh Sách</h5>
                         </div>
-                        <button class="btn_search">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
+                        <section class="search">
+                            <div class="search_item d-flex justify-content-end">
+                                <div class="">
+                                    <input type="text" class="border-0" style="outline: none" placeholder="Tìm kiếm..." @change="searchInput" v-model="textSearch">
+                                </div>
+                                <button class="btn_search ps-1" @click.prevent="searchInput">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </section>
+                        <section class="list_table">
+                            <table class="table table-hover">
+                                <thead class="table_list">
+                                    <tr class="bg-secondary text-center">
+                                        <th scope="col STT">STT</th>
+                                        <th scope="col Title">Tiêu đề</th>
+                                        <th scope="col Price">Giá phòng</th>
+                                        <th scope="col Acrege">Diện tích</th>
+                                        <th scope="col Adress">Địa chỉ</th>
+                                        <th scope="col">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table_list" v-if="my_posts.length != 0">
+                                    <tr v-for="(attribute,index) in my_posts" :key="index">
+                                        <th scope="row" class="STT">{{ index+1}}</th>
+                                        <td class="Title">{{ attribute.title }}</td>
+                                        <td class="Price" id="Price">
+                                            <input type="text" name="" class="border-0 " readonly :value="formatPrice(attribute.price)">
+                                        </td>
+                                        <td class="Acrege">{{ attribute.area }} m<sup>2</sup></td>
+                                        <td class="Adress">{{ attribute.full_address }}</td>
+                                        <td class="text-center">
+                                            <router-link class="btn btn-primary btn-sm" :to="'edit_post/'+attribute.id">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </router-link>
+                                            <a class="btn btn-danger btn-sm ms-1"  @click.prevent="deletePosts(attribute.id)">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody v-else>
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            <span class="text-center">
+                                                Rất tiếc, dữ liệu bạn nhập không tồn tại
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-center">
+                                <Bootstrap5Pagination :data="currentPage" @pagination-change-page="load_My_Posts"/>
+                            </div>
+                        </section>
                     </div>
-                </section>
-                <section class="list_table mt-4 mb-3">
-                    <table class="table table-hover">
-                        <thead class="table_list">
-                            <tr class="bg-secondary text-center">
-                                <th scope="col STT">STT</th>
-                                <th scope="col Title">Tiêu đề</th>
-                                <th scope="col Price">Giá phòng</th>
-                                <th scope="col Acrege">Diện tích</th>
-                                <th scope="col Adress">Địa chỉ</th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table_list">
-                            <tr v-for="(attribute,index) in my_posts" :key="index">
-                                <th scope="row" class="STT">{{ index+1}}</th>
-                                <td class="Title">{{ attribute.postData.title }}</td>
-                                <td class="Price" id="Price">{{ attribute.postData.price }}</td>
-                                <td class="Acrege">{{ attribute.postData.area }} m<sup>2</sup></td>
-                                <td class="Adress">{{ attribute.postData.full_address }}</td>
-                                <td class="text-center">
-                                    <a class="btn btn-primary btn-sm" href="./edit.vue">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    <a class="btn btn-danger btn-sm ms-1"  @click.prevent="deletePosts(attribute.postData.id)">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+                </div>
             </div>
         </div>
     </div>
@@ -55,41 +75,65 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 import {mapState,mapGetters,mapActions} from 'vuex'
 import Swal from 'sweetalert2'
 import postApi from '../../../Api/postApi'
 
-import Navbar from '../NavbarManagerUser.vue'
 import Sidebar from '../Sidebar.vue'
 
 export default defineComponent({
     name: "HomeManager",
     computed:{
-        ...mapGetters(['authUser'])
+        ...mapGetters(['authUser']),
     },
     components: {
-        Navbar,
-        Sidebar
+        Sidebar,
+        Bootstrap5Pagination
     },
     data() {
         const error = ref([])
+        const currentPage = ref([])
         const my_posts = ref([])
+        const textSearch = ref(null)
+        const attribute = {
+            price: ""
+        }
 
         return {
-            my_posts
+            currentPage,
+            textSearch,
+            my_posts,
+            attribute,
         }
-    },
-    mounted(){
     },
     methods : {
 
-        formatPrice(){
-            console.log(document.querySelectorAll("#Price"))
-            // this.my_posts.postData.price = this.postData.price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
+        async searchInput(page = 1){
+
+            const response =  await postApi.searchInput(this.textSearch);
+
+            if(response){
+                this.currentPage = response.data
+                this.my_posts = response.data.data
+            }
+            console.log(this.my_posts.length)
         },
 
-        filterPosts(){
-             this.my_posts =  this.my_posts.message.filter(item => item.postData.user_id == this.authUser.id)
+        formatPrice(price){
+            return price.toLocaleString('vi', {style : 'currency', currency : 'VND'})
+        },
+
+        async load_My_Posts(page = 1){
+            // const response = await postApi.getPostByUserId(page);
+
+            const response =  await postApi.searchInput(this.textSearch,page);
+
+            if(response){
+                this.currentPage = response.data
+                this.my_posts = response.data.data
+            }
+
         },
 
         async deletePosts($id){
@@ -120,41 +164,33 @@ export default defineComponent({
     },
 
     async created(){
-        this.my_posts = await postApi.listPost();
-        this.filterPosts(),
-        this.formatPrice()
+        this.load_My_Posts()
     }
 })
 </script>
 
 <style scoped>
+
     .listPost{
-        display: flex;
+        background-color: #ffff;
     }
 
-    .listPost .search{
-        float: right;
-        margin-top: 20px;
-        padding: 5px;
-        width: auto;
-        border: 1px solid rgb(162, 160, 160,0.5);
+    .listPost .title_main{
+        background-color:#ff5d26;
+        padding: 6px 3px ;
+        border-top-right-radius: 1rem ;
+        border-top-left-radius: 1rem ;
+
     }
 
-    .listPost .viewListPost{
-        margin:30px;
+    .listPost .list_table{
+        padding: 1rem;
+        margin-top: 4rem;
+
     }
 
-    .listPost .viewListPost span{
-        font-size: 15px;
-    }
-
-    .listPost .viewListPost .title{
-        color: var(--primary-color);
-        font-weight: 600;
-    }
-
-    .table .col {
-
+    .table .table_list  {
+        cursor: pointer;
     }
 
     .table .table_list .STT{
@@ -165,11 +201,20 @@ export default defineComponent({
     .table .table_list .Adress,
     .table .table_list .Title{
         width: 30%;
+        cursor: pointer;
     }
 
     .table .table_list .Acrege,
     .table .table_list .Price{
         width: 10%;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .table_list .Price input[type="text"]{
+        background-color: transparent;
+        outline: none;
+        cursor: pointer;
         text-align: center;
     }
 
@@ -177,6 +222,22 @@ export default defineComponent({
     .table .btn_detail{
         padding: 5px 45px;
         margin: 0 5px;
+    }
+
+    /* search */
+
+    .listPost .search{
+        float: right;
+        margin-top: 20px;
+        margin-right: 1rem ;
+        padding: 5px;
+        width: auto;
+        border: 1px solid rgb(162, 160, 160,0.5);
+        border-radius:.25rem ;
+    }
+
+    .listPost .search .search_item div:nth-child(1) input[type = 'text']{
+        width: 300px;
     }
 
 </style>

@@ -21,7 +21,7 @@ class Post extends Model
         'district_id',
         'ward_id',
         'street_id',
-        'video_link',
         'number_like'
     ];
+
 }

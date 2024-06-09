@@ -49,7 +49,7 @@ ul , li {
     text-align: center;
 }
 
-.App.fix_body #navbar-menu {
+/* .App.fix_body #navbar-menu {
     position: fixed;
     top: 0;
     left: 0;
@@ -60,12 +60,12 @@ ul , li {
     display: block;
     width: 100%;
     background-color: #fff;
-}
+} */
 
 body .view_home .advertise .advertisement{
     height: 100vh;
     overflow: hidden;
-    
+
 }
 
 /* Thanh tìm kiếm */

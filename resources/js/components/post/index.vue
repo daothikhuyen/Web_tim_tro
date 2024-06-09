@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in infoPost.message" :key="index">
+        <div class="post px-2 py-3 bg-white rounded-3 mb-2" v-for="(listPost, index) in infoPost.posts" :key="index">
             <Poster :user="listPost.user" :created_at="listPost.postData.created_at"></Poster>
             <PostContent :postData="listPost.postData" :images="listPost.images" :extensions="listPost.extensions" :videos="listPost.videos"></PostContent>
             <Comment :postId="listPost.postData.id" :numberLike="listPost.postData.number_like" :like="rattig_post.message"></Comment>
@@ -56,6 +56,7 @@ export default defineComponent(
         async created() {
             this.infoPost = await postApi.listPost();
             this.rattig_post = await rattig_post.getLikePost()
+            console.log(this.infoPost)
         }
     }
 )

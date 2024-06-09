@@ -57,7 +57,7 @@
                                         <a class="dropdown-item" href="/postManagement/index/creator">📝 Đăng tin cho thuê</a>
                                     </li>
                                     <li class="menu-child border-bottom py-1">
-                                        <a class="dropdown-item" href="/postManagement/my_posts">📑 Quản lí tin đăng</a>
+                                        <a class="dropdown-item" href="/postManagement/my_posts/list_posts">📑 Quản lí tin đăng</a>
                                     </li>
                                     <li class="menu-child border-bottom py-1">
                                         <a class="dropdown-item" href="#">👤 Thông tin tài khoản</a>
@@ -141,6 +141,18 @@ export default {
         height: 100px;
     }
 
+    .App.fix_body #navbar-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+    }
+
+    #navbar-menu {
+        display: block;
+        width: 100%;
+        background-color: #fff;
+    }
     .navbar{
         box-shadow: rgba(33, 35, 38, 0.2) 0px 10px 10px -10px;
     }
@@ -161,14 +173,6 @@ export default {
     /* active */
     .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
         color: var(--primary-color);
-    }
-/*
-    .navbar-nav .nav-item:hover a{
-        color: black;
-    } */
-
-    .navbar .nav-item_post:hover a{
-        background-color: #ea4e27;
     }
 
     /* avatar */

@@ -6,6 +6,13 @@ const getLocation =()=> baseApi.baseApi({
     data: ""
 })
 
+const getNameLocation =(data)=> baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/get/getNameLocation`,
+    data: data
+})
+
 export default {
-    getLocation
+    getLocation,
+    getNameLocation
 }

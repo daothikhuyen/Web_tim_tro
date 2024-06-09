@@ -1,32 +1,40 @@
 <template>
-    <aside v-if="authUser" :class="`${is_expanded && 'is_expanded'}`">
-        <div class="sidebarPost d-flex align-items-center mt-2">
-            <div class="avatar inline-block">
-                <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_user">
-                <img v-else class="image_avatar_user" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="">
+    <aside class="main-siderbar" v-if="authUser" :class="`${is_expanded && 'is_expanded'}`">
+        <a href="index3.html" class="brand-link">
+            <span class="brand-text font-weight-light">PhongTot</span>
+        </a>
+        <div class="siderbar">
+            <div class="sidebarPost d-flex align-items-center mb-1">
+                <div class="avatar inline-block" style="padding: 0 .5rem;">
+                    <img v-if="authUser.avatar" :src="authUser.avatar" alt="avatar" class="image_avatar_user">
+                    <img v-else class="image_avatar_user" src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="">
+                </div>
+                <div class="name ps-3 d-block" >
+                    <div style="font-size:15px" class=" fw-bold">{{authUser.username}}</div>
+                    <div style="font-size:14px" class=""><small>{{authUser.email}}</small></div>
+                </div>
             </div>
-            <div class="name ps-3 d-block" >
-                <div style="font-size:15px" class=" fw-bold">{{authUser.username}}</div>
-                <div style="font-size:14px" class=""><small>{{authUser.email}}</small></div>
+
+            <div class="menu-toggle-wrap">
+                <button class="menu-toggle" @click="ToggleMenu()">
+                    <span class="material-icons">
+                         <i class="fa-solid fa-angles-right fa-xl" style="color:#c2c7d0; "></i>
+                       <!-- <i class="fa-solid fa-bars fa-xl" style="color:#c2c7d0; "></i> -->
+                    </span>
+                </button>
             </div>
-        </div>
-        <div class="menu-toggle-wrap">
-            <button class="menu-toggle" @click="ToggleMenu()">
-                <span class="material-icons">
-                    <i class="fa-solid fa-angles-right"></i>
-                </span>
-            </button>
-        </div>
-        <hr class="dropdown-divider border-bottom mb-2 mt-1">
-        <div class="menu" v-for="menuAttribute in menuAttributes" :key="menuAttribute.id">
-            <router-link v-if="menuAttribute.title != 'Đăng xuất' " class="button" :to="menuAttribute.url">
-                <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
-                <span class="text">{{menuAttribute.title}}</span>
-            </router-link>
-            <a v-else href="#" class="button" @click.prevent="logoutWeb">
-                <span class="material-icons" ><i :class="menuAttribute.icon"></i></span>
-                <span class="text">{{menuAttribute.title}}</span>
-            </a>
+            <div class="menu" v-for="menuAttribute in menuAttributes" :key="menuAttribute.id">
+
+                <router-link v-if="menuAttribute.title != 'Đăng xuất' " class="button" :to="menuAttribute.url">
+                    <i :class="menuAttribute.icon"></i>
+                    <span class="text">{{menuAttribute.title}}</span>
+                </router-link>
+                <a v-else href="#" class="button" @click.prevent="logoutWeb">
+                    <i :class="menuAttribute.icon"></i>
+                    <!-- <span class="material-icons" ></i></span> -->
+                    <span class="text">{{menuAttribute.title}}</span>
+                </a>
+            </div>
         </div>
     </aside>
 </template>
@@ -42,7 +50,7 @@ export default defineComponent({
         ...mapGetters(['authUser'])
     },
     data() {
-        const is_expanded = ref(false)
+        const is_expanded = ref(true)
         const menuAttributes = ref([])
 
         return {
@@ -78,7 +86,7 @@ export default defineComponent({
                 {
                     icon : 'fa-solid fa-list-check',
                     title : 'Quản lí tin đăng',
-                    url : '/postManagement/my_posts'
+                    url : '/postManagement/my_posts/list_posts'
                 },
                 {
                     icon: 'fa-solid fa-right-from-bracket',
@@ -113,24 +121,46 @@ export default defineComponent({
 
 <style scoped>
     aside {
-        position:static ;
+        position:relative;
         display: flex;
         flex-direction: column;
-        width: calc(2rem + 32px);
-        /* height: 100vh;
-        overflow-y: scroll; */
+        width: calc(2rem + 34px);
         min-height: 100vh;
         overflow: hidden;
-        background-color: #f3f3f3;
+        background-color: #343a40;
         transition: 0.2s ease-out;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .22) !important;
+        z-index: 1000;
+        padding: 0 .25rem;
+    }
+
+    aside .brand-link{
+        width: 250px;
+        color: #c2c7d0;
+        display: block;
+        font-size: 1.25rem;
+        line-height: 1.5;
+        padding: .8125rem .5rem;
+        transition: width .3s ease-in-out;
+        white-space: nowrap;
+        text-align: center;
+        border-bottom: 1px solid #4f5962;
     }
 
     aside::-webkit-scrollbar{
         width: 0%;
     }
 
+    aside .siderbar .menu{
+        padding: 0 .25rem;
+    }
+
     aside .sidebarPost{
-        padding: 5rem 1rem 1rem 1rem;
+        padding: 1rem 0rem 1rem 0rem;
+        color: #c2c7d0;
+        margin: 0 5px;
+        border-bottom: 1px solid #4f5962;
+
     }
 
     .avatar img{
@@ -145,11 +175,6 @@ export default defineComponent({
         margin-top: 4px;
     }
 
-    aside.is_expanded{
-        width: 300px;
-        transition: 0.2s ease-in;
-    }
-
     aside .menu-toggle-wrap{
         display: flex;
         justify-content: flex-end;
@@ -158,55 +183,62 @@ export default defineComponent({
         transition: 0.2s ease-out;
     }
 
-    aside.is_expanded .menu-toggle-wrap{
-        top: -3rem;
-    }
-
-    aside .menu-toggle-wrap .material-icons{
-        font-size: 1rem;
-        padding: 1rem;
+    aside .menu-toggle-wrap{
+        top: -7.3rem;
+        justify-content: center;
     }
 
     aside h3,
     aside .button .text{
         opacity: 0;
         transition: 0.3s ease-out;
+        color: #c2c7d0;
     }
 
     aside .menu .button {
+        min-height: 40px;
+        overflow: hidden;
         display: flex;
-        align-items: center;
         text-decoration: none;
-        padding: 0rem 0.5rem;
         transition: 0.2s ease-out;
         padding-left: 1rem;
+        margin-bottom: .2rem;
+        border-radius: .25rem;
     }
 
-    aside .menu .button .material-icons{
+    aside .menu .button i{
         font-size: 1rem;
-        /* color: var( --primary-color); */
-        margin-right: 1rem;
         transition: 0.2s ease-out;
-    }
-
-    aside .menu .button .text{
-        /* color: var( --primary-color); */
-        transition: 0.2s ease-out;
+        color: #c2c7d0;
+        margin: auto;
     }
 
     aside .menu .button:hover{
         background-color: var(--hover-color)
     }
 
-    aside.is_expanded .logo img{
-        width: 10rem;
-        margin: auto;
-    }
-
     aside.is_expanded .menu-toggle-wrap{
         display: flex;
         justify-content: flex-end;
     }
+
+    aside.is_expanded{
+        width: 250px;
+        min-width: 250px;
+        transition: 0.2s ease-in;
+    }
+
+    aside.is_expanded .button{
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        padding-left: 0;
+        transition: 0.2s ease-out;
+    }
+
+    /* aside.is_expanded .menu-toggle-wrap{
+        top: -3rem;
+    } */
 
     aside.is_expanded .menu-toggle-wrap .menu-toggle{
         transform: rotate(-180deg);
@@ -217,9 +249,9 @@ export default defineComponent({
         opacity: 1;
     }
 
-    aside.is_expanded .button .material-icons{
+    aside.is_expanded .menu .button i{
         padding: 0.5rem 1rem;
-        margin-right: 1rem;
+        margin: 0;
     }
 
     .menu .button:hover{
@@ -227,25 +259,24 @@ export default defineComponent({
     }
 
     .menu .button.router-link-active{
-        border-right: 5px solid var(--primary-color);
-        color: var(--primary-color);
-        background-color: var(--hover-color);
+        background-color: rgba(255, 255, 255, .9);
+        color: #343a40;
     }
 
-    /* .hover {
-        border-radius: 8px;
-        background-color: var(--hover-color);
-    } */
+    aside .button.router-link-active i,
+    aside .button.router-link-active .text{
+        color: black;
+    }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         aside{
             position: fixed;
             z-index: 99;
         }
 
-        aside .sidebarPost{
+        /* aside .sidebarPost{
             padding: 5rem 1rem 0rem 1rem;
-        }
+        } */
 
     }
 </style>
