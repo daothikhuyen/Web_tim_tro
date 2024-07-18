@@ -16,7 +16,7 @@ class UploadFileController extends Controller
     }
 
     public function uploadFile(Request $request){
-        // dd($request->file);
+        // dd($request);
         $request->validate([
             'file' => 'required|mimes:png,jpg,mp4'
         ]);
@@ -31,6 +31,7 @@ class UploadFileController extends Controller
         }else{
             return response()->json([
                 'message' => 'Tải File thất bại',
+                'url' => ""
             ]);
         }
 

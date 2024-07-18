@@ -1,94 +1,27 @@
-const getFeedback = (postId) => {
-    const feedback= [
-        {
-            id_feedback: 1,
-            username: "Khuyên Khuyên",
-            avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-            post_id : 1,
-            user_id : 1,
-            content : 'Chất lượng thế, ui xịn thế 😒 id 1',
-            created_time : "12/03/2004",
-            parent_id: 0,
-            feedback:[
-                {
-                    id_feedback: 2,
-                    username: "Đào Khuyên",
-                    avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-                    post_id : 1,
-                    user_id : 1,
-                    content : 'Chất lượng thế, ui xịn thế 😒 id 2',
-                    created_time : "12/03/2004",
-                    parent_id: 1,
-                    feedback: [
-                        {
-                            id_feedback: 7,
-                            username: "Khuyên Khuyên",
-                            avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-                            post_id : 1,
-                            user_id : 1,
-                            content : 'Chất lượng thế, ui xịn thế 😒 id 3',
-                            created_time : "12/03/2004",
-                            parent_id: 2,
-                            feedback: [
+import baseApi from './base'
 
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id_feedback: 3,
-                    username: "Đào Khuyên",
-                    avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-                    post_id : 1,
-                    user_id : 1,
-                    content : 'Chất lượng thế, ui xịn thế 😒 id 4',
-                    created_time : "12/03/2004",
-                    parent_id: 1,
-                }
-            ]
-        },
-        {
-            id_feedback: 4,
-            username: "Khuyên Khuyên",
-            avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-            post_id : 2,
-            user_id : 1,
-            content : 'Chất lượng thế, ui xịn thế 😒 id 5',
-            created_time : "12/03/2004",
-            parent_id: 0,
-            feedback:[
+const getFeedback = (postId) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/feedback/getFeedbacks/${postId}`,
+    data: ""
+})
 
-            ]
-        },
-        {
-            id_feedback: 5,
-            username: "Khuyên Khuyên",
-            avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-            post_id : 1,
-            user_id : 1,
-            content : 'Chất lượng thế, ui xịn thế 😒 id 6',
-            created_time : "12/03/2004",
-            parent_id: 0,
-            feedback:[
-                {
-                    id_feedback: 6,
-                    username: "Khuyên Khuyên",
-                    avatar: 'http://localhost/Lavarel_Vuejs_project/Web_tim_phong_project/resources/image/avatar/35974153931cc138a337256ce086e9f1.jpg',
-                    post_id : 1,
-                    user_id : 1,
-                    content : 'Chất lượng thế, ui xịn thế 😒',
-                    created_time : "12/03/2004",
-                    parent_id: 5,
-                    feedback:[
+const creatFeedback = (data) =>{
+    const values = {
+        'user_id' : data.user_id,
+        'post_id' : data.post_id,
+        'comment' : data.comment,
+        'parent_id': data.parent_id
+    };
 
-                    ]
-                }
-            ]
-        }
-    ]
-    return feedback.filter(item => item.post_id === postId)
+    return baseApi.baseApi({
+        method: 'POST',
+        url : 'http://localhost:8000/api/feedback/insert',
+        data: values
+    })
 }
 
 export default{
-    getFeedback
+    getFeedback,
+    creatFeedback
 }

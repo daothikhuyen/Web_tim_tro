@@ -10,13 +10,13 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 
 import { createApp } from 'vue';
 
-
 import app from './App.vue'
 import router from './router/index.js';
+import store from './store/index.js'
 
 const vueApp = createApp(app)
 
-
+vueApp.use(store)
 vueApp.use(router)
 vueApp.use(CKEditor)
 vueApp.mount('#app')

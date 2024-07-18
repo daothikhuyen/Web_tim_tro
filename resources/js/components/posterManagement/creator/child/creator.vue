@@ -1,96 +1,91 @@
 <template>
-   <div class="ViewPost w-100 m-auto pb-4">
-        <div class="row">
-            <div class="col-lg-9 col-md-12 mt-5">
-                <div class="p-2 ps-3 mx-2 rounded-3 w-100"  style="background-color: rgb(162, 160, 160,0.25)">
-                    <span class="title">PhongTot</span> / <span class="title">Quản lí </span>/ <span>Đăng tin mới</span>
-                </div>
-                <div class="pt-4">
-                    <h5 class="ps-3">Đăng Tin Mới</h5>
-                    <hr>
-                </div>
-                <section class="info px-3 py-3 row">
-                    <div class="col-md-4">
-                        <div class="address">
-                            <div class="">
-                                <h5>Địa chỉ cho thuê</h5>
-                            </div>
-                            <div class="error w-100 ps-3 pb-3">
-                                <span class="text-danger">{{error['address']}}</span>
-                            </div>
-                            <addAddress :createAddress="createAddress" />
-                        </div>
-                        <div class="extentsion mt-3">
-                            <div>
-                                <h5>Tiện ích</h5>
-                            </div>
-                            <Extension  :loadExtension="loadExtension" />
-                        </div>
+    <div class="ViewPost container-fluid bg-white" v-if="newPost">
+        <div class="bg-white mb-5">
+            <div class="">
+                <div class="viewPostItems px-0">
+                    <div class="title_main w-100"  style="">
+                        <h5 class="ps-3 pt-1 text-white">Đăng Tin Mới</h5>
                     </div>
-                    <div class="detail_info ps-3 col-md-8">
-                        <div class="info_detail">
-                            <div class="">
-                                <h5>Thông tin bài đăng</h5>
+                    <div>
+                        <section class="info w-100 p-3 row">
+                            <div class="col-md-4">
+                                <div class="address">
+                                    <div class="">
+                                        <h5>Địa chỉ cho thuê</h5>
+                                    </div>
+                                    <div class="w-100 ps-3 pb-3">
+                                        <span class="text-danger">{{error['address']}}</span>
+                                    </div>
+                                    <addAddress :createAddress="createAddress" />
+                                </div>
+                                <div class="extentsion mt-3">
+                                    <div>
+                                        <h5>Tiện ích</h5>
+                                    </div>
+                                    <Extension  :loadExtension="loadExtension" />
+                                </div>
                             </div>
-                            <section class="ps-3">
-                                <div class="info-item">
-                                    <div class="post_title">
-                                        Tiêu đề <span class="text-danger">*</span>
+                            <div class="detail_info col-md-8">
+                                <div class="info_detail">
+                                    <div class="">
+                                        <h5>Thông tin bài đăng</h5>
                                     </div>
-                                    <input type="text" name="title" id="title" class="input_item w-100 " v-model="title">
-                                    <div class="error w-100 ps-2">
-                                        <span class="text-danger"><small>{{error['title']}}</small></span>
-                                    </div>
+                                    <section class="ps-3">
+                                        <div class="info-item">
+                                            <div class="post_title">
+                                                Tiêu đề <span class="text-danger">*</span>
+                                            </div>
+                                            <input type="text" name="title" id="title" class="input_item w-100 " placeholder="Cho Thuê Nhà Ở Đà Nẵng" v-model="newPost.postData.title">
+                                            <div class="w-100 ps-2">
+                                                <span v-if="!error['title']" class=""><small>Tối thiếu 30 ký tự, tối đa 99 ký tự</small></span>
+                                                <span v-else class="text-danger"><small>{{error['title']}}</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="info-item mt-3">
+                                            <div class="post_title mt-0">
+                                                Giá cho thuê <span class="text-danger">*</span>
+                                            </div>
+                                            <div class="input_special d-flex justify-content-between align-items-center">
+                                                <input type="text" name="price" id="price" class="input_item" placeholder="Nhập đầy đủ các số, ví dụ 1000000" v-model="newPost.postData.price">
+                                                <div class="">VND/Tháng</div>
+                                            </div>
+                                            <div class="w-100 ps-2">
+                                                <!-- <span v-if="!error['price']" class="attention"><small>Tối thiếu 30 ký tự, tối đa 99 ký tự</small></span> -->
+                                                <span class="text-danger"><small>{{error['price']}}</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="info-item contactInfo mb-3">
+                                            <div class="post_title">
+                                                Diện tích <span class="text-danger">*</span>
+                                            </div>
+                                            <div class="input_special d-flex justify-content-between align-items-center">
+                                                <input type="text" class="input_item" placeholder="Nhập diện tích, VD: 20" v-model="newPost.postData.area">
+                                                <div class="">m<sup>2</sup></div>
+                                            </div>
+                                            <div class="w-100 ps-md--2">
+                                                <span class="text-danger"><small>{{error['area']}}</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="info-item description">
+                                            <div class="post_title">
+                                                Nội dung mô tả <span class="text-danger">*</span>
+                                            </div>
+                                            <ckeditor :editor="editor" v-model="newPost.postData.description" :config="editorConfig"></ckeditor>
+                                            <div class="w-100 ps-2">
+                                                <span class="text-danger"><small>{{error['description']}}</small></span>
+                                            </div>
+                                        </div>
+                                        <addImage @loadImage="UpdateImage" @loadVideo="UpdateVideo" :notifi="error['image']" />
+                                    </section>
                                 </div>
-                                <div class="info-item mt-3">
-                                    <div class="post_title mt-0">
-                                        Giá cho thuê <span class="text-danger">*</span>
-                                    </div>
-                                    <input type="text" name="title" id="title" class="input_item w-100" placeholder="Nhập đầy đủ các số, ví dụ 1000000" v-model="textPrice">
-                                    <div class="error w-100 ps-2">
-                                        <span class="text-danger"><small>{{error['price']}}</small></span>
-                                    </div>
-                                </div>
-                                <div class="info-item contactInfo mb-3">
-                                    <div class="post_title">
-                                        Diện tích <span class="text-danger">*</span>
-                                    </div>
-                                    <div class="input_special d-flex justify-content-between align-items-center">
-                                        <input type="text" class="input_item" placeholder="15" v-model="textArea">
-                                        <div class="">m<sup>2</sup></div>
-                                    </div>
-                                    <div class="error w-100 ps-2">
-                                        <span class="text-danger"><small>{{error['area']}}</small></span>
-                                    </div>
-                                </div>
-                                <div class="info-item description">
-                                    <div class="post_title">
-                                        Nội dung mô tả <span class="text-danger">*</span>
-                                    </div>
-                                    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
-                                    <div class="error w-100 ps-2">
-                                        <span class="text-danger"><small>{{error['description']}}</small></span>
-                                    </div>
-                                </div>
-                                <addImage @loadImage="UpdateImage" @loadVideo="UpdateVideo" :notifi="error['image']" />
-                            </section>
-                        </div>
-                    </div>
-                </section>
+                            </div>
 
-                <div class="btn_submit ps-2 d-flex justify-content-md-end justify-content-center">
-                    <button class="button" @click.prevent="ValidatorForm()">Tiếp theo</button>
-                </div>
-            </div>
-            <div class="col-lg-3 d-lg-block d-none mt-5 pt-5">
-                <div class="note_post">
-                    <h3>Lưu ý khi đăng tin</h3>
-                    <ul class="">
-                        <li>Nội dung phải viết bằng Tiếng Việt, có dấu</li>
-                        <li>Tiêu đề không dài quá 100 kí tự</li>
-                        <li>Các bạn nên điền đầy đủ thông tin để tin có thể đạt hiểu suất nhanh</li>
-                        <li>Để để tạo sự tin cậy các bạn nên đăng ảnh và video rõ ràng , địa chỉ cũ thể !</li>
-                    </ul>
+                            <div class="btn_submit ps-2 d-flex justify-content-md-end justify-content-center">
+                                <button class="button" type="submit" @click.prevent="ValidatorForm()">Tiếp theo</button>
+                            </div>
+
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,6 +94,7 @@
 
 <script lang="ts">
 import {ref,defineComponent } from 'vue'
+import {mapGetters,mapActions} from 'vuex'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import user from '../../../../Api/userApi'
 
@@ -108,29 +104,42 @@ import Extension from './listChild/extension.vue'
 
 export default defineComponent({
     name: 'CreatePoster',
+    computed: {
+        ...mapGetters(['authUser']),
+        ...mapGetters(['newPost'])
+    },
     components: {
-        addImage,
         addAddress,
+        addImage,
         Extension,
-
     },
     data() {
+
         const error= ref([])
-        const fullAddress = ref([])
-        const newPostInfo = ref({})
+        const user = ref({})
+        const array_nameLocation = ref([])
+        const location_id = ref([])
+        const newPostInfo = ref(null)
         const arrayImage = ref([])
         const arrayvideo = ref([])
         const arrayExtension = ref([])
-
-        const title = ref("")
-        const textPrice = ref("")
-        const textArea = ref("")
-        const textFullAfress = ref("")
-
+        const newPost = {
+            postData : {
+                title : "Cho Thuê Nhà , Giá Đẹp",
+                price : "",
+                area: "",
+                description: "<p>Nhập nội dung mô tả tại đây</p>",
+                full_address: "",
+                province_id: "",
+                district_id: "",
+                ward_id: "",
+                street_id: ""
+            }
+        }
 
         return {
+            newPost,
             editor: ClassicEditor,
-            editorData: '',
             editorConfig: {
                 toolbar: {
                     items: [
@@ -144,16 +153,20 @@ export default defineComponent({
                 }
             },
             error,
-            title,
-            textPrice,
-            textArea,
-            textFullAfress,
+            user,
+            location_id,
+            array_nameLocation,
             newPostInfo,
-            fullAddress,
             arrayImage ,
             arrayvideo,
-            arrayExtension
+            arrayExtension,
+
         };
+    },
+    watch: {
+        newPost(value){
+            this.newPost = value;
+        }
     },
     methods : {
 
@@ -162,147 +175,135 @@ export default defineComponent({
             console.log(this.arrayExtension)
         },
 
-        createAddress(address,title){
-            this.fullAddress = address
-            this.title = "Cho Thuê Nhà Ở " +  title
-
-        },
-
         UpdateImage(imgae){
-            console.log(imgae)
-            const newImage = {
-                id:  Math.floor(Math.random() * 1000),
-                image: imgae,
-                post_id: Math.floor(Math.random() * 1000),
-            }
-            this.arrayImage.push(newImage)
+            this.arrayImage = []
+
+            imgae.forEach(element => {
+                console.log(element)
+                const newImage = {
+                    id:  Math.floor(Math.random() * 1000),
+                    link_image: element.link_image,
+                    post_id: Math.floor(Math.random() * 1000),
+                }
+                this.arrayImage.push(newImage)
+            });
+
+            console.log(this.arrayImage)
+
         },
 
         UpdateVideo(video){
+            video.forEach(element => {
+                const newvideo = {
+                    id:  Math.floor(Math.random() * 1000),
+                    link_video: element.link_video,
+                    post_id: Math.floor(Math.random() * 1000),
+                }
 
-            const newvideo = {
-                id:  Math.floor(Math.random() * 1000),
-                video: video,
-                post_id: Math.floor(Math.random() * 1000),
-            }
-            this.arrayvideo.push(newvideo)
-            console.log(this.arrayvideo)
+                this.arrayvideo.push(newvideo)
+            });
         },
 
         ValidatorForm(){
             let checkValidator = ref(false)
+            const attribute = this.newPost.postData
             this.error = []
-
-            const arrayInput = [
-                {
-                    value: this.fullAddress,
-                    name:  "address"
-                },
-                {
-                    value: this.arrayImage,
-                    name: "image"
-                }
-            ]
-
             const arrayText = [
-                {
-                    value: this.title,
-                    name : "title"
-                },
-                {
-                    value: this.textPrice,
-                    name: "price"
-                },
-                {
-                    value: this.textArea,
-                    name: "area"
-                },
-                {
-                    value: this.editorData,
-                    name: "description"
-                }
+                { value: attribute.title,      name: "title" },
+                { value: attribute.price,  name: "price" },
+                { value: attribute.area ,  name: "area" },
+                { value: attribute.description, name: "description" }
+            ]
+            const arrayInput = [
+                { value: this.full_address, name:  "address"},
+                { value: this.arrayImage,  name: "image"}
             ]
 
             arrayText.forEach(element => {
+                if(element.name == "title" && element.value.length < 30 && element.value.length >99){
+                    this.error[element.name] = "Bạn nhập chưa đúng định dạng"
+                }
+
+                const match = /^[0-9]+$/;
+                if(element.name == "price" && !element.value.match(match)){
+                    this.error[element.name] = "Bạn phải nhập đủ các số VD: 100000"
+                }
+
                 if(element.value == ""){
                     this.error[element.name] = "Bạn cần nhập thông tin này"
                 }
             });
 
             arrayInput.forEach(element => {
-                if(element.value.length == 0){
+                console.log(element.value)
+                if(!element.value || element.value.length==0 ){
                     this.error[element.name] = "Bạn cần chọn thông tin này"
+
                 }
             });
 
-            console.log(Object.keys(this.error))
+
             if(Object.keys(this.error).length === 0){
+                console.log("hello")
                 checkValidator.value = true
             }
-            console.log(checkValidator.value)
 
             if(checkValidator.value){
+                 console.log("hi")
                 this.seenBefore()
             }
         },
 
-        seenBefore(){
-            this.fullAddress.forEach((element,index) => {
-                this.textFullAfress += element
-                if(index < this.fullAddress.length -1){
-                    this.textFullAfress += " - "
-                }
+        createAddress(address,location){
+
+            location.forEach(element => {
+                this.location_id[element.title] = element.id
             });
+            this.full_address = address
+        },
 
-            const newPost = {
-                user : user.User()[0],
-                postData: {
-                    id:  Math.floor(Math.random() * 1000),
-                    title: this.title,
-                    description: this.editorData,
-                    full_address: this.textFullAfress,
-                    price: this.textPrice,
-                    arceage:this.textArea,
-                    user_id: 1,
-                    category_id:1,
-                    number_like: 0
+        seenBefore(){
 
-                },
-                extensions: this.arrayExtension,
-                images :this.arrayImage,
-                videos : this.arrayvideo
+            try {
+                this.user = this.authUser
+                const attribute = this.newPost.postData
+                const newPost = {
+                    user : this.user,
+                    postData: {
+                        title: attribute.title,
+                        description: attribute.description,
+                        full_address: this.full_address,
+                        price: attribute.price,
+                        area: attribute.area,
+                        user_id: this.user.id,
+                        province_id: this.location_id['Thành Phố'],
+                        district_id: this.location_id['Quận Huyện'],
+                        ward_id: this.location_id['Phường Xã'],
+                        street_id: this.location_id['Đường Phố'] ?this.location_id['Đường Phố']: "",
+                        category_id:1,
+                        number_like: 0
+
+                    },
+                    extensions: this.arrayExtension,
+                    images :this.arrayImage,
+                    videos : this.arrayvideo
+                }
+
+                this.$store.dispatch('createPosts',newPost);
+                const jsonData = JSON.stringify(newPost);
+                console.log(newPost)
+                this.$router.push({name :'next',params: {data: jsonData}})
+            } catch (error) {
+                console.log(error)
             }
 
-            console.log(this.arrayImage)
-
-            this.newPostInfo = newPost
-            const jsonData = JSON.stringify(this.newPostInfo);
-            this.$router.push({name : 'next', params: {data: jsonData}})
-
-        }
+        },
 
     }
 })
 </script>
 
-
-
-<style >
-    .ViewPost{
-        padding-top: 50px;
-        margin:30px;
-        /* max-height: 100vh;
-        overflow-y: scroll; */
-    }
-
-    .ViewPost span{
-        font-size: 15px;
-    }
-
-    .ViewPost .title{
-        color: var(--primary-color);
-        font-weight: 600;
-    }
+<style>
 
     .ViewPost .info .post_title{
         font-size: 14px;
@@ -388,7 +389,7 @@ export default defineComponent({
         font-size: 18px;
     }
 
-    /* Ckeditor */
+    /* Ckeditor*/
     .ck.ck-editor__editable_inline>:last-child {
         margin-bottom: var(--ck-spacing-large);
         height: 200px;
@@ -398,10 +399,38 @@ export default defineComponent({
         border: 1px solid black;
     }
 
-    @media (max-width: 768px) {
+    .attention small {
+        font-size: 11px;
+        line-height: 16px;
+        font-weight: 450;
+        color:rgb(162, 160, 160,1);
+    }
+
+    @media only screen and (max-width: 992px) {
         .ViewPost{
-            padding-left: 5rem;
+            margin-top: 50px;
+            padding: 0px 0px;
         }
+
+        .ViewPost .viewPostItems{
+            border:none;
+        }
+
+        .ViewPost .title_main {
+            background-color: #ff5d26;
+            padding: 6px 3px;
+            /* border-radius: 0px; */
+        }
+
+        .ViewPost .info_account{
+            padding: 0px 10px 10px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        /* .ViewPost{
+            padding-left: 5rem;
+        } */
 
         .ViewPost .info .Address_detail select{
             width: 100%;
@@ -410,6 +439,19 @@ export default defineComponent({
             border-radius: 2px;
         }
 
+    }
+
+    @media (max-width:600px) {
+        .homeManager .ViewPost{
+            padding-left: 0px;
+            margin: 0px;
+        }
+
+        .ViewPost .title_main {
+            background-color: #ff5d26;
+            padding: 6px 3px;
+            border-radius: 0px;
+        }
     }
 
 </style>
