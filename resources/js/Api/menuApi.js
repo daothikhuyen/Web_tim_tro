@@ -33,6 +33,11 @@ const Menus = () => ({
             title : 'Quản lí tin đăng',
             url : '/postManagement/my_posts/list_posts'
         },
+        // {
+        //     icon : 'fa-solid fa-list-check',
+        //     title : 'Tin đã lưu',
+        //     url : '/postManagement/my_posts/save_posts'
+        // }
     ],
 
     admin : [

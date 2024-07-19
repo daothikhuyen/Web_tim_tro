@@ -39,7 +39,7 @@
                                 <div class="justify-content-between">
                                     <div class="search-price w-100 me-1">
                                         <div class="d-flex justify-content-between align-items-center" @click.prevent="dropdownBoxSearch('price')">
-                                            <h6>Lọc Theo Giá Thuê</h6>
+                                            <h6>Lọc Theo Giá</h6>
                                             <span >
                                                 <i class="fa-solid fa-chevron-up"></i>
                                             </span>
