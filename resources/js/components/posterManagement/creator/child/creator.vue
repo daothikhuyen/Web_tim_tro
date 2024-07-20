@@ -172,7 +172,6 @@ export default defineComponent({
 
         loadExtension(extension){
             this.arrayExtension = extension
-            console.log(this.arrayExtension)
         },
 
         UpdateImage(imgae){
@@ -244,12 +243,10 @@ export default defineComponent({
 
 
             if(Object.keys(this.error).length === 0){
-                console.log("hello")
                 checkValidator.value = true
             }
 
             if(checkValidator.value){
-                 console.log("hi")
                 this.seenBefore()
             }
         },

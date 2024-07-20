@@ -10,8 +10,8 @@
                         <img class="" src="../../image/advertisement/advertisement_01.png" alt="">
                     </div>
                 </div>
-                <div class="col-lg-8 col-md-12 col-sm-12 view_main mt-3">
-                    <form action="" @submit.prevent="searchInput">
+                <div class="col-lg-8 col-md-12 col-sm-12 view_main mt-3 ">
+                    <form action="" @submit.prevent="searchInput" class="position-relative">
                         <div class="parent_header_search">
                             <div class="header_search">
                                 <div class="searchLocation" @click.prevent="getLocationByParent_id">
@@ -26,9 +26,21 @@
                                     <i class="bi bi-search"></i>
                                 </button>
                                 <div class="LocationInputSearch">
-                                    <input type="text" class="input_search" v-model="inputSearch" placeholder="Nhập đề cần tìm kiếm">
+                                    <input type="text" class="input_search" v-model="inputSearch" @input="SearchSuggestions" placeholder="Nhập để tìm kiếm">
                                 </div>
                                 <button type="submit" class="btnSearch" @click.prevent="searchInput">Tìm Kiếm</button>
+                            </div>
+                        </div>
+                        <div class="listItemProps" :class="{'show': inputSearch != '' || inputSearch == null}">
+                            <div>
+                                <ul class="ul_listItem px-0">
+                                    <div class="conntent_search">
+                                        Tìm kiếm từ khoá "{{inputSearch}}"
+                                    </div>
+                                    <li class="li_listItem" v-for="item in list_searchSuggestion" :key="item.id" @click.prevent="inputSearch = item.title_suggestion; searchInput()">
+                                        <span>{{item.title_suggestion}}</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </form>
@@ -85,7 +97,7 @@
                 <div class="col-lg-2 advertise">
                     <div class="advertisement">
 
-                        <img class="" src="../../image/advertisement/advertisement_01.png" alt="">
+                        <img class="" src="../../image/advertisement/advertisement_02.jpg" alt="">
                     </div>
                 </div>
             </div>
@@ -134,6 +146,19 @@
                 </div>
             </div>
         </div>
+        <div class="filter_group" :class="{show: show_BoxChooseLocation == 3}">
+            <div class="header">
+                <i class="fa-solid fa-arrow-left" @click.prevent="off_filter_location"></i>
+               <span>{{ nameLocation['2']}}</span>
+            </div>
+            <div class="content">
+                <div id="filter_group_districts_option" class="districts">
+                    <ul>
+                        <li v-for="(items,index) in locations['3']" :key="index" :class="{selected: selectedLocation[items.type] === items.name}" @click.prevent="clickSeleted(items,4)">{{items.name}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="black_overlay" @click.prevent="off_filter_location" :class="{show: !black_screen}"></div>
 
         <div class="box_search_locations" :class="{show : !showLocaing_location}">
@@ -171,7 +196,7 @@ export default defineComponent(
 
         },
         data() {
-            const inputSearch = ref(null)
+            const inputSearch = ref('')
             const show_BoxChooseLocation = ref(null)
             const nameLocation = ref([])
             const roomPrice = ref([])
@@ -184,6 +209,8 @@ export default defineComponent(
             const notification_bar = ref(true)
             const black_screen = ref(true)
             const showLocaing_location = ref(true)
+            const list_searchSuggestion = ref([])
+
             const openSearchPrice = ref(false)
             const openSearchArea = ref(false)
 
@@ -201,6 +228,7 @@ export default defineComponent(
                 nameLocation,
                 queryLocation,
                 showLocaing_location,
+                list_searchSuggestion,
                 openSearchPrice,
                 openSearchArea
             }
@@ -265,11 +293,27 @@ export default defineComponent(
                 }
             },
 
+            async SearchSuggestions(){
+                const data = {
+                    input : this.inputSearch
+                }
+
+                if(this.inputSearch != ""){
+
+                    const response = await postApi.list_searchSuggestion(data);
+
+                    if(!response.error){
+                        this.list_searchSuggestion = response.data;
+                    }
+                }
+            },
+
             async searchInput(){
+
                 const response =  await postApi.searchInputAll(this.inputSearch);
 
                 if(!response.error){
-
+                    this.inputSearch = ''
                     this.posts = response
                 }else{
                     Swal.fire({
@@ -296,7 +340,8 @@ export default defineComponent(
                 if(this.queryLocation.length > 0){
                     const data = {
                         province_id: this.queryLocation['1'],
-                        district_id: this.queryLocation['2']?this.queryLocation['2']:0
+                        district_id: this.queryLocation['2']?this.queryLocation['2']:0,
+                        ward_id: this.queryLocation['3']?this.queryLocation['3']:0,
                     }
 
                     const response =  await postApi.searchByLocation_Id (data);
@@ -330,7 +375,7 @@ export default defineComponent(
 
                     const response =  await locationApi.getLocationByParent_id(item.id,type);
                     if(Object.keys(response.locations).length != 0 ){
-                        if(type < 3){
+                        if(type < 4){
                             this.show_BoxChooseLocation = type
                         }
                     }
@@ -524,6 +569,45 @@ export default defineComponent(
 
     .view_main .header_search button.btnSearch:hover{
         background-color: rgb(255, 93, 38,0.7);
+    }
+
+    /* đề xuất tìm kiếm theo nội dung */
+    form .listItemProps{
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        width: 100%;
+        margin-top: 10px;
+        padding: 8px 0px;
+        box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+                    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+                    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        z-index: 7;
+    }
+
+    form .listItemProps.show{
+        display: block;
+    }
+
+    form .listItemProps .conntent_search{
+       padding: 5px 12px 8px 12px;
+    }
+
+    form .listItemProps .ul_listItem .li_listItem{
+        padding: calc(2px + 4px) 12px;
+        /* color: #8C8C8C; */
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: background-color 150ms cubic-bezier(0.4,0,0.2,1) 0ms;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        overflow: hidden;
+    }
+
+    form .listItemProps .ul_listItem .li_listItem:hover{
+        background-color: #E8E8E8 ;
     }
 
     /* Khung tìm kiếm theo địa chỉ */
@@ -801,6 +885,10 @@ export default defineComponent(
 
         .view_main .header_search .LocationInputSearch input{
             font-size: 10px;
+        }
+
+        .view_main .header_search .LocationInputSearch input.input_search{
+            font-size: 15px;
         }
 
         .view_main .header_search button.btnSearch{

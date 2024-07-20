@@ -103,7 +103,6 @@ class CreatePosts extends Controller
     }
 
     public function searchInput_All(Request $request){
-
         $result = $this->createpostsService->searchInputAll($request[0]);
 
         return response()->json([
@@ -119,6 +118,15 @@ class CreatePosts extends Controller
         return response()->json([
             'error' => $result?false:true,
             'posts' => $result
+        ]);
+    }
+
+    public function list_SearchSuggestion(Request $request){
+        $result = $this->createpostsService->list_SearchSuggestion($request);
+
+        return response()->json([
+            'error' => $result?false:true,
+            'data' => $result
         ]);
     }
 }

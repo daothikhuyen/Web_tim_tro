@@ -59,6 +59,12 @@ const searchByLocation_Id = (data) => baseApi.baseApi({
     data: data
 })
 
+const list_searchSuggestion = (data) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/list_searchSeggestion`,
+    data: data
+})
+
 export default {
     listPost,
     getPostByUserId,
@@ -69,7 +75,8 @@ export default {
     searchInput,
     searchPriceOrArea,
     searchInputAll,
-    searchByLocation_Id
+    searchByLocation_Id,
+    list_searchSuggestion
 }
 
 

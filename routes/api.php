@@ -73,6 +73,7 @@ Route::prefix('posts')->group(function(){
     Route::post('/searchPriceOrArea',[CreatePosts::class,'getBySearch']);
     Route::post('/searchInput_All',[CreatePosts::class,'searchInput_All']);
     Route::post('/searchByLocation_Id',[CreatePosts::class,'searchByLocation_Id']);
+    Route::post('/list_searchSeggestion',[CreatePosts::class,'list_SearchSuggestion']);
 });
 
 Route::prefix('locations')->group(function(){

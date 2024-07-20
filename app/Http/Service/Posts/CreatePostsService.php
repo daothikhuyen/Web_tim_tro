@@ -18,7 +18,6 @@ class CreatePostsService {
         $array = [];
 
         $postData =  Post::where('is_deleted', 0)->orderBy('id', 'desc')->get();
-
         foreach ($postData as $value) {
             $new = [];
 
@@ -213,7 +212,8 @@ class CreatePostsService {
     }
 
     public function searchInputAll($request){
-        $items = Post::where('title', 'like', "%{$request}%")->get();
+        $items = Post::where('full_address', 'like', "%{$request}%")
+                    ->orWhere('title', 'like',"%{$request}%" )->get();
 
         $result = $this->CreateArray($items);
         return $result;
@@ -247,6 +247,25 @@ class CreatePostsService {
         }
 
         return $array;
+    }
+
+    public function list_SearchSuggestion($request){
+
+        try {
+            $result = Post::where('is_deleted', 0)->where('title', 'like', "%{$request->input}%")->select('title as title_suggestion')->get();
+
+            if($result->isEmpty()){
+                $result = Post::where('is_deleted', 0)->where('full_address', 'like', "%{$request->input}%")->select('full_address as title_suggestion')->get();
+            }
+
+            return $result;
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            return false;
+        }
+
+
+
     }
 
 }

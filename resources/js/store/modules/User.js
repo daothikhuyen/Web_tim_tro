@@ -67,13 +67,16 @@ export default ({
                 const csrfToken = localStorage.getItem('token');
 
                 if(csrfToken){
-                    const response = await userApi.user()
+                    try {
+                        const response = await userApi.user()
 
-                    if(!response.error){
-                        // console.log(response.user)
-                        commit('SET_USER',response.user)
-                    }else{
-                        dispatch('logout')
+                        if(!response.error){
+                            commit('SET_USER',response.user)
+                        }else{
+                            dispatch('logout')
+                        }
+                    } catch (error) {
+                        localStorage.removeItem('token')
                     }
                 }
 

@@ -114,7 +114,7 @@ export default {
         box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
         transition: all .3s ease;
         overflow: auto;
-        z-index: 9999;
+        z-index: 8;
     }
 
     .menu i {
@@ -226,7 +226,7 @@ export default {
         top: 0;
         left: 0;
         opacity: 0.5;
-        z-index: 9998;
+        z-index: 7;
         display: none;
     }
 

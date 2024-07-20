@@ -108,7 +108,7 @@ export default defineComponent({
 
         fullAddress(value){
             console.log(value)
-            const text = value.split('-')
+            const text = value.split(',')
             if(text.length > 4){
                 this.select.numberHome = text[0]
             }
@@ -152,7 +152,7 @@ export default defineComponent({
             this.full_address.reverse().forEach((element,index) => {
                 this.textFullAddress += element
                 if(index < this.full_address.length -1){
-                    this.textFullAddress += " - "
+                    this.textFullAddress += ", "
                 }
             });
 
