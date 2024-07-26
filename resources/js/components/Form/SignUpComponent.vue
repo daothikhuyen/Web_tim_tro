@@ -45,9 +45,9 @@
                                 <Field type="password" name="confirmPassword" id="" class="form-control" :class="{'is-invalid' : errors.confirmPassword}"/>
                                  <span class="invalid-feedback">{{errors.confirmPassword}}</span>
                             </div>
-                            <div class="d-flex flex-wrap flex-50" >
+                            <div class="form-group d-flex flex-wrap flex-50" >
                                 <Field type="checkbox" name="checkbox" id="" value="đồng ý"  :class="{'is-invalid' : errors.checkbox}"/>
-                                <label for="" class="pt-2 pb-1 ps-3 ">Đồng ý với <span class="text-primary">các chính sách bảo mật</span> của  <br>chúng tôi.</label>
+                                <label for="" class="label_agree pt-2 pb-1 ps-3 ">Đồng ý với <span class="text-primary">các chính sách bảo mật</span> của  <br>chúng tôi.</label>
                                 <span class="invalid-feedback ps-2">{{errors.checkbox}}</span>
                             </div>
                             <div class="form-group">
@@ -197,6 +197,10 @@ export default {
         text-decoration: none;
     }
 
+    .form-group a:hover{
+        color: #ff5d26;
+    }
+
     .view_home .contact_us{
         border: 5px solid rgb(255, 93, 38,0.2);
         padding: 16px;
@@ -303,6 +307,13 @@ export default {
         .from_sign{
             border-radius:0px ;
         }
+
     }
 
+    @media only screen and (max-width: 400px) {
+
+        .form-group .label_agree{
+            font-size: 13px;
+        }
+    }
 </style>

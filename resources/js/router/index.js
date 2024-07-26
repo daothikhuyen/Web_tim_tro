@@ -22,6 +22,8 @@ import my_posts from '../components/posterManagement/my_posts/index.vue'
 import list_posts from '../components/posterManagement/my_posts/list.vue'
 import edit_post from '../components/posterManagement/my_posts/edit.vue'
 
+import contactComponent from '../components/Contact/contactComponent.vue';
+
 // Admin
 import list_user from '../components/posterManagement/admin/list_user.vue';
 import list_posts_user from '../components/posterManagement/admin/list_posts_user.vue';
@@ -69,9 +71,18 @@ const routes = [
         meta: { public: true },
     },
     {
+        name: 'contact',
+        path: '/contact',
+        component: contactComponent,
+        props: true,
+        meta: { public: true },
+    },
+    {
         name: 'postManagement',
         path: '/postManagement',
         component: posterManagement,
+        props: true,
+        meta: { public: true },
         children: [
             {
                 name: 'index',

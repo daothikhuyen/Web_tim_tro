@@ -17,7 +17,7 @@
                                 <div class="searchLocation" @click.prevent="getLocationByParent_id">
                                     <div class="listsearch">
                                         <i class="bi bi-geo-alt icon_location" ></i>
-                                        <div class="name_search">{{nameLocation['1']?nameLocation['1']:'Toàn Quốc'}}</div>
+                                        <div class="name_search">{{nameLocation!=null?nameLocation:'Toàn Quốc'}}</div>
                                         <i class="fa-solid fa-chevron-down"></i>
                                         <span class="postfix-div"></span>
                                     </div>
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="listItemProps" :class="{'show': inputSearch != '' || inputSearch == null}">
-                            <div>
+                            <div class="py-2">
                                 <ul class="ul_listItem px-0">
                                     <div class="conntent_search">
                                         Tìm kiếm từ khoá "{{inputSearch}}"
@@ -96,79 +96,23 @@
                 </div>
                 <div class="col-lg-2 advertise">
                     <div class="advertisement">
-
                         <img class="" src="../../image/advertisement/advertisement_02.jpg" alt="">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="filterLocation">
-        <div class="filterPrice" :class="[openSearchPrice?'d-block': 'd-none']">
-            <ul class="list-group list-group-search list-group-flush">
-                <li v-for="price in romePrice" :key="price.id" class="list-group-item list-group-item-action" @click.prevent="getBySearch('price',price.on,price.under)">
-                    <a href="#" class="text-decoration-none">Giá từ {{price.title}}</a>
-                </li>
-            </ul>
-        </div>
-        <div class="filterAcreage" :class="[openSearchArea?'d-block': 'd-none']">
-            <ul  class="list-group list-group-search list-group-flush">
-                <li v-for="(item,index) in area" :key="index" class="list-group-item list-group-item-action" @click.prevent="getBySearch('area',item.on,item.under)">
-                    <a href="#" v-if="index == 0" class="text-decoration-none">Dưới {{item.under}} m <sup>2</sup></a>
-                    <a href="#" v-else class="text-decoration-none">Từ {{item.on}} - {{item.under}}m <sup>2</sup></a>
-                </li>
-            </ul>
-        </div>
-        <div class="filter_group" :class="{show: show_BoxChooseLocation == 1}">
-            <div class="header">
-                <i class="fa-solid fa-arrow-left" @click.prevent="off_filter_location"></i>
-               <span>Chọn Tỉnh Thành</span>
-            </div>
-            <div class="content">
-                <div id="filter_group_city_option" class="city_option">
-                    <ul>
-                        <li :class="{selected : selectedLocation.length == 0 || selectedLocation == 'Toàn Quốc'}" @click.prevent="clickSeleted('Toàn Quốc',0)">Toàn Quốc</li>
-                        <li v-for="(items,index) in locations['1']" :key="index" :class="{selected: selectedLocation[items.type] === items.name}" @click.prevent="clickSeleted(items,2)">{{items.name}}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="filter_group" :class="{show: show_BoxChooseLocation == 2}">
-            <div class="header">
-                <i class="fa-solid fa-arrow-left" @click.prevent="off_filter_location"></i>
-               <span>{{ nameLocation['1']}}</span>
-            </div>
-            <div class="content">
-                <div id="filter_group_districts_option" class="districts">
-                    <ul>
-                        <li v-for="(items,index) in locations['2']" :key="index" :class="{selected: selectedLocation[items.type] === items.name}" @click.prevent="clickSeleted(items,3)">{{items.name}}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="filter_group" :class="{show: show_BoxChooseLocation == 3}">
-            <div class="header">
-                <i class="fa-solid fa-arrow-left" @click.prevent="off_filter_location"></i>
-               <span>{{ nameLocation['2']}}</span>
-            </div>
-            <div class="content">
-                <div id="filter_group_districts_option" class="districts">
-                    <ul>
-                        <li v-for="(items,index) in locations['3']" :key="index" :class="{selected: selectedLocation[items.type] === items.name}" @click.prevent="clickSeleted(items,4)">{{items.name}}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="black_overlay" @click.prevent="off_filter_location" :class="{show: !black_screen}"></div>
-
-        <div class="box_search_locations" :class="{show : !showLocaing_location}">
-            <div class="box_page_loading">
-                <div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
+    <div>
+        <FilterLocationComponent
+            :show_BoxChooseLocation="show_BoxChooseLocation"
+            :black_screen="black_screen"
+            :openSearchPrice="openSearchPrice"
+            :openSearchArea="openSearchArea"
+            @Update_backScreen="UpdateBackScreen"
+            @title_location="titleLocation">
+        </FilterLocationComponent>
     </div>
+
 </template>
 
 <script>
@@ -181,9 +125,11 @@ import areaApi from "../Api/area"
 import { ref, defineComponent, onMounted } from 'vue'
 import { useDateFormat, useNow } from '@vueuse/core'
 import NavbarComponent from './NavbarComponent.vue'
+import FilterLocationComponent from './Search_Location/SearchLocationComponent.vue';
 
 import PostComponent from './post/index.vue'
 import locationApi from '../Api/locationApi'
+import axios from 'axios'
 
 export default defineComponent(
     {
@@ -191,6 +137,7 @@ export default defineComponent(
         components: {
             NavbarComponent,
             PostComponent,
+            FilterLocationComponent
         },
         props: {
 
@@ -198,17 +145,10 @@ export default defineComponent(
         data() {
             const inputSearch = ref('')
             const show_BoxChooseLocation = ref(null)
-            const nameLocation = ref([])
             const roomPrice = ref([])
-            const cities = ref([])
-            const locations = ref([])
-            const area = ref([])
             const posts = ref([])
-            const selectedLocation  = ref([])
-            const queryLocation = ref([])
             const notification_bar = ref(true)
             const black_screen = ref(true)
-            const showLocaing_location = ref(true)
             const list_searchSuggestion = ref([])
 
             const openSearchPrice = ref(false)
@@ -217,17 +157,10 @@ export default defineComponent(
             return {
                 posts,
                 notification_bar,
-                area,
                 inputSearch,
                 roomPrice,
-                cities,
-                locations,
                 show_BoxChooseLocation,
                 black_screen,
-                selectedLocation,
-                nameLocation,
-                queryLocation,
-                showLocaing_location,
                 list_searchSuggestion,
                 openSearchPrice,
                 openSearchArea
@@ -241,30 +174,6 @@ export default defineComponent(
 
             filterFeedBackData(post_id) {
                 return this.treeFeedback.feedback.filter(item => item.post_id === post_id)
-            },
-
-            // Send comment
-            AddComment(postId, parentId, index, event) {
-                try {
-                    event.preventDefault();
-
-                    const Hours = useDateFormat(useNow(), 'DD/MM/YYYY')
-                    const newComment = {
-                        id: Math.floor(Math.random() * 1000),
-                        username: this.user[0].username,
-                        avatar: this.user[0].avatar,
-                        post_id: postId,
-                        content: this.commentData,
-                        created_time: Hours,
-                        parent_id: parentId,
-                        feedback: []
-                    };
-
-                    this.treeFeedback.feedback.push(newComment);
-                    this.commentData = '';
-                } catch (error) {
-                    console.error("Error:", error);
-                }
             },
 
             async getBySearch(name,on,under){
@@ -297,9 +206,7 @@ export default defineComponent(
                 const data = {
                     input : this.inputSearch
                 }
-
                 if(this.inputSearch != ""){
-
                     const response = await postApi.list_searchSuggestion(data);
 
                     if(!response.error){
@@ -308,89 +215,20 @@ export default defineComponent(
                 }
             },
 
-            async searchInput(){
-
-                const response =  await postApi.searchInputAll(this.inputSearch);
-
-                if(!response.error){
-                    this.inputSearch = ''
-                    this.posts = response
-                }else{
-                    Swal.fire({
-                    title: "Thông Báo!",
-                    text: "Không Tìm Thấy Bài Đăng Phù Hợp",
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 1500
-                    })
-                }
-            },
-
             async getLocationByParent_id(){
-                this.show_BoxChooseLocation = 1
+                this.show_BoxChooseLocation = 'provinces'
                 this.black_screen = !this.black_screen
             },
 
-            async off_filter_location(){
-                this.show_BoxChooseLocation = null
-                this.black_screen = true
+            UpdateBackScreen(blaclScreen,show_Box){
+                this.black_screen = blaclScreen,
+                this.show_BoxChooseLocation = show_Box
                 this.openSearchPrice = false
                 this.openSearchArea = false
-
-                if(this.queryLocation.length > 0){
-                    const data = {
-                        province_id: this.queryLocation['1'],
-                        district_id: this.queryLocation['2']?this.queryLocation['2']:0,
-                        ward_id: this.queryLocation['3']?this.queryLocation['3']:0,
-                    }
-
-                    const response =  await postApi.searchByLocation_Id (data);
-                    if(!response.error){
-                        this.posts = response
-                    }else{
-                        Swal.fire({
-                        title: "Thông Báo!",
-                        text: "Không Tìm Thấy Bài Đăng Phù Hợp",
-                        icon: "error",
-                        showConfirmButton: false,
-                        timer: 1500
-                        })
-                    }
-                }else{
-                    const response =  await postApi.listPost();
-                    this.posts = response
-                }
             },
 
-            async clickSeleted(item,type){
-
-                if(type == 0){
-                    this.queryLocation = []
-                    this.selectedLocation[item.type] = item
-                    this.nameLocation['1'] = item
-                }else{
-                    this.queryLocation[item.type] = item.id
-                    this.showLocaing_location = false
-                    this.selectedLocation[item.type] = item.name
-
-                    const response =  await locationApi.getLocationByParent_id(item.id,type);
-                    if(Object.keys(response.locations).length != 0 ){
-                        if(type < 4){
-                            this.show_BoxChooseLocation = type
-                        }
-                    }
-                    this.locations[type] = response.locations
-                    this.nameLocation[item.type] = item.name
-                    this.showLocaing_location = true
-                }
-            },
-
-            // Tìm kiếm theo địa chỉ đã chọn
-            async loadLocation(){
-                const response =  await locationApi.getLocationByParent_id(0,1);
-                if(!response.error){
-                    this.locations['1'] = response.locations
-                }
+            titleLocation(title){
+                this.nameLocation = title
             },
 
             dropdownBoxSearch(text){
@@ -399,7 +237,6 @@ export default defineComponent(
                 }else{
                     this.openSearchArea = !this.openSearchArea
                 }
-
                 this.black_screen = !this.black_screen
 
             }
@@ -408,8 +245,6 @@ export default defineComponent(
             this.infoPost = postApi.listPost()
             this.romePrice = romePriceApi.Price();
             this.area = areaApi.Area();
-            this.loadLocation();
-
         }
     }
 )
@@ -573,6 +408,7 @@ export default defineComponent(
 
     /* đề xuất tìm kiếm theo nội dung */
     form .listItemProps{
+        max-height: 380px;
         display: none;
         position: absolute;
         background-color: #fff;
@@ -610,123 +446,6 @@ export default defineComponent(
         background-color: #E8E8E8 ;
     }
 
-    /* Khung tìm kiếm theo địa chỉ */
-
-    .filterLocation .box_search_locations {
-        display: none;
-        position: fixed;
-        z-index: 99999;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-        width: 30px;
-        height: 30px;
-        border: 3.5px solid #45474b;
-        border-radius: 50%;
-        border-style:  dotted ;
-        animation: spin 2.5s infinite linear;
-    }
-
-    @keyframes spin {
-        100%{
-            transform: rotate(360deg);
-        }
-    }
-
-    .filterLocation .black_overlay{
-        display: none;
-        background-color: rgba(0, 0, 0, .5);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 999;
-    }
-
-    .filterLocation .filter_group{
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 99999;
-        background-color: #fff;
-        overflow: hidden;
-        width: 680px;
-        max-height: 490px;
-        margin: auto;
-        border-radius: 8px;
-    }
-
-    .filterLocation .box_search_locations.show,
-    .black_overlay.show,
-    .filter_group.show{
-        display: block;
-    }
-
-    .filterLocation .filter_group .header{
-        padding: 10px;
-        border-bottom: 1px solid #CDCDCD;
-        text-align: center;
-        font-weight: 500;
-        font-size: 18px;
-    }
-
-    .filterLocation .filter_group .header i.fa-solid.fa-arrow-left{
-        float: left;
-        align-items: center;
-        font-size: 18px;
-        margin: 5px;
-        cursor: pointer;
-    }
-
-    .filterLocation .filter_group .content{
-        width: 100%;
-        height: calc(100% - 40px);
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-        /* padding: 10px 25px; */
-    }
-
-    .filterLocation .filter_group .content ul>li{
-        padding: 12px 10px 12px 25px;
-        border-bottom: 1px solid #ddd;
-        font-size: 1.1rem;
-        position: relative;
-        cursor: pointer;
-    }
-
-    .filterLocation .filter_group .content ul>li::before{
-        background: url(../../image/cirlcle-rec.svg) center no-repeat;
-        background-size: contain;
-        width: 15px;
-        height: 15px;
-        position: absolute;
-        top: 50%;
-        left: 0;
-        margin-top: -8px;
-        display: block;
-        content: "";
-        opacity: .45;
-    }
-
-    .filterLocation .filter_group .content ul>li.selected::before{
-        background: url(../../image/cirlcle-rec-active.svg) center no-repeat;
-        background-size: contain;
-        opacity: 1;
-    }
-
-    .filterLocation .filter_group .content ul>li.selected{
-        color: #ff5d26;
-        font-weight: 500;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-
     .info {
         width: 100vw;
         height: 100vh;
@@ -737,17 +456,6 @@ export default defineComponent(
         z-index: 9999;
         text-align: center;
         animation: slideInTop ease .2s, fadeOut linear 1s 2s forwards;
-    }
-
-    .info div span{
-        width: auto;
-        background-color: rgb(255, 0, 0,0.7);
-        padding: 10px 10px;
-        color: #fff;
-        border-radius: 8px ;
-        font-size: 18px;
-        font-weight: 490;
-        margin: auto;
     }
 
     @keyframes slideInTop {
@@ -804,28 +512,6 @@ export default defineComponent(
             max-height: 58px;
             overflow: hidden;
         }
-
-        .filterPrice,
-        .filterAcreage{
-            position: fixed;
-            top: 45%;
-            left: 10%;
-            right: 10%;
-            bottom: 0;
-            z-index: 9999;
-            overflow: hidden;
-        }
-
-        .filterPrice .list-group,
-        .filterAcreage .list-group{
-            border: 1px solid #dedede;
-            border-radius: 8px ;
-        }
-
-        .filterLocation .filter_group{
-            width: 540px;
-            max-height: 400px;
-        }
     }
 
     @media only screen and (max-width: 600px) {
@@ -849,11 +535,6 @@ export default defineComponent(
 
         .swiper-slide img {
             height: auto;
-        }
-
-        .filterLocation .filter_group{
-            width: 100vw;
-            max-height: 100vh;
         }
     }
 
@@ -895,17 +576,6 @@ export default defineComponent(
             font-size: 10px;
             max-height: 25px;
             max-width: 65px;
-        }
-
-        .filterPrice,
-        .filterAcreage{
-            position: fixed;
-            top: 30%;
-            left: 10%;
-            right: 10%;
-            bottom: 0;
-            z-index: 9999;
-            overflow: hidden;
         }
 
         .the_right {

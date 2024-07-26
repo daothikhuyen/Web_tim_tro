@@ -2,12 +2,15 @@
 
 namespace App\Http\Service\Posts;
 
+use App\Models\Districts;
 use App\Models\Extension;
 use App\Models\Image;
 use App\Models\Location;
 use App\Models\Post;
+use App\Models\Provinces;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\Wards;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -117,14 +120,25 @@ class CreatePostsService {
     }
 
     public function show($posts){
-        $location_id = [$posts->province_id,$posts->district_id,$posts->ward_id,$posts->street_id];
+        $location_id = [$posts->province_id,$posts->district_id,$posts->ward_id];
+
+
+        $province = Provinces::where('id',$posts->province_id)->first();
+        $districts = Districts::where('id',$posts->district_id)->first();
+        $ward = Wards::where('id',$posts->ward_id)->first();
+
+        $location = array(
+            'province' => $province->id,
+            'district' => $districts->id,
+            'ward' => $ward->id
+        );
 
         $array = [
             'postData' => $posts,
             'images' => Image::where('post_id', $posts->id)->get(),
             'videos' => Video::where('post_id', $posts->id)->get(),
             'extensions'=>Extension::where('post_id', $posts->id)->get(),
-            'locations' => Location::whereIn('id',$location_id)->get(),
+            'locations' => $location,
         ];
 
         return $array;
@@ -220,12 +234,19 @@ class CreatePostsService {
     }
 
     public function searchByLocation_Id($request){
-
         if($request->district_id == 0){
             $items = Post::where('province_id', $request->province_id)->get();
-        }else{
-            $items = Post::where('province_id', $request->province_id)
-                        ->where('district_id', $request->district_id)->get();
+        }
+        else{
+            if($request->ward_id == 0){
+                $items = Post::where('province_id', $request->province_id)
+                            ->where('district_id', $request->district_id)->get();
+            }
+            else{
+                $items = Post::where('province_id', $request->province_id)
+                            ->where('district_id', $request->district_id)
+                            ->where('ward_id',$request->ward_id)->get();
+            }
         }
 
         $result = $this->CreateArray($items);
@@ -252,10 +273,14 @@ class CreatePostsService {
     public function list_SearchSuggestion($request){
 
         try {
-            $result = Post::where('is_deleted', 0)->where('title', 'like', "%{$request->input}%")->select('title as title_suggestion')->get();
+            $result = Post::where('is_deleted', 0)->where('title', 'like', "%{$request->input}%")
+                            ->orderByDesc('id')
+                            ->select('title as title_suggestion')->limit(10)->get();
 
             if($result->isEmpty()){
-                $result = Post::where('is_deleted', 0)->where('full_address', 'like', "%{$request->input}%")->select('full_address as title_suggestion')->get();
+                $result = Post::where('is_deleted', 0)->where('full_address', 'like', "%{$request->input}%")
+                                ->orderByDesc('id')
+                                ->select('full_address as title_suggestion')->limit(10)->get();
             }
 
             return $result;

@@ -95,7 +95,8 @@ class AuthController extends Controller
     }
 
     public function getUser(){
-        if(Auth::check()){
+
+        if(Auth::check() && Auth::user()->is_deleted == 0 && Auth::user()->is_activated == 1){
             return response()->json([
                 'error' => false,
                 'user' => Auth::user()
@@ -103,7 +104,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'error' => false,
+            'error' => true,
             'user' => ''
         ]);
     }

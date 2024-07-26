@@ -178,6 +178,10 @@ export default {
         text-decoration: none;
     }
 
+    .form-group a:hover{
+        color: #ff5d26;
+    }
+
     .view_home .contact_us{
         border: 5px solid rgb(255, 93, 38,0.2);
         padding: 16px;

@@ -1,28 +1,25 @@
 <template>
-    <section class="Address_detail d-md-block ps-md-3">{{newPost}}
-        <div class="location pb-3">
-            <select class="input_item" name="cityLocation" id="cityLocation" @change="changeCity(select.city)"  v-model="select.city">
+    <section class="Address_detail d-md-block ps-md-3">
+        <div class="location pb-3 d-flex align-items-center">
+            <select class="input_item" name="provinceLocation" id="provinceLocation" @change="changeProvince(select.province.id)"  v-model="select.province.id">
                 <option :value="null" disabled selected>--Chọn Tỉnh/TP--</option>
-                <option v-for="city in filterCity" :key="city.id"  :value="city.id" >{{city.name}}</option>
+                <option v-for="province in getData.provinces" :key="province"  :value="province.id" >{{province.name}}</option>
             </select>
+            <span class="text-danger fw-bold ps-1">* </span>
         </div>
-        <div class="location pb-3">
-            <select class="input_item" name="districtLocation" id="districtLocation" @change="changeDistrict(select.district)" v-model="select.district">
+        <div class="location pb-3  d-flex align-items-center">
+            <select class="input_item" name="districtLocation" id="districtLocation" @change="changeDistrict(select.district.id)" v-model="select.district.id">
                 <option :value="null" disabled selected>--Chọn Quận/Huyện--</option>
-                <option v-for="district in filterDistrict" :key="district"  :value="district.id" >{{district.name}}</option>
+                <option v-for="district in getData.districts" :key="district"  :value="district.id" >{{district.name}}</option>
             </select>
+            <span class="text-danger fw-bold ps-1">* </span>
         </div>
-        <div class="location pb-3">
-            <select class="input_item" name="wardsLocation" id="wardsLocation" @change="changeCityWard(select.ward)" v-model="select.ward">
+        <div class="location pb-3  d-flex align-items-center">
+            <select class="input_item" name="wardsLocation" id="wardsLocation" @change="changeWard(select.ward.id)" v-model="select.ward.id">
                 <option :value="null" disabled selected>--Chọn Phường/Xã--</option>
-                <option  v-for="ward in filterWard" :key="ward"  :value="ward.id" >{{ward.name}}</option>
+                <option  v-for="ward in getData.wards" :key="ward"  :value="ward.id" >{{ward.name}}</option>
             </select>
-        </div>
-        <div class="location pb-3">
-            <select class="input_item" name="streetLocation" id="streetLocation" @change="changeCityStreet(select.street)" v-model="select.street">
-                <option :value="null" disabled selected>--Chọn Đường/Phố--</option>
-                <option v-for="street in filterStreet" :key="street"  :value="street.id" >{{street.name}}</option>
-            </select>
+            <span class="text-danger fw-bold ps-1">* </span>
         </div>
     </section>
     <div class="input_number_fulladdress">
@@ -63,88 +60,86 @@ export default defineComponent({
         const arrayLocation_Id = ref([])
         const selected = ref([])
         const select = {
-            city: ref(null),
-            district: ref(null),
-            ward: ref(null),
-            street: ref(null),
+            province : {
+                id: ref(null),
+                name: ref(null),
+            },
+            district :{
+                id: ref(null),
+                name: ref(null),
+            },
+            ward: {
+                id: ref(null),
+                name: ref(null),
+            },
             numberHome: ref(null)
         }
 
+        const getData = {
+            provinces: ref([]),
+            districts: ref([]),
+            wards : ref([])
+        }
+
         return {
-            getLocation,
             arrayLocation_Id,
             selected,
             select,
             textFullAddress : "",
-            full_address : []
+            full_address : [],
+            getData
         }
     },
-    computed: {
-        filterCity(){
-            return this.getLocation.filter(item => item.parent_id  === 0)
-        },
-
-        filterDistrict(){
-            return this.getLocation.filter(item => item.parent_id  === this.select.city)
-        },
-
-        filterWard(){
-            return this.getLocation.filter(item => item.parent_id  === this.select.district)
-        },
-
-        filterStreet(){
-            return this.getLocation.filter(item => item.parent_id  === this.select.ward)
-        }
-    },
+    computed: {},
     watch: {
-        newPost(value){
-            console.log('1')
-            console.log(value)
-        },
-
         locations(value){
             this.uploadLocation(value)
         },
 
         fullAddress(value){
-            console.log(value)
             const text = value.split(',')
-            if(text.length > 4){
-                this.select.numberHome = text[0]
-            }
+            this.select.numberHome = text[0]
         }
     },
     methods: {
 
         uploadLocation(value){
             this.arrayLocation_Id = value,
-            this.full_address = this.fullAddress,
+            this.full_address = this.fullAddress;
 
-            this.select.city = value[0]?value[0].id:null
-            this.select.district = value[1]?value[1].id: null
-            this.select.ward = value[2]?value[2].id: null
-            this.select.street = value[3]?value[3].id: null
+            this.select.province.id = value['province']
+            this.select.district.id = value['district']
+            this.select.ward.id = value['ward']
+
+            this.get_Provinces()
+            this.get_Districts(value['province'])
+            this.get_Wards(value['district'])
+
         },
 
         deleteSelect(value){
             value.forEach(element => {
-                this.select[element] = ref(null)
+                const keys = element.split('.');
+                if (keys.length === 2) {
+                    const [parent, child] = keys;
+                    this.select[parent][child] = ref(null);
+                } else {
+                    this.select[element] = ref(null);
+                }
             });
         },
 
         async get_Full_Address(value){
 
-            const data = [this.select.city,this.select.district,this.select.ward,this.select.street]
-            const result = await locationApi.getNameLocation(data)
-            this.arrayLocation_Id = result
-
-            this.full_address = []
-            this.arrayLocation_Id.forEach((element,index) => {
-                this.full_address.push(element.name)
+            this.data = [this.select.province.name,this.select.district.name,this.select.ward.name]
+            this.full_address = [];
+            this.data.forEach((element,index) => {
+                if(element != null){
+                    this.full_address.push(element)
+                }
             });
 
-            if(value != 'id'){
-                console.log(this.full_address)
+            if(value != ""){
                 this.full_address.push(value)
             }
 
@@ -156,41 +151,63 @@ export default defineComponent({
                 }
             });
 
+            this.arrayLocation_Id = {
+                province :this.select.province.id,
+                district : this.select.district.id,
+                ward: this.select.ward.id
+            }
+
             this.createAddress(this.textFullAddress,this.arrayLocation_Id)
         },
 
+        async get_Provinces(){
+            const response = await locationApi.get_Provinces();
+            this.getData.provinces = response
+        },
 
-        changeCity(cityId){
-            this.select.city = cityId
-            const array = ["district","ward","street","numberHome"]
+        async get_Districts(province_id){
+
+            if(this.select.province.id != null || this.select.province.id != ""){
+                const response = await locationApi.get_Districts(province_id);
+                this.getData.districts = response
+            }
+        },
+
+        async get_Wards(district_id){
+
+            if(this.select.district.id != null || this.select.district.id != ""){
+                const response = await locationApi.get_Wards(district_id);
+                this.getData.wards = response
+            }
+        },
+
+        filterLocation(nameTable,selectName,filterId){
+            const result = this.getData[nameTable].filter(item => item.id == filterId)
+            this.select[selectName].name = result[0].name
+        },
+
+        changeProvince(provinceId){
+            this.filterLocation('provinces','province',provinceId)
+            const array = ["district.name","district.id","ward.name","ward.id","numberHome"]
             this.deleteSelect(array)
-            this.get_Full_Address("id")
+            this.get_Full_Address("")
+            this.get_Districts(provinceId)
         },
 
         changeDistrict(districtId){
-            this.select.district = districtId
-
-            const array = ["ward","street","numberHome"]
+            this.filterLocation('districts','district',districtId)
+            const array = ["ward.name","ward.id","numberHome"]
             this.deleteSelect(array)
-
-            this.get_Full_Address("id")
-
+            this.get_Full_Address("")
+            this.get_Wards(districtId)
         },
 
-        changeCityWard(wardId){
-            this.select.ward = wardId
-
-            const array = ["street","numberHome"]
-            this.deleteSelect(array)
-            this.get_Full_Address("id")
-        },
-
-        changeCityStreet(streetId){
-            this.select.street = streetId
-
+        changeWard(wardId){
+            this.filterLocation('wards','ward',wardId)
             const array = ["numberHome"]
             this.deleteSelect(array)
-            this.get_Full_Address("id")
+            this.select.ward.id = wardId
+            this.get_Full_Address("")
         },
 
         getNumber_houer(textAddress){
@@ -200,7 +217,8 @@ export default defineComponent({
         },
     },
     async created(){
-        this.getLocation = await locationApi.getLocation()
+        // this.getLocation = await locationApi.getLocation()
+        this.get_Provinces();
     }
 })
 </script>

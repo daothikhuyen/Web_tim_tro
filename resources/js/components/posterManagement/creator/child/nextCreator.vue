@@ -23,8 +23,8 @@
 
                         </div>
                     </div>
-                    <div class="btn_submit">
-                        <a href="listpost/see" @click.prevent="insertPost" class="button">Đăng Bài</a>
+                    <div class="btn_submit h-auto">
+                        <a href="listpost/see" @click.prevent="insertPost" class="button float-end">Đăng Bài</a>
                     </div>
                 </div>
             </div>

@@ -67,20 +67,16 @@ export default ({
                 const csrfToken = localStorage.getItem('token');
 
                 if(csrfToken){
-                    try {
-                        const response = await userApi.user()
-
-                        if(!response.error){
-                            commit('SET_USER',response.user)
-                        }else{
-                            dispatch('logout')
-                        }
-                    } catch (error) {
-                        localStorage.removeItem('token')
+                    const response = await userApi.user()
+                    if(!response.error){
+                        commit('SET_USER',response.user)
+                    }else{
+                        dispatch('logout')
                     }
                 }
 
             } catch (error) {
+                localStorage.removeItem('token')
                 console.error('Lỗi lấy thông tin:', error);
             }
         },
