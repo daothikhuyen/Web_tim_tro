@@ -77,14 +77,14 @@ Route::prefix('posts')->group(function(){
 });
 
 Route::prefix('locations')->group(function(){
-    Route::get('/getAll',[LocationController::class,'getLocation']);
+    // Route::get('/getAll',[LocationController::class,'getLocation']);
 
     Route::get('/get_Provinces',[LocationController::class,'get_Provinces']);
     Route::post('/get_Districts',[LocationController::class,'get_Districts']);
     Route::post('/get_Wards',[LocationController::class,'get_Wards']);
 
-    Route::post('/getNameLocation',[LocationController::class,'getNameLocation']);
-    Route::post('/getLocationByParent_id',[LocationController::class,'getLocationByParent_id']);
+    // Route::post('/getNameLocation',[LocationController::class,'getNameLocation']);
+    // Route::post('/getLocationByParent_id',[LocationController::class,'getLocationByParent_id']);
 });
 
 Route::prefix('feedback')->group(function(){

@@ -129,7 +129,8 @@ export default defineComponent({
 
                     if(!result.error){
                         if (nodeData == 1) {
-                            this.treeFeedback.message.push(newComment)
+                            // this.treeFeedback.message.push(newComment)
+                            this.treeFeedback = await feedbackApi.getFeedback(this.postId)
                         }
                         else {
                             nodeData.feedback.push(newComment)

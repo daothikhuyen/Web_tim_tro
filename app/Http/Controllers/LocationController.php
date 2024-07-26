@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\DB;
 class LocationController extends Controller
 {
 
-    public function getLocation(){
+    // public function getLocation(){
 
-        $location = Location::select()->get();
+    //     $location = Location::select()->get();
 
-        return $location;
-    }
+    //     return $location;
+    // }
 
     public function get_Provinces(){
 
@@ -59,26 +59,26 @@ class LocationController extends Controller
         return $result;
     }
 
-    public function getNameLocation(Request $request){
-        $array = [];
+    // public function getNameLocation(Request $request){
+    //     $array = [];
 
-        foreach ($request as $key => $value) {
-            if($request[$key] !== null){
-                $array[$key] = $request[$key];
-            }
-        }
+    //     foreach ($request as $key => $value) {
+    //         if($request[$key] !== null){
+    //             $array[$key] = $request[$key];
+    //         }
+    //     }
 
-        return Location::whereIn('id',$request)->get();
-    }
+    //     return Location::whereIn('id',$request)->get();
+    // }
 
-    public function getLocationByParent_id(Request $request){
-        $result = Location::where('parent_id',$request->parent_id)
-                        ->where('type',$request->type)->get();
+    // public function getLocationByParent_id(Request $request){
+    //     $result = Location::where('parent_id',$request->parent_id)
+    //                     ->where('type',$request->type)->get();
 
-        return response()->json([
-            'error' => $result?false:true,
-            'locations' => $result
-        ]);
+    //     return response()->json([
+    //         'error' => $result?false:true,
+    //         'locations' => $result
+    //     ]);
 
-    }
+    // }
 }

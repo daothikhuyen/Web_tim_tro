@@ -7,7 +7,7 @@
             <div class="row mx-auto">
                 <div class="col-lg-2 advertise">
                     <div class="advertisement">
-                        <img class="" src="../../image/advertisement/advertisement_01.png" alt="">
+                        <img class="" src="../../image/advertisement/advertisement_01.jpg" alt="">
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-12 col-sm-12 view_main mt-3 ">
@@ -96,7 +96,7 @@
                 </div>
                 <div class="col-lg-2 advertise">
                     <div class="advertisement">
-                        <img class="" src="../../image/advertisement/advertisement_02.jpg" alt="">
+                        <img class="" src="../../image/advertisement/advertisement_01.jpg" alt="">
                     </div>
                 </div>
             </div>
@@ -254,18 +254,19 @@ export default defineComponent(
 
 <style scoped>
 
-    .view_home .advertise {
+    .view_home .advertise:nth-child(1) {
         padding: 0;
         display: flex;
-        justify-content: center;
+        justify-content: end;
     }
 
     .view_home .advertise .advertisement{
         position: fixed;
-        width: 200px;
+        /* width: 200px; */
         height: 600px;
         overflow: auto;
         padding-top: 10px;
+        float: end;
     }
 
     .App .view_home .advertise .advertisement img{
@@ -273,6 +274,7 @@ export default defineComponent(
         height: 100%;
         padding-top: 15%;
         padding-bottom: 20%;
+
     }
 
     .App.fix_body .view_home .advertise .advertisement img{
