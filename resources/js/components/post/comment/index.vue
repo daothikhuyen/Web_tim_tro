@@ -87,7 +87,6 @@ export default defineComponent({
     methods: {
 
         formatNumberLike(num,digits){
-            console.log(digits)
              const lookup = [
                 { value: 1, symbol: "" },
                 { value: 1e3, symbol: "k" },

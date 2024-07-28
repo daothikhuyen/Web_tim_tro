@@ -112,7 +112,13 @@
             @title_location="titleLocation">
         </FilterLocationComponent>
     </div>
-
+    <div class="box_search_locations" :class="[!showLocaing_location?'d-block':'']">
+        <div class="box_page_loading">
+            <div>
+                <div></div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -150,6 +156,7 @@ export default defineComponent(
             const notification_bar = ref(true)
             const black_screen = ref(true)
             const list_searchSuggestion = ref([])
+            const showLocaing_location = ref(true)
 
             const openSearchPrice = ref(false)
             const openSearchArea = ref(false)
@@ -162,6 +169,7 @@ export default defineComponent(
                 show_BoxChooseLocation,
                 black_screen,
                 list_searchSuggestion,
+                showLocaing_location,
                 openSearchPrice,
                 openSearchArea
             }
@@ -174,6 +182,25 @@ export default defineComponent(
 
             filterFeedBackData(post_id) {
                 return this.treeFeedback.feedback.filter(item => item.post_id === post_id)
+            },
+
+            async searchInput(){
+                this.showLocaing_location = !this.showLocaing_location
+                const response =  await postApi.searchInputAll(this.inputSearch);
+
+                this.showLocaing_location = !this.showLocaing_location
+                if(!response.error){
+                    this.inputSearch = ''
+                    this.posts = response
+                }else{
+                    Swal.fire({
+                    title: "Thông Báo!",
+                    text: "Không Tìm Thấy Bài Đăng Phù Hợp",
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
+                }
             },
 
             async getBySearch(name,on,under){
@@ -475,6 +502,23 @@ export default defineComponent(
         to{
             opacity: 0;
         }
+    }
+
+    .box_search_locations {
+        display: none;
+        position: fixed;
+        z-index: 99999;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 30px;
+        height: 30px;
+        border: 3.5px solid #45474b;
+        border-radius: 50%;
+        border-style:  dotted ;
+        animation: spin 2.5s infinite linear;
     }
 
     /* responsive */
