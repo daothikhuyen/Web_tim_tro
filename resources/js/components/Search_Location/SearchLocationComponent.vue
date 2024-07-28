@@ -63,13 +63,13 @@
         </div>
         <div class="black_overlay" @click.prevent="off_filter_location"  :class="{'d-block':!black_screen}"></div>
 
-        <!-- <div class="box_search_locations" :class="{show : !showLocaing_location}">
+        <div class="box_search_locations" :class="{show : !showLocaing_location}">
             <div class="box_page_loading">
                 <div>
                     <div></div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 </template>
 
