@@ -81,8 +81,6 @@ const routes = [
         name: 'postManagement',
         path: '/postManagement',
         component: posterManagement,
-        props: true,
-        meta: { public: true },
         children: [
             {
                 name: 'index',
