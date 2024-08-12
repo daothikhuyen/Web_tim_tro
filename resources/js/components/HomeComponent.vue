@@ -123,6 +123,7 @@
 
 <script>
 import Swal from 'sweetalert2'
+import debounce from 'lodash.debounce';
 
 import postApi from "../Api/postApi"
 import romePriceApi from "../Api/roomPrice"
@@ -184,7 +185,7 @@ export default defineComponent(
                 return this.treeFeedback.feedback.filter(item => item.post_id === post_id)
             },
 
-            async searchInput(){
+            searchInput: debounce( async function(){
                 this.showLocaing_location = !this.showLocaing_location
                 const response =  await postApi.searchInputAll(this.inputSearch);
 
@@ -201,9 +202,9 @@ export default defineComponent(
                     timer: 1500
                     })
                 }
-            },
+            },500),
 
-            async getBySearch(name,on,under){
+            getBySearch: debounce(async function(name,on,under){
                 const data = {
                     name: name,
                     on: on,
@@ -227,9 +228,9 @@ export default defineComponent(
                     timer: 1500
                     })
                 }
-            },
+            },300),
 
-            async SearchSuggestions(){
+            SearchSuggestions: debounce(async function(){
                 const data = {
                     input : this.inputSearch
                 }
@@ -240,7 +241,7 @@ export default defineComponent(
                         this.list_searchSuggestion = response.data;
                     }
                 }
-            },
+            },400),
 
             async getLocationByParent_id(){
                 this.show_BoxChooseLocation = 'provinces'

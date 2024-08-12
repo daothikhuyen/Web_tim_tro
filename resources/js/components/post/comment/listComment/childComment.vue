@@ -56,7 +56,6 @@ import Swal from 'sweetalert2'
 import userApi from '../../../../Api/userApi'
 import ratting_api from '../../../../Api/ratting_like'
 import AddComment from '../AddComment.vue'
-import { object } from 'yup'
 
 export default defineComponent ({
     name: "FeedBackNode",

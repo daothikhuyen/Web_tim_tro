@@ -28,19 +28,19 @@ export default {
             this.isScroll = window.scrollY > 0
         },
 
-        myEventHandler(){
-            window.location.reload()
-        }
+        // myEventHandler(){
+        //     window.location.reload()
+        // }
     },
 
     destroyed(){
         window.removeEventListener('scroll', this.handleScroll)
-        window.removeEventListener("resize", this.myEventHandler);
+        // window.removeEventListener("resize", this.myEventHandler);
     },
 
     created() {
-        window.addEventListener('scroll', this.handleScroll),
-        window.addEventListener("resize", this.myEventHandler);
+        window.addEventListener('scroll', this.handleScroll)
+        // window.addEventListener("resize", this.myEventHandler);
     },
 }
 </script>

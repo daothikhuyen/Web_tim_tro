@@ -108,6 +108,7 @@ import {ref} from 'vue'
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import {mapState,mapActions} from 'vuex'
+import debounce from 'lodash.debounce';
 
 import NavbarComponent from '../NavbarComponent.vue'
 import FooterComponent from '../FooterComponent.vue'
@@ -145,7 +146,8 @@ export default {
     },
     methods: {
 
-        async signup(values) {
+        signup: debounce(async function(values){
+            
             this.showLoading = !this.showLoading
             const result = await userApi.signup(values)
 
@@ -157,7 +159,8 @@ export default {
             }else{
                 this.error['error'] = result.message
             }
-        },
+
+        },1000)
     }
 }
 

@@ -96,8 +96,9 @@
 import {ref,defineComponent } from 'vue'
 import {mapGetters,mapActions} from 'vuex'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import user from '../../../../Api/userApi'
+import debounce from 'lodash.debounce';
 
+import user from '../../../../Api/userApi'
 import addImage from './listChild/addImages.vue'
 import addAddress from './listChild/addAddress.vue'
 import Extension from './listChild/extension.vue'
@@ -203,7 +204,8 @@ export default defineComponent({
             });
         },
 
-        ValidatorForm(){
+        ValidatorForm: debounce(function (e) {
+
             let checkValidator = ref(false)
             const attribute = this.newPost.postData
             this.error = []
@@ -234,7 +236,6 @@ export default defineComponent({
             });
 
             arrayInput.forEach(element => {
-                console.log(element.value)
                 if(!element.value || element.value.length==0 ){
                     this.error[element.name] = "Bạn cần chọn thông tin này"
 
@@ -249,7 +250,8 @@ export default defineComponent({
             if(checkValidator.value){
                 this.seenBefore()
             }
-        },
+
+        }, 500),
 
         createAddress(address,location){
             this.location_id = location
@@ -293,7 +295,10 @@ export default defineComponent({
 
         },
 
-    }
+    },
+    // created(){
+    //     this.ValidatorForm = debounce(this.ValidatorFormCreated,2000)
+    // }
 })
 </script>
 
