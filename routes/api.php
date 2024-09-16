@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Contact\SendContact;
 use App\Http\Controllers\Feedbacks\FeedbackController;
 use App\Http\Controllers\Feedbacks\FeedbackController_Admin;
 use App\Http\Controllers\Feedbacks\Ratting_PostController;
@@ -68,17 +69,22 @@ Route::prefix('posts')->group(function(){
         });
     });
 
-
     Route::get('/getall',[CreatePosts::class,'index']);
     Route::post('/searchPriceOrArea',[CreatePosts::class,'getBySearch']);
     Route::post('/searchInput_All',[CreatePosts::class,'searchInput_All']);
     Route::post('/searchByLocation_Id',[CreatePosts::class,'searchByLocation_Id']);
+    Route::post('/list_searchSeggestion',[CreatePosts::class,'list_SearchSuggestion']);
 });
 
 Route::prefix('locations')->group(function(){
-    Route::get('/getAll',[LocationController::class,'getLocation']);
-    Route::post('/getNameLocation',[LocationController::class,'getNameLocation']);
-    Route::post('/getLocationByParent_id',[LocationController::class,'getLocationByParent_id']);
+    // Route::get('/getAll',[LocationController::class,'getLocation']);
+
+    Route::get('/get_Provinces',[LocationController::class,'get_Provinces']);
+    Route::post('/get_Districts',[LocationController::class,'get_Districts']);
+    Route::post('/get_Wards',[LocationController::class,'get_Wards']);
+
+    // Route::post('/getNameLocation',[LocationController::class,'getNameLocation']);
+    // Route::post('/getLocationByParent_id',[LocationController::class,'getLocationByParent_id']);
 });
 
 Route::prefix('feedback')->group(function(){
@@ -96,6 +102,10 @@ Route::prefix('ratting')->group(function(){
 
     Route::post('/getlikeFeddback',[Ratting_PostController::class,'index_Feedback']);
     Route::post('/likeFeddback',[Ratting_PostController::class,'store_Feedback']);
+});
+
+Route::prefix('contact')->group(function(){
+    Route::post('/send_contact',[SendContact::class,'send_contact']);
 });
 
 

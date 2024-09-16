@@ -1,16 +1,21 @@
 <template>
-
-    <div class="appChildren">
-        <div>
-            <sidebar/>
-        </div>
-        <div class="homeManager px-0">
-            <navbar-component></navbar-component>
-            <div class="router_view">
-                <router-view></router-view>
+    <div>
+        <div class="appChildren">
+            <div>
+                <sidebar/>
+            </div>
+            <div class="homeManager px-0">
+                <navbar-component></navbar-component>
+                <div class="router_view">
+                    <router-view></router-view>
+                    <div class="footer_index">
+                        <footer-component-vue></footer-component-vue>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -46,7 +51,7 @@ export default defineComponent({
 
     .homeManager{
         width: 100%;
-        padding-bottom: 20px;
+        /* padding-bottom: 20px; */
     }
 
     @media (max-width: 1024px) {
@@ -82,6 +87,11 @@ export default defineComponent({
         font-weight: 500;
         border: 3px solid #d95230;
         border-radius: 10px;
+    }
+
+    .footer_admin {
+        border-top: 1px  solid transparent ;
+        box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
     }
 
      @media only screen and (min-width: 1200px) {

@@ -96,8 +96,9 @@
 import {ref,defineComponent } from 'vue'
 import {mapGetters,mapActions} from 'vuex'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import user from '../../../../Api/userApi'
+import debounce from 'lodash.debounce';
 
+import user from '../../../../Api/userApi'
 import addImage from './listChild/addImages.vue'
 import addAddress from './listChild/addAddress.vue'
 import Extension from './listChild/extension.vue'
@@ -172,7 +173,6 @@ export default defineComponent({
 
         loadExtension(extension){
             this.arrayExtension = extension
-            console.log(this.arrayExtension)
         },
 
         UpdateImage(imgae){
@@ -204,7 +204,8 @@ export default defineComponent({
             });
         },
 
-        ValidatorForm(){
+        ValidatorForm: debounce(function (e) {
+
             let checkValidator = ref(false)
             const attribute = this.newPost.postData
             this.error = []
@@ -235,7 +236,6 @@ export default defineComponent({
             });
 
             arrayInput.forEach(element => {
-                console.log(element.value)
                 if(!element.value || element.value.length==0 ){
                     this.error[element.name] = "Bạn cần chọn thông tin này"
 
@@ -244,21 +244,17 @@ export default defineComponent({
 
 
             if(Object.keys(this.error).length === 0){
-                console.log("hello")
                 checkValidator.value = true
             }
 
             if(checkValidator.value){
-                 console.log("hi")
                 this.seenBefore()
             }
-        },
+
+        }, 500),
 
         createAddress(address,location){
-
-            location.forEach(element => {
-                this.location_id[element.title] = element.id
-            });
+            this.location_id = location
             this.full_address = address
         },
 
@@ -276,10 +272,10 @@ export default defineComponent({
                         price: attribute.price,
                         area: attribute.area,
                         user_id: this.user.id,
-                        province_id: this.location_id['Thành Phố'],
-                        district_id: this.location_id['Quận Huyện'],
-                        ward_id: this.location_id['Phường Xã'],
-                        street_id: this.location_id['Đường Phố'] ?this.location_id['Đường Phố']: "",
+                        province_id: this.location_id['province'],
+                        district_id: this.location_id['district'],
+                        ward_id: this.location_id['ward'],
+                        street_id: "",
                         category_id:1,
                         number_like: 0
 
@@ -299,7 +295,10 @@ export default defineComponent({
 
         },
 
-    }
+    },
+    // created(){
+    //     this.ValidatorForm = debounce(this.ValidatorFormCreated,2000)
+    // }
 })
 </script>
 

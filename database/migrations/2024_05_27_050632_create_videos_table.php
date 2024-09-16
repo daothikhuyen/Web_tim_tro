@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            $table->string('link_video')->unsigned();
-            $table->bigInteger('post_id');
+            $table->string('link_video');
+            $table->bigInteger('post_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

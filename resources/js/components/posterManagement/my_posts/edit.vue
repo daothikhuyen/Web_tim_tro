@@ -224,10 +224,7 @@ export default defineComponent({
         },
 
         createAddress(address,location){
-
-            location.forEach(element => {
-                this.location_id[element.title] = element.id
-            });
+            this.location_id = location
             this.full_address = address
         },
 
@@ -244,10 +241,10 @@ export default defineComponent({
                         price: attribute.price,
                         area: attribute.area,
                         user_id: this.user.id,
-                        province_id: this.location_id['Thành Phố'],
-                        district_id: this.location_id['Quận Huyện'],
-                        ward_id: this.location_id['Phường Xã'],
-                        street_id: this.location_id['Đường Phố'] ?this.location_id['Đường Phố']: "",
+                        province_id: this.location_id['province'],
+                        district_id: this.location_id['district'],
+                        ward_id: this.location_id['ward'],
+                        street_id: "",
                         category_id:1,
                         number_like: 0
                     },

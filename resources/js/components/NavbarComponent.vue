@@ -7,7 +7,7 @@
                     <span class="info_nav text-secondary">Nơi cung cấp những căn phòng tốt nhất</span>
                 </div>
                 <div class="pe-md-5 text-start">
-                    <span class="info_nav text-secondary">Liên lạc: 0834006771 | Phòng tốt | Nhà tốt</span>
+                    <span class="info_nav text-secondary">Liên lạc: 0834006771 | Phòng tốt | Nhà tốt| <a class="contact" href="/contact">Liên hệ</a></span>
                 </div>
             </div>
         </div>
@@ -138,6 +138,10 @@ export default {
                     title: '👤 Thông tin tài khoản',
                     url: '/postManagement/account/personal_info'
                 },
+                {
+                    title: '📞 Liên hệ với chúng tôi',
+                    url: '/contact'
+                },
             ],
             admin: [
                 {
@@ -183,7 +187,7 @@ export default {
 
     },
     created() {
-        this.user = this.$store.dispatch('getUser');
+        // this.user = this.$store.dispatch('getUser');
     },
 }
 
@@ -204,6 +208,10 @@ export default {
 
     .header .info_nav{
         font-size: 14px;
+    }
+
+    .header .contact:hover{
+        color: #f19171;
     }
 
     .navbarCommpent{
@@ -283,7 +291,7 @@ export default {
     }
 
     .dropdown-item.active, .dropdown-item:active {
-        color: #fff;
+        color: #ff5d26;
         text-decoration: none;
         background-color: #e9ecef;
     }

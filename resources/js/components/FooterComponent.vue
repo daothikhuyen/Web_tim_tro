@@ -1,6 +1,6 @@
 
 <template>
-    <div class="footer bg-white">
+    <div class="footer">
         <div class="container-fluid">
             <div class="row">
                 <!-- <div class="col-md-1"></div> -->
@@ -93,7 +93,7 @@
                     <div class="col-lg-6 col-md-6">
                         <ul class="ps-0">
                             <li>
-                                Ghi rõ nguồn "PhongTot.com" khi phát hành lại thông tin từ website này.
+                                Ghi rõ nguồn <span style="color:#ff5d26">Phongtrotot.com</span> khi phát hành lại thông tin từ website này.
                             </li>
                         </ul>
                     </div>
@@ -144,6 +144,7 @@
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
         /* padding: 20px; */
         padding: 25px 0px 0px 0px;
+        background-color: #fff;
     }
 
     .footer .info_footer .logo_info{
@@ -223,10 +224,11 @@
     }
 
     @media (max-width: 992px) {
-        .footer{
-            position: sticky;
+        /* .footer{
+            position: fixed;
             z-index: 99;
-        }
+            bottom: 0;
+        } */
 
         .footer .footer_main .customer{
             display: flex;

@@ -45,9 +45,9 @@
                                 <Field type="password" name="confirmPassword" id="" class="form-control" :class="{'is-invalid' : errors.confirmPassword}"/>
                                  <span class="invalid-feedback">{{errors.confirmPassword}}</span>
                             </div>
-                            <div class="d-flex flex-wrap flex-50" >
+                            <div class="form-group d-flex flex-wrap flex-50" >
                                 <Field type="checkbox" name="checkbox" id="" value="đồng ý"  :class="{'is-invalid' : errors.checkbox}"/>
-                                <label for="" class="pt-2 pb-1 ps-3 ">Đồng ý với <span class="text-primary">các chính sách bảo mật</span> của  <br>chúng tôi.</label>
+                                <label for="" class="label_agree pt-2 pb-1 ps-3 ">Đồng ý với <span class="text-primary">các chính sách bảo mật</span> của  <br>chúng tôi.</label>
                                 <span class="invalid-feedback ps-2">{{errors.checkbox}}</span>
                             </div>
                             <div class="form-group">
@@ -108,6 +108,7 @@ import {ref} from 'vue'
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import {mapState,mapActions} from 'vuex'
+import debounce from 'lodash.debounce';
 
 import NavbarComponent from '../NavbarComponent.vue'
 import FooterComponent from '../FooterComponent.vue'
@@ -145,7 +146,8 @@ export default {
     },
     methods: {
 
-        async signup(values) {
+        signup: debounce(async function(values){
+            
             this.showLoading = !this.showLoading
             const result = await userApi.signup(values)
 
@@ -157,7 +159,8 @@ export default {
             }else{
                 this.error['error'] = result.message
             }
-        },
+
+        },1000)
     }
 }
 
@@ -195,6 +198,10 @@ export default {
     .from_sign .form-group.footer_form a{
         list-style: none;
         text-decoration: none;
+    }
+
+    .form-group a:hover{
+        color: #ff5d26;
     }
 
     .view_home .contact_us{
@@ -303,6 +310,13 @@ export default {
         .from_sign{
             border-radius:0px ;
         }
+
     }
 
+    @media only screen and (max-width: 400px) {
+
+        .form-group .label_agree{
+            font-size: 13px;
+        }
+    }
 </style>

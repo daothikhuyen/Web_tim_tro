@@ -92,7 +92,7 @@ export default defineComponent({
             videos : [],
             uploadFiles: [],
             files: [],
-            showProgress
+            showProgress,
         }
     },
     watch: {
@@ -133,7 +133,6 @@ export default defineComponent({
 
                 const formData = new FormData()
                 formData.append("file", file)
-                console.log(formData);
                 if(file.type.split('/')[0] == 'video'){
                     this.files.push({name: fileName, loading : 0})
                     this.showProgress = true

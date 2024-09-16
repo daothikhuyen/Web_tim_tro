@@ -2,6 +2,7 @@
 
 <template>
   <div class="App" :class="{'fix_body' : isScroll}">
+    <!-- <navbar-component></navbar-component> -->
     <transition name="fade">
       <router-view></router-view>
     </transition>
@@ -10,26 +11,36 @@
 
 <script>
 import { ref,onMounted,onUnmounted, defineComponent } from 'vue'
+import NavbarComponent from '../js/components/NavbarComponent.vue';
 
 export default {
-  setup() {
-    const isScroll = ref(false)
+    components: {
+        NavbarComponent
+    },
+    data() {
+        const isScroll = ref(false)
+        return {
+            isScroll
+        }
+    },
+    methods: {
+        handleScroll() {
+            this.isScroll = window.scrollY > 0
+        },
 
-    const handleScroll = () => {
-        isScroll.value = window.scrollY > 0
-    }
+        // myEventHandler(){
+        //     window.location.reload()
+        // }
+    },
 
-    onMounted(() => {
-        window.addEventListener('scroll', handleScroll)
-    })
+    destroyed(){
+        window.removeEventListener('scroll', this.handleScroll)
+        // window.removeEventListener("resize", this.myEventHandler);
+    },
 
-    onUnmounted(() => {
-        window.removeEventListener('scroll', handleScroll)
-    })
-
-    return {
-      isScroll
-    }
-  }
+    created() {
+        window.addEventListener('scroll', this.handleScroll)
+        // window.addEventListener("resize", this.myEventHandler);
+    },
 }
 </script>

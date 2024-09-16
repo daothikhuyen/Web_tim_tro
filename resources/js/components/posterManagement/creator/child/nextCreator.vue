@@ -23,8 +23,8 @@
 
                         </div>
                     </div>
-                    <div class="btn_submit">
-                        <a href="listpost/see" @click.prevent="insertPost" class="button">Đăng Bài</a>
+                    <div class="btn_submit h-auto">
+                        <a href="listpost/see" @click.prevent="insertPost" class="button float-end">Đăng Bài</a>
                     </div>
                 </div>
             </div>
@@ -36,6 +36,7 @@
 import { ref, defineComponent } from 'vue'
 import {mapGetters,mapState,mapActions} from 'vuex'
 import Swal from 'sweetalert2'
+import debounce from 'lodash.debounce';
 
 import Poster from "../../../post/Poster.vue"
 import PostContent from "../../../post/Content.vue"
@@ -77,14 +78,13 @@ export default defineComponent({
             return Number(price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
         },
 
-        async insertPost(){
+        insertPost: debounce( async function(){
 
             const jsonData = this.$route.params.data;
             const data = JSON.parse(jsonData);
             console.log(data);
 
             const result = await postApi.createPost(data)
-            console.log(result)
             if(result.error == false){
                     Swal.fire({
                     title: "Thông Báo!",
@@ -105,7 +105,7 @@ export default defineComponent({
                     })
                 console.error(error);
             }
-        },
+        },1000),
 
         checkDemoPost(){
             const jsonData = this.$route.params.data;

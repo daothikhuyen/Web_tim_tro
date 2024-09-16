@@ -85,6 +85,7 @@ import {ref} from 'vue'
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import Swal from 'sweetalert2'
+import debounce from 'lodash.debounce';
 
 import NavbarComponent from '../NavbarComponent.vue'
 import FooterComponent from '../FooterComponent.vue'
@@ -116,7 +117,7 @@ export default {
     mounted() {
     },
     methods: {
-        async Validate(values) {
+        Validate : debounce(async function (values) {
             this.showLoading = !this.showLoading
             const result = await userApi.login(values)
 
@@ -141,7 +142,10 @@ export default {
                 delete this.error['error'];
                 this.error['error'] = result.message
             }
-        },
+        },1000)
+    },
+    created(){
+
     }
 }
 
@@ -176,6 +180,10 @@ export default {
     .from_login .form-group.footer_form a{
         list-style: none;
         text-decoration: none;
+    }
+
+    .form-group a:hover{
+        color: #ff5d26;
     }
 
     .view_home .contact_us{

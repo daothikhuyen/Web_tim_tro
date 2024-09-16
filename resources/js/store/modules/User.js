@@ -68,9 +68,7 @@ export default ({
 
                 if(csrfToken){
                     const response = await userApi.user()
-
                     if(!response.error){
-                        // console.log(response.user)
                         commit('SET_USER',response.user)
                     }else{
                         dispatch('logout')
@@ -78,6 +76,7 @@ export default ({
                 }
 
             } catch (error) {
+                localStorage.removeItem('token')
                 console.error('Lỗi lấy thông tin:', error);
             }
         },

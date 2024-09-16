@@ -3,7 +3,7 @@
         <div class="number_like_comment d-flex justify-content-between align-items-center px-2 my-2">
             <div class="number_like">
                 <span>👍</span>
-                <span class="first_span_number_like"> {{ numberLike }}</span>
+                <span class="first_span_number_like"> {{ formatNumberLike(numberLike,numberLike.toString().lenght) }}</span>
             </div>
             <div class="number_comment">
                 <span class="first_span_number">{{treeFeedback.total_feedback}}</span>
@@ -86,6 +86,22 @@ export default defineComponent({
     },
     methods: {
 
+        formatNumberLike(num,digits){
+             const lookup = [
+                { value: 1, symbol: "" },
+                { value: 1e3, symbol: "k" },
+                { value: 1e6, symbol: "M" },
+                { value: 1e9, symbol: "G" },
+                { value: 1e12, symbol: "T" },
+                { value: 1e15, symbol: "P" },
+                { value: 1e18, symbol: "E" }
+            ]
+
+             const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/;
+            const item = lookup.findLast(item => num >= item.value);
+            return item ? (num / item.value).toFixed(digits).replace(regexp, "").concat(item.symbol) : "0";
+        },
+
         ShowWriteComment(index) {
             this.showWriteComment = false
         },
@@ -129,7 +145,8 @@ export default defineComponent({
 
                     if(!result.error){
                         if (nodeData == 1) {
-                            this.treeFeedback.message.push(newComment)
+                            // this.treeFeedback.message.push(newComment)
+                            this.treeFeedback = await feedbackApi.getFeedback(this.postId)
                         }
                         else {
                             nodeData.feedback.push(newComment)
@@ -190,20 +207,18 @@ export default defineComponent({
         },
 
         async loadLike(){
-            if(this.authUser != null){
-                this.like.forEach(element => {
+            this.like.forEach(element => {
 
-                    if(element.post_id == this.postId ){
+                if(element.post_id == this.postId ){
 
-                        this.numberLike = this.numberLike + 1;
+                    this.numberLike = this.numberLike + 1;
 
-                        if(element.user_id == this.authUser.id){
-                            this.showIcon = !this.showIcon
-                        }
-
+                    if(this.authUser != null && element.user_id == this.authUser.id){
+                        this.showIcon = !this.showIcon
                     }
-                });
-            }
+
+                }
+            });
         }
     },
 

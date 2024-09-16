@@ -47,7 +47,7 @@
             <div class="swiper">
                 <Carousel class="swiper-wrapper">
                     <Slide v-for="slideOne in videos" :key="slideOne.id" class="swiper-slide">
-                        <video width="320" height="240" controls class="carousel__item">
+                        <video width="320" height="250" controls class="carousel__item">
                             <source :src="slideOne.link_video" type="video/mp4">
                         </video>
                     </Slide>
