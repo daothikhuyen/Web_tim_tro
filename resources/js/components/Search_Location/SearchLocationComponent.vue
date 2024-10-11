@@ -113,27 +113,8 @@ export default {
     },
     methods: {
         async getBySearch(name,on,under){
-            const data = {
-                name: name,
-                on: on,
-                under: under
-            }
-            const response = await postApi.searchPriceOrArea(data);
-
             this.$emit('Update_backScreen',true,false,false)
-
-            if(!response.error){
-                this.posts = response
-
-            }else{
-                Swal.fire({
-                title: "Thông Báo!",
-                text: "Không Tìm Thấy Bài Đăng Phù Hợp",
-                icon: "error",
-                showConfirmButton: false,
-                timer: 1500
-                })
-            }
+            this.$emit('searchPriceOrArea',name,on,under)
         },
 
         async off_filter_location(){
@@ -148,7 +129,7 @@ export default {
 
                 const response =  await postApi.searchByLocation_Id (data);
                 if(!response.error){
-                    this.posts = response
+                    this.$emit('off_filter_location',response)
                 }else{
                     Swal.fire({
                     title: "Thông Báo!",
@@ -197,6 +178,7 @@ export default {
             const response =  await locationApi.get_Provinces();
             this.locations['provinces'] = response
         },
+
     },
     created() {
         this.romePrice = romePriceApi.Price();

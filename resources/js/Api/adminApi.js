@@ -24,6 +24,12 @@ const searchInput = (data,page) => baseApi.baseApi({
     data: data
 })
 
+const searchInputAll = (data,page) => baseApi.baseApi({
+    method: 'POST',
+    url : `http://localhost:8000/api/posts/admin/searchInputAll_Admin?page=${page}`,
+    data: data
+})
+
 const list_posts_user = (page) => baseApi.baseApi({
     method: 'POST',
     url : `http://localhost:8000/api/posts/admin/list_posts_user?page=${page}`,
@@ -59,6 +65,7 @@ export default {
     account_lock,
     deleteAccount,
     searchInput,
+    searchInputAll,
     list_posts_user,
     posts_detail,
     destroy_posts,

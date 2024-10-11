@@ -66,6 +66,7 @@ Route::prefix('posts')->group(function(){
             Route::post('/list_posts_user',[CreatePosts_Admin::class, 'list_posts_user']);
             Route::get('/detail/{posts}',[CreatePosts_Admin::class, 'show_detail']);
             Route::post('/destroy_posts/{posts}',[CreatePosts_Admin::class, 'destroy_posts']);
+            Route::post('/searchInputAll_Admin',[CreatePosts_Admin::class,'searchInputAll_Admin']);
         });
     });
 

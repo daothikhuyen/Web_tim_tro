@@ -49,4 +49,14 @@ class CreatePosts_Admin extends Controller
             'error' => false
         ]);
     }
+
+    // tìm kiếm trong phần tìm kiếm bài đăng của người đăng
+    public function searchInputAll_Admin(Request $request){
+
+        $result = $this->createposts_AdminService->searchInputAll_Admin($request[0]);
+
+        if($result){
+            return $result;
+        }
+    }
 }
