@@ -153,8 +153,8 @@ export default {
     }
 
     .menu .avatar img{
-        height: 4rem;
-        width: 4rem;
+        height: 3rem;
+        width: 3rem;
         border-radius: 100rem;
         object-fit: cover;
     }

@@ -9,9 +9,9 @@
             <section class="search">
                 <div class="search_item d-flex justify-content-end">
                     <div class="">
-                        <input type="text" class="border-0" style="outline: none" placeholder="Tìm kiếm..." @change="searchInput" v-model="textSearch">
+                        <input type="text" class="border-0" style="outline: none" placeholder="Tìm kiếm..." @change="searchInput_All" v-model="textSearch">
                     </div>
-                    <button class="btn_search ps-1" @click.prevent="searchInput">
+                    <button class="btn_search ps-1" @click.prevent="searchInput_All">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
@@ -135,13 +135,13 @@ export default defineComponent({
             this.box_choose[index] = !this.box_choose[index]
         },
 
-        async searchInput(page = 1){
-
-            const response =  await postApi.searchInput(this.textSearch);
+// tìm kiếm tất cả của admin
+        async searchInput_All(page = 1){
+            const response =  await adminApi.searchInputAll(this.textSearch);
 
             if(response){
                 this.currentPage = response.data
-                this.my_posts = response.data.data
+                this.list_posts = response.data.data
             }
         },
 

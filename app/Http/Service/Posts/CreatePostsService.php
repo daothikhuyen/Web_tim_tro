@@ -188,7 +188,7 @@ class CreatePostsService {
 
             if($request != null){
                 $items = Post::where('user_id', $user->id)
-                        ->where('title', 'like', "%{$request}%")->paginate(10);
+                        ->where('title', 'like', "%{$request}%")->where('is_deleted', 0)->paginate(10);
 
             }else{
                 $items =  Post::where('is_deleted', 0)->where('user_id', $user->id)->paginate(10);

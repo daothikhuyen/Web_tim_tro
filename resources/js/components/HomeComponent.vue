@@ -108,16 +108,11 @@
             :black_screen="black_screen"
             :openSearchPrice="openSearchPrice"
             :openSearchArea="openSearchArea"
+            @off_filter_location="off_filter_location"
+            @searchPriceOrArea="getBySearch"
             @Update_backScreen="UpdateBackScreen"
             @title_location="titleLocation">
         </FilterLocationComponent>
-    </div>
-    <div class="box_search_locations" :class="[!showLocaing_location?'d-block':'']">
-        <div class="box_page_loading">
-            <div>
-                <div></div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -185,25 +180,7 @@ export default defineComponent(
                 return this.treeFeedback.feedback.filter(item => item.post_id === post_id)
             },
 
-            searchInput: debounce( async function(){
-                this.showLocaing_location = !this.showLocaing_location
-                const response =  await postApi.searchInputAll(this.inputSearch);
-
-                this.showLocaing_location = !this.showLocaing_location
-                if(!response.error){
-                    this.inputSearch = ''
-                    this.posts = response
-                }else{
-                    Swal.fire({
-                    title: "Thông Báo!",
-                    text: "Không Tìm Thấy Bài Đăng Phù Hợp",
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 1500
-                    })
-                }
-            },500),
-
+// tìm kiếm theo giá hoặc diện tích
             getBySearch: debounce(async function(name,on,under){
                 const data = {
                     name: name,
@@ -230,6 +207,27 @@ export default defineComponent(
                 }
             },300),
 
+// Tìm kiếm theo ô nhập
+            searchInput: debounce( async function(){
+                this.showLocaing_location = !this.showLocaing_location
+                const response =  await postApi.searchInputAll(this.inputSearch);
+
+                this.showLocaing_location = !this.showLocaing_location
+                if(!response.error){
+                    this.inputSearch = ''
+                    this.posts = response
+                }else{
+                    Swal.fire({
+                    title: "Thông Báo!",
+                    text: "Không Tìm Thấy Bài Đăng Phù Hợp",
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
+                }
+            },500),
+
+// tìm kiếm theo đề xuất
             SearchSuggestions: debounce(async function(){
                 const data = {
                     input : this.inputSearch
@@ -242,6 +240,10 @@ export default defineComponent(
                     }
                 }
             },400),
+// tìm kiến theo id của quận huyện, thành phố
+            off_filter_location(posts){
+                this.posts = posts
+            },
 
             async getLocationByParent_id(){
                 this.show_BoxChooseLocation = 'provinces'
