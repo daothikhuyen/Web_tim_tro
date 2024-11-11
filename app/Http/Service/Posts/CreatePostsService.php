@@ -113,10 +113,14 @@ class CreatePostsService {
         $posts = Post::where('id', $id)->first();
 
         if($posts){
-            return Post::where('id', $id)->delete();
+
+            $posts->is_deleted = 1;
+
+            return $posts->save();
         }
 
         return false;
+
     }
 
     public function show($posts){
